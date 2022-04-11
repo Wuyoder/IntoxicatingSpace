@@ -2,10 +2,13 @@ const express = require('express');
 const xml = require('xml');
 const app = express();
 const port = 3000;
+app.use(express.static('./public'));
+
 app.get('/', (req, res) => {
   console.log('hihi');
   res.send('hihi');
 });
+// app.get('/play',(req,res))
 
 app.get('/rss', (req, res) => {
   const rss = `<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0" xmlns:googleplay="http://www.google.com/schemas/play-podcasts/1.0" xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd" xmlns:psc="https://podlove.org/simple-chapters/" xmlns:kkbox="https://podcast.kkbox.com/">
