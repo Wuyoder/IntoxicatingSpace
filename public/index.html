@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Intoxicating Space</title>
+    <link
+      rel="shorcut icon"
+      type="image/jpg"
+      href="https://intoxicating.s3.ap-northeast-1.amazonaws.com/IS_LOGO.png"
+    />
+    <link rel="stylesheet" href="./css/play.css" />
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-FF4HQZCFFK"
+    ></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag('js', new Date());
+
+      gtag('config', 'G-FF4HQZCFFK');
+    </script>
+  </head>
+  <body>
+    <div>
+      <h1>TEST</h1>
+      <audio
+        id="player"
+        src="https://intoxicating.s3.ap-northeast-1.amazonaws.com/Tom+Tykwer+-+Cloud+Atlas+End+Title.mp3"
+        controls="controls"
+        autoplay="true"
+        preload="auto"
+        width="1000"
+        height="80"
+      ></audio>
+    </div>
+    <div>
+      <button onclick="document.getElementById('player').play()">Play</button>
+      <button onclick="document.getElementById('player').pause()">Pause</button>
+      <button onclick="document.getElementById('player').volume += 0.1">
+        Vol +
+      </button>
+      <button onclick="document.getElementById('player').volume -= 0.1">
+        Vol -
+      </button>
+      <button onclick="document.getElementById('player').playbackRate = 2">
+        speed 2
+      </button>
+      <button onclick="document.getElementById('player').playbackRate = 1">
+        speed 1
+      </button>
+      <button id="showtime">currentTime</button>
+      <button id="mute">mute</button>
+      <button id="forward">forward10</button>
+      <button id="backward">backward10</button>
+    </div>
+    <script>
+      const showtime = document.getElementById('showtime');
+      const player = document.getElementById('player');
+      const mute = document.getElementById('mute');
+      const forward = document.getElementById('forward');
+      const backward = document.getElementById('backward');
+      showtime.addEventListener('click', async () => {
+        alert(player.currentTime);
+        console.log(player.currentTime);
+      });
+      mute.addEventListener('click', async () => {
+        let sound = player.muted;
+        player.muted = !sound;
+      });
+      forward.addEventListener('click', async () => {
+        player.currentTime += 10;
+      });
+      backward.addEventListener('click', async () => {
+        player.currentTime -= 10;
+      });
+      player.addEventListener('ended', async () => {
+        alert('finished.');
+      });
+    </script>
+  </body>
+  <footer></footer>
+</html>
