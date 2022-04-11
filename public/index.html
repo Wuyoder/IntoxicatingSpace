@@ -9,7 +9,7 @@
     />
     <link rel="stylesheet" href="./css/play.css" />
     <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script
+    <!-- <script
       async
       src="https://www.googletagmanager.com/gtag/js?id=G-FF4HQZCFFK"
     ></script>
@@ -21,7 +21,8 @@
       gtag('js', new Date());
 
       gtag('config', 'G-FF4HQZCFFK');
-    </script>
+    </script> -->
+    <!-- Global site tag (gtag.js) - Google Analytics -->
   </head>
   <body>
     <div>
@@ -66,17 +67,17 @@
         alert(player.currentTime);
         console.log(player.currentTime);
       });
-      mute.addEventListener('click', async () => {
+      mute.addEventListener('click', () => {
         let sound = player.muted;
         player.muted = !sound;
       });
-      forward.addEventListener('click', async () => {
+      forward.addEventListener('click', () => {
         player.currentTime += 10;
       });
-      backward.addEventListener('click', async () => {
+      backward.addEventListener('click', () => {
         player.currentTime -= 10;
       });
-      player.addEventListener('ended', async () => {
+      player.addEventListener('ended', () => {
         alert('finished.');
       });
     </script>
