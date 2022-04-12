@@ -1,0 +1,23 @@
+#show_image {
+  width: 15vh;
+  height: 15vh;
+}
+#main {
+  display: flex;
+  flex-direction: row;
+}
+.episode {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.episode_date,
+.episode_title,
+.episode_play {
+  display: block;
+}
+
+#show_episode {
+  width: 80vh;
+}

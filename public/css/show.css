@@ -1,0 +1,20 @@
+#show_details {
+  display: flex;
+  flex-direction: row;
+}
+
+#main {
+  display: block;
+}
+
+.episode {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.episode_date,
+.episode_title,
+.episode_play {
+  display: block;
+}

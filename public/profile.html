@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta
+      name="viewpoint"
+      content="width=device-width, initial-scale=1.0"
+      minimum-scale="0.5,"
+      maximum-scale="2.0,"
+      user-scalable="yes"
+    />
+    <meta charset="utf-8" />
+    <title>Intoxicating Space</title>
+    <meta name="referrer" content="no-referrer-when-downgrade" />
+    <link rel="shorcut icon" href="./img/favicon/IS.ico" />
+    <link rel="stylesheet" href="./css/index.css" />
+    <link rel="stylesheet" href="./css/profile.css" />
+  </head>
+  <body>
+    <!-- top -->
+    <header id="topbar">
+      <a href="./index.html"><img id="main_logo" src="https://intoxicating.s3.ap-northeast-1.amazonaws.com/IS_LOGO.png"></div></a>
+      <div id="slogan">Intoxicating Space</div>
+      <div>search<div>
+    </header>
+    <!-- sidebar & main -->
+    <div id="middle">
+      <!-- sidebar -->
+      <div id="sidebar">
+        <div><a href="./index.html">Home</a></div>
+        <div><a href="./profile.html">Porfile</a></div>
+        <div><a href="./creator.html">Creator</a></div>
+        <div><a href="./dashboard.html">Dashboard</a></div>
+        <div><a>user_image</a></div>
+        <div><a href="./login_signup.html">login/signup</a></div>
+      </div>
+      <!-- ---------------------------------------------------------------------------------------------------------------------- -->
+      <!-- main -->
+      <div id="main">
+        <div id="profile_info">
+            <div id="user_name">IS</div>
+            <img id="user_image" src="https://intoxicating.s3.ap-northeast-1.amazonaws.com/IS_LOGO.png">
+            <div id="user_creator">IS</div></a>
+            <div id="user_show">IntoxicatingSpace</div>
+            <div id="user_email">IntoxicatingSpace@mail.com</div> 
+            <div id="user_counter">99Days</div>  
+            <div id="user_crown">悠久的住人</div>
+         </div>
+     
+      
+      </div>
+    </div>
+    <!-- ---------------------------------------------------------------------------------------------------------------------- -->
+    <!-- playerbar -->
+    <div id="playbar">
+      <audio
+        id="player"
+        src="https://intoxicating.s3.ap-northeast-1.amazonaws.com/Tom+Tykwer+-+Cloud+Atlas+End+Title.mp3"
+        controls="controls"
+        autoplay="true"
+        preload="auto"
+        width="1000"
+        height="80"
+      ></audio>
+      <div id="btnlist">
+        <button onclick="document.getElementById('player').play()">Play</button>
+        <button onclick="document.getElementById('player').pause()">
+          Pause
+        </button>
+        <button onclick="document.getElementById('player').volume += 0.1">
+          Vol +
+        </button>
+        <button onclick="document.getElementById('player').volume -= 0.1">
+          Vol -
+        </button>
+        <button onclick="document.getElementById('player').playbackRate = 2">
+          speed 2
+        </button>
+        <button onclick="document.getElementById('player').playbackRate = 1">
+          speed 1
+        </button>
+        <button id="showtime">currentTime</button>
+        <button id="mute">mute</button>
+        <button id="forward">forward10</button>
+        <button id="backward">backward10</button>
+      </div>
+    </div>
+    <script src="./js/play.js"></script>
+  </body>
+  <footer></footer>
+</html>

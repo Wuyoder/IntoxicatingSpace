@@ -1,0 +1,15 @@
+#login,
+#signup {
+  display: flex;
+  flex-direction: column;
+}
+#L_email,
+#L_pwd,
+#L_btn,
+#S_email,
+#S_pwd,
+#S_birth,
+#S_btn {
+  color: black;
+  width: 30vh;
+}
