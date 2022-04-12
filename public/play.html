@@ -3,24 +3,16 @@
   <head>
     <title>Intoxicating Space</title>
     <meta name="referrer" content="no-referrer-when-downgrade" />
-    <link rel="shorcut icon" href="./img/favicon/IS.ico" />
-    <link rel="stylesheet" href="./css/index.css" />
+    <link
+      rel="shorcut icon"
+      type="image/jpg"
+      href="https://intoxicating.s3.ap-northeast-1.amazonaws.com/IS_LOGO.png"
+    />
+    <link rel="stylesheet" href="./css/play.css" />
   </head>
   <body>
-    <!-- sidebar & (top & main) -->
-    <div id="bodydiv">
-      <!-- sidebar -->
-      <div id="sidebar">11111</div>
-      <!-- top & main -->
-      <div>
-        <!-- top -->
-        <divV></divV>
-        <!-- main -->
-        <div></div>
-      </div>
-    </div>
-    <!-- playerbar -->
     <div>
+      <h1>TEST</h1>
       <audio
         id="player"
         src="https://intoxicating.s3.ap-northeast-1.amazonaws.com/Tom+Tykwer+-+Cloud+Atlas+End+Title.mp3"
@@ -30,6 +22,8 @@
         width="1000"
         height="80"
       ></audio>
+    </div>
+    <div>
       <button onclick="document.getElementById('player').play()">Play</button>
       <button onclick="document.getElementById('player').pause()">Pause</button>
       <button onclick="document.getElementById('player').volume += 0.1">

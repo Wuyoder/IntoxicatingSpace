@@ -1,0 +1,10 @@
+#bodydiv {
+  height: 100%;
+  width: 100%;
+}
+
+#sidebar {
+  height: 90%;
+  width: 20%;
+  background-color: #14212e;
+}
