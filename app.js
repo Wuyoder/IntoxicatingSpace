@@ -10,7 +10,7 @@ const axios = require('axios');
 
 app.get('/test', async (req, res) => {
   const result = await axios
-    .get('http://localhost:3000/api/1.0/user/showlist')
+    .get('https://intoxicating.space/api/1.0/user/showlist')
     .then((response) => {
       const data = response.data;
       var show = '';
