@@ -36,18 +36,17 @@
       <!-- main -->
       <div id="main">
         <div id="login">
-            email<input id="L_email">
-            password<input id="L_pwd">
+            email<input id="L_email" required>
+            password<input id="L_pwd" required>
             <input id="L_btn" type="button" value="login">
          </div>
          <div id="signup">
-            email<input id="S_email">
-            password<input id="S_pwd">
-            birthday<input type="date" id="S_birth">
+            username<input id="S_name" required>  
+            email<input id="S_email" required>
+            password<input type="password" id="S_pwd" required>
+            birthday<input type="date" id="S_birth" required>
             <input id="S_btn" type="button" value="signup">
          </div>
-     
-      
       </div>
     </div>
     <!-- ---------------------------------------------------------------------------------------------------------------------- -->
@@ -85,7 +84,11 @@
         <button id="backward">backward10</button>
       </div>
     </div>
-    <script src="./js/play.js"></script>
+    <script src="./js/login_signup.js"></script>
+    <script>
+  
+   
+    </script>
   </body>
   <footer></footer>
 </html>

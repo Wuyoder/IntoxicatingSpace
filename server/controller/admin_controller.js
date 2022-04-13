@@ -9,6 +9,7 @@ const newrss = async (req, res) => {
   for (let i = 0; i < rsslist.length; i++) {
     const rss = rsslist[i];
     rssObject = await rssparser.parseURL(rss);
+
     const title = rssObject.title;
     const url = rssObject.feedUrl;
     const image = rssObject.itunes.image;
@@ -38,12 +39,12 @@ const newrss = async (req, res) => {
       category_sub = 'none';
     }
     const hot = 1;
-    insert += `("${title}","${url}","${creator}","${image}",${explicit},"${category_main}","${category_sub}","${hot}"),`;
+    insert += `("${title}","${url}","${creator}","${image}",${explicit},"${category_main}","${category_sub}","${hot}", 1),`;
     console.log(title);
   }
   const insertAll = insert.slice(0, insert.length - 1);
   mysql.newrss(insertAll);
 
-  res.send('OK');
+  res.send('new rss insert to DB OK');
 };
 module.exports = { newrss };

@@ -3,9 +3,11 @@
   display: flex;
   flex-direction: column;
 }
+
 #L_email,
 #L_pwd,
 #L_btn,
+#S_name,
 #S_email,
 #S_pwd,
 #S_birth,

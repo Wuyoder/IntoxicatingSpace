@@ -44,7 +44,9 @@
   font-size: 2vh;
 }
 
-.show_list_main {
+#show_list_main1,
+#show_list_main2,
+#show_list_main3 {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
