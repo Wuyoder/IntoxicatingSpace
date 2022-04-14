@@ -9,19 +9,13 @@ app.use(bodyParser.urlencoded({ extended: true }));
 const axios = require('axios');
 
 app.get('/test', async (req, res) => {
+  let data;
   const result = await axios
     .get('https://intoxicating.space/api/1.0/user/showlist')
     .then((response) => {
-      const data = response.data;
-      var show = '';
-
-      for (i = 0; i < 6; i++) {
-        show += `<a href="./show.html"><img class="show_image" src="${data[i].rss_image}">
-            <div class="show_name">${data[i].rss_title}</div>
-            <div class="show_category">${data[i].rss_category.main}</div></a>`;
-      }
+      data = response.data;
     });
-  res.send(show);
+  res.send(data);
 });
 
 //TODO:error handler, try&catch
