@@ -5,7 +5,7 @@ const axios = require('axios');
 
 const showlist = async (req, res) => {
   const [showlist_by_hot] = await db.query(
-    'SELECT * FROM intoxicating.rss WHERE rss_explicit=0 AND rss_status=1 order by rss_hot desc limit 18;'
+    'SELECT * FROM intoxicating.rss WHERE rss_explicit=0 AND rss_status=1 order by rss_hot desc limit 6;'
   );
   res.json(showlist_by_hot);
 };
@@ -22,7 +22,14 @@ const showchoice = async (req, res) => {
   await db.query('UPDATE rss SET rss_hot = rss_hot+1 WHERE rss_id = ?', [id]);
 
   const url = show_choice[0].rss_url;
-  rssObject = await rssparser.parseURL(url);
+  try {
+    rssObject = await rssparser.parseURL(url);
+  } catch (err) {
+    err = new Error();
+    err.message = 'wrong rss url';
+    return res.send(err);
+  }
+  console.log(rssObject.title);
   res.send(rssObject);
 };
 
