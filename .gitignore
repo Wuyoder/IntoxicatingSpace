@@ -5,6 +5,7 @@ Backend_IS/.env
 # Frontend_IS
 Frontend_IS/node_modules
 Frontend_IS/db.json
+Frontend_IS/.env
 
 # dependencies
 /node_modules
