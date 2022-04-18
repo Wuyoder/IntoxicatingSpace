@@ -14,9 +14,23 @@ export const AppContext = createContext();
 const App = () => {
   //匯出useContext內容，可以包含useState一起放下去，就可以跨區setState
 
-  const [routetry, setRoutertry] = useState(1);
+  //決定show id頁面的出現
+  const [showid, setShowid] = useState(1);
+  const [episodeid, setEpisodeid] = useState(0);
+  const [episodeurl, setEpisodeurl] = useState('123');
+  //
+  const [test, setTest] = useState('test');
+  //
 
-  const appContextValue = { test: 'testasdasdasdasd', setRoutertry };
+  const appContextValue = {
+    showid,
+    setShowid,
+    episodeid,
+    setEpisodeid,
+    episodeurl,
+    setEpisodeurl,
+    test: [test, setTest],
+  };
 
   // 下方return中，已經帶入一包context，詳見showlist.js
 
@@ -26,8 +40,6 @@ const App = () => {
   return (
     <BrowserRouter>
       <AppContext.Provider value={appContextValue}>
-        <div>{gopages}</div>
-        <div>{routetry}</div>
         <Main.Topbar />
         <div id='middle'>
           <Main.Sidebar />

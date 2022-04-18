@@ -1,53 +1,43 @@
-import { SHOWLIST } from '../../../global/constants';
-import axios from 'axios';
 import { v4 } from 'uuid';
 import { useEffect, useState, useContext } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Container from 'react-bootstrap/Container';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
-import { Link } from 'react-router-dom';
-import React, { useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link, NavLink } from 'react-router-dom';
+import React from 'react';
 import { AppContext } from '../../../App';
-// 取得useContext內容
-const TodoItem = () => {
-  const { test, setRoutertry } = useContext(AppContext);
-  console.log('test', test);
-  return { test, setRoutertry };
-};
+
 // 可以一次取得多個再使用
 const HotShow = ({ item, setGopages }) => {
-  function test() {
-    setGopages(function (prev) {
-      return (prev += 1);
-    });
-  }
-
-  const ABOUT = () => {
-    const navigate = useNavigate();
-    const onClick = () => {
-      navigate('/profile');
-    };
-    return (
-      <div>
-        <button onClick={onClick}>BACK</button>
-      </div>
-    );
-  };
+  // 取得useContext內容
+  const { showid, setShowid } = useContext(AppContext);
+  // 可以一次取得多個再使用
 
   return (
     <Container>
       <Col>
         <div key={v4()}>
-          <img
-            src={item.rss_image}
-            alt={item.title}
-            className='show_image show'
-            onClick={TodoItem().setRoutertry(4)}
-          ></img>
-          <div>{ABOUT()}</div>
-          <div className='show_name show'>{item.rss_title}</div>
+          <Link
+            to='/showchoice'
+            onClick={(event) => {
+              setShowid(item.rss_id);
+              console.log('showid', showid);
+              console.log(
+                'event.target',
+                event.currentTarget.lastChild.innerHTML
+              );
+            }}
+          >
+            <img
+              src={item.rss_image}
+              alt={item.title}
+              show={item.title}
+              className='show_image show'
+            ></img>
+            <div className='show_name show'>{item.rss_title}</div>
+            <div Style='display:none'>{item.rss_id}</div>
+          </Link>
           <div className='show_category show'>{item.rss_category_main}</div>
         </div>
       </Col>

@@ -1,3 +1,13 @@
+import { useNavigate, Link, NavLink } from 'react-router-dom';
+import React, { useEffect, useContext } from 'react';
+import AudioPlayer from 'react-h5-audio-player';
+import 'react-h5-audio-player/lib/styles.css';
+import { AppContext } from '../App';
+let activeStyle = {
+  textDecoration: 'wavy underline overline  white',
+  color: 'white',
+  fontWeight: 'bold',
+};
 const Topbar = () => {
   return (
     <div id='topbar'>
@@ -18,40 +28,99 @@ const Sidebar = () => {
   return (
     <div id='sidebar'>
       <div>
-        <a href='./'>Home</a>
+        <NavLink
+          to='/'
+          style={({ isActive }) => (isActive ? activeStyle : undefined)}
+        >
+          Home
+        </NavLink>
       </div>
       <div>
-        <a href='./profile'>Porfile</a>
+        <NavLink
+          to='/profile'
+          style={({ isActive }) => (isActive ? activeStyle : undefined)}
+        >
+          Profile
+        </NavLink>
       </div>
       <div>
-        <a href='./creator'>Creator</a>
+        <NavLink
+          to='/creator'
+          style={({ isActive }) => (isActive ? activeStyle : undefined)}
+        >
+          Creator
+        </NavLink>
       </div>
       <div>
-        <a href='./dashboard'>Dashboard</a>
+        <NavLink
+          to='/dashboard'
+          style={({ isActive }) => (isActive ? activeStyle : undefined)}
+        >
+          Dashboard
+        </NavLink>
       </div>
       <div>user_image</div>
       <div>
-        <a href='./login'>login/signup</a>
+        <NavLink
+          to='/login'
+          style={({ isActive }) => (isActive ? activeStyle : undefined)}
+        >
+          Login/Signup
+        </NavLink>
       </div>
     </div>
   );
 };
 
 const Player = () => {
+  const { episodeurl } = useContext(AppContext);
+
+  ///
+
   return (
     <div>
-      <audio
+      <button
+        onClick={() => {
+          console.log(document.querySelector('audio').currentTime);
+        }}
+      >
+        now
+      </button>
+      <AudioPlayer
+        id='playbar'
+        src={localStorage.getItem('episode')}
+        onPlay={(e) => console.log('Play')}
+        autoPlay={false}
+        showSkipControls={false}
+        showFilledVolume={true}
+        Style='background-color:black'
+      />
+    </div>
+  );
+};
+
+const Main = { Topbar, Sidebar, Player };
+export default Main;
+
+{
+  /* <audio
         id='player'
-        src='https://rss.soundon.fm/rssf/6e5b64e5-3239-4fa0-b8cd-dfc1ce825f1f/feedurl/0b63ed3c-b88b-4b90-879e-093fdaf8287e/rssFileVip.mp3?timestamp=1646784044980'
+        src={localStorage.getItem('episode')}
         controls='controls'
-        autoPlay={true}
+        autoPlay={false}
         preload='auto'
         width='1000'
         height='80'
       ></audio>
       <div id='btnlist'></div>
 
-      <button id='play' Style='background-color:black'>
+      <button
+        id='play'
+        Style='background-color:black'
+        onClick={() => {
+          document.getElementById('player');
+        }}
+      >
         Play
       </button>
       <button id='pause' Style='background-color:black'>
@@ -80,10 +149,5 @@ const Player = () => {
       </button>
       <button id='backward' Style='background-color:black'>
         backward10
-      </button>
-    </div>
-  );
-};
-
-const Main = { Topbar, Sidebar, Player };
-export default Main;
+      </button> */
+}
