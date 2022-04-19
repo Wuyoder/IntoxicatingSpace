@@ -59,7 +59,6 @@ const Sidebar = () => {
           Dashboard
         </NavLink>
       </div>
-      <div>user_image</div>
       <div>
         <NavLink
           to='/login'
@@ -79,13 +78,13 @@ const Player = () => {
 
   return (
     <div>
-      <button
+      {/* <button
         onClick={() => {
           console.log(document.querySelector('audio').currentTime);
         }}
       >
         now
-      </button>
+      </button> */}
       <AudioPlayer
         id='playbar'
         src={localStorage.getItem('episode')}

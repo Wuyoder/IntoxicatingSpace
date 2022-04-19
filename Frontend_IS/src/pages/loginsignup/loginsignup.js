@@ -7,22 +7,24 @@ const LoginSignup = () => {
   const [now, setNow] = useState(true);
   return (
     <>
-      <button
-        Style='background-color:black'
-        onClick={() => {
-          setNow(true);
-        }}
-      >
-        Login
-      </button>
-      <button
-        Style='background-color:black'
-        onClick={() => {
-          setNow(false);
-        }}
-      >
-        Signup
-      </button>
+      <div>
+        <button
+          Style='background-color:black'
+          onClick={() => {
+            setNow(true);
+          }}
+        >
+          Login
+        </button>
+        <button
+          Style='background-color:black'
+          onClick={() => {
+            setNow(false);
+          }}
+        >
+          Signup
+        </button>
+      </div>
       {now ? <Login /> : <Signup />}
     </>
   );

@@ -48,13 +48,18 @@
 }
 
 #sidebar {
-  width: 15%;
+  width: 15vw;
+  height: 100vh;
   background-color: #14212e;
   display: flex;
-  justify-content: space-evenly;
+  justify-content: flex-start;
   align-items: center;
   flex-direction: column;
   color: aliceblue;
+}
+
+#sidebar.a {
+  margin: 10px;
 }
 
 #main {

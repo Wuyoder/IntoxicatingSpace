@@ -17,7 +17,6 @@ const ShowEpisode = () => {
 
   return (
     <>
-      <div>{test[0]}</div>
       {episode.map((item, index) => {
         return (
           <div className='episode'>

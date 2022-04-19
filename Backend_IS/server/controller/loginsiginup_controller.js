@@ -139,8 +139,14 @@ const signin = async (req, res) => {
   }
   payload.user_adult = adult;
   const timestamp = new Date();
-  await db.query('UPDATE users SET user_last_login = ?', [timestamp]);
-  await db.query('UPDATE counters SET counter_logins = counter_logins+1');
+  await db.query('UPDATE users SET user_last_login = ? WHERE user_id = ?', [
+    timestamp,
+    user_id,
+  ]);
+  await db.query(
+    'UPDATE counters SET counter_logins = counter_logins+1 WHERE user_id = ?',
+    [user_id]
+  );
   const token = jwt.sign(payload, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRED,
   });

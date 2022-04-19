@@ -1,7 +1,9 @@
 const db = require('../util/mysql');
 const RssParser = require('rss-parser');
 const rssparser = new RssParser();
-const axios = require('axios');
+const jwt = require('jsonwebtoken');
+const { promisify } = require('util');
+const { jwtwrap } = require('../util/jwt');
 
 const showlist = async (req, res) => {
   const [showlist_by_hot] = await db.query(
@@ -54,4 +56,121 @@ const episodechoice = async (req, res) => {
   res.send(data);
 };
 
-module.exports = { showlist, showchoice, episodechoice };
+const showsubscribe = async (req, res) => {
+  const who = await jwtwrap(req);
+  if (who.error) {
+    return res.json(who);
+  }
+  if (!req.body.id) {
+    return res.status(400).json({ error: 'show id missing' });
+  }
+  const [sub_check] = await db.query(
+    'SELECT user_id FROM subscribes WHERE user_id = ? && rss_id = ?',
+    [who.id, req.body.id]
+  );
+  if (sub_check[0]?.user_id) {
+    return res.json({ message: 'already subscribed.' });
+  }
+  await db.query('INSERT INTO subscribes (user_id, rss_id) VALUES (?,?)', [
+    who.id,
+    req.body.id,
+  ]);
+  res.send('subscribe ok');
+};
+
+const showunsub = async (req, res) => {
+  const who = await jwtwrap(req);
+  if (who.error) {
+    return res.json(who);
+  }
+  if (!req.body.id) {
+    return res.status(400).json({ error: 'show id missing' });
+  }
+  const [unsub_check] = await db.query(
+    'DELETE FROM intoxicating.subscribes WHERE user_id = ? && rss_id = ?;',
+    [who.id, req.body.id]
+  );
+  if (unsub_check.affectedRows === 0) {
+    return res.status(400).json({ error: 'subscribe yet' });
+  }
+  console.log(unsub_check.affectedRows);
+
+  res.send('unsubcribe OK');
+};
+
+const showswitcher = async (req, res) => {
+  const who = await jwtwrap(req);
+  if (who.error) {
+    return res.json(who);
+  }
+  if (!req.body.id || !req.body.status) {
+    return res.status(400).json({ error: 'show id missing' });
+  }
+  const [showswitcheon] = await db.query(
+    'UPDATE creators_shows SET show_status = ? WHERE user_id = ?',
+    [req.body.status, who.id]
+  );
+  res.status(200).json({ 'status change': req.body.status });
+};
+//TODO: new episode first
+const episodeswitcher = async (req, res) => {
+  res.send('OK');
+};
+
+const userhistory = async (req, res) => {
+  const who = await jwtwrap(req);
+  if (who.error) {
+    return res.json(who);
+  }
+  if (!req.body.type) {
+    return res.status(400).json({ error: 'type missing' });
+  }
+  let result;
+  if (req.body.type === 'show') {
+    const [show_initial_check] = await db.query(
+      'SELECT * FROM history_shows WHERE user_id = ? && show_id = ?',
+      [who.id, req.body.show]
+    );
+    if (!show_initial_check[0]) {
+      result = await db.query(
+        'INSERT INTO history_shows (user_id, show_id, clicks) VALUES (?, ?, ?)',
+        [who.id, req.body.show, 1]
+      );
+    } else {
+      result = await db.query(
+        'UPDATE history_shows SET clicks = clicks + 1 WHERE user_id = ? && show_id = ?',
+        [who.id, req.body.show]
+      );
+    }
+  }
+
+  if (req.body.type === 'episode') {
+    const [episode_initial_check] = await db.query(
+      'SELECT * FROM history_episodes WHERE user_id = ? && show_id = ? && episode_id = ?',
+      [who.id, req.body.show, req.body.episode]
+    );
+    if (!episode_initial_check[0]) {
+      result = await db.query(
+        'INSERT INTO history_episodes (user_id, show_id, episode_id, clicks) VALUES (?, ?, ?, ?)',
+        [who.id, req.body.show, req.body.episode, 1]
+      );
+    } else {
+      result = await db.query(
+        'UPDATE history_episodes SET clicks = clicks + 1 WHERE user_id = ? && show_id = ? && episode_id = ?',
+        [who.id, req.body.show, req.body.episode]
+      );
+    }
+  }
+  res.status(200).json({ 'history update': req.body.type });
+};
+
+module.exports = {
+  showlist,
+  showchoice,
+  episodechoice,
+  showsubscribe,
+  showunsub,
+  showswitcher,
+  episodeswitcher,
+  userhistory,
+};
