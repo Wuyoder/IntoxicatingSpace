@@ -12,7 +12,7 @@ const userprofile = async (req, res) => {
   } catch (err) {
     err = new Error();
     err.message = 'wrong token';
-    return res.status(400).json({ error: err.message });
+    return res.status(200).json({ error: err.message });
   }
   res.send(who);
 };
@@ -27,7 +27,7 @@ const creatorprofile = async (req, res) => {
   } catch (err) {
     err = new Error();
     err.message = 'wrong token';
-    return res.status(400).json({ error: err.message });
+    return res.status(200).json({ error: err.message });
   }
   const [creator_profile] = await db.query(
     'SELECT * FROM creators_shows WHERE user_id = ?',

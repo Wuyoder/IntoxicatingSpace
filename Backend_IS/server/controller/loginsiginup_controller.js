@@ -15,20 +15,22 @@ const signup = async (req, res) => {
   });
   image = 'https://intoxicating.s3.ap-northeast-1.amazonaws.com/IS_LOGO.png';
   if (validation.error) {
-    return res.status(400).send(validation.error.details[0].message);
+    return res.status(200).json({ error: validation.error.details[0].message });
   }
   const email_check = await db.query(
     `SELECT user_id FROM users WHERE user_email =?`,
     [email]
   );
   if (email_check[0][0]) {
-    return res.status(400).send('the email address is already in use.');
+    return res
+      .status(200)
+      .json({ error: 'the email address is already in use.' });
   }
   const hashed_pwd = await bcrypt.hash(pwd, saltRounds);
-  const today = new Date();
-  const year_18 = today.getFullYear() - 18;
-  const month = today.getMonth() + 1;
-  const adult_boundary = year_18 + '-' + month + '-' + today.getDate();
+
+  const adult_boundary = new Date(
+    new Date().setFullYear(new Date().getFullYear() - 18)
+  );
   let adult;
   if (birth < adult_boundary) {
     adult = 1;
@@ -52,7 +54,7 @@ const signup = async (req, res) => {
   const show_category_main = 'Leisure';
   const show_category_sub = 'Hobbies';
   const newcreator = await db.query(
-    'INSERT INTO creators_shows (user_id, show_id,show_name, show_des, show_image, show_explicit, show_category_main, show_category_sub, show_time_update, show_subscriber, show_status, show_click, creator_name, creator_email, creator_status) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)',
+    'INSERT INTO creators_shows (user_id, show_id,show_name, show_des, show_image, show_explicit, show_category_main, show_category_sub,  show_subscriber, show_status, show_click, creator_name, creator_email, creator_status) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)',
     [
       user_id,
       show_id,
@@ -62,7 +64,6 @@ const signup = async (req, res) => {
       show_explicit,
       show_category_main,
       show_category_sub,
-      Date.now(),
       0,
       0,
       0,
@@ -93,7 +94,10 @@ const signup = async (req, res) => {
   await db.query('COMMIT');
   //const upload = await s3upload('123', 'user', 'image/jpeg', 'test.jpg');
 
-  return res.send('new user signup OK');
+  return res.status(200).json({
+    status:
+      'Your account has been successfully created. Please turn to signin.',
+  });
 };
 
 const signin = async (req, res) => {
@@ -102,34 +106,33 @@ const signin = async (req, res) => {
     email,
   ]);
   if (!user_info[0]) {
-    return res.send('signup first');
+    return res.json({ error: 'signup first' });
   }
   const checkpwd = await bcrypt.compare(pwd, user_info[0].user_password);
   if (!checkpwd) {
-    return res.send('wrong password');
+    return res.status(200).json({ error: 'wrong password' });
   }
   const infos = user_info[0];
   const {
     user_id,
     user_name,
     user_email,
+    user_birth,
     user_status,
     user_image,
     user_adult,
     user_role,
   } = infos;
-  const payload = {
+  let payload = {
     id: user_id,
     name: user_name,
     email: user_email,
     image: user_image,
-    adult: user_adult,
     role: user_role,
   };
-  const today = new Date();
-  const year_18 = today.getFullYear() - 18;
-  const month = today.getMonth() + 1;
-  const adult_boundary = year_18 + '-' + month + '-' + today.getDate();
+  const adult_boundary = new Date(
+    new Date().setFullYear(new Date().getFullYear() - 18)
+  );
   let adult;
   const birth = infos.user_birth;
   if (birth < adult_boundary) {
@@ -137,12 +140,13 @@ const signin = async (req, res) => {
   } else {
     adult = 0;
   }
-  payload.user_adult = adult;
+  payload.adult = adult;
+
   const timestamp = new Date();
-  await db.query('UPDATE users SET user_last_login = ? WHERE user_id = ?', [
-    timestamp,
-    user_id,
-  ]);
+  await db.query(
+    'UPDATE users SET user_last_login = ? , user_adult = ? WHERE user_id = ?',
+    [timestamp, adult, user_id]
+  );
   await db.query(
     'UPDATE counters SET counter_logins = counter_logins+1 WHERE user_id = ?',
     [user_id]

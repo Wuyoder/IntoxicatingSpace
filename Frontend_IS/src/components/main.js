@@ -1,5 +1,7 @@
 import { useNavigate, Link, NavLink } from 'react-router-dom';
-import React, { useEffect, useContext } from 'react';
+import { COUNTER_LOGINS } from '../global/constants';
+import React, { useEffect, useContext, useState } from 'react';
+import axios from 'axios';
 import AudioPlayer from 'react-h5-audio-player';
 import 'react-h5-audio-player/lib/styles.css';
 import { AppContext } from '../App';
@@ -8,6 +10,27 @@ let activeStyle = {
   color: 'white',
   fontWeight: 'bold',
 };
+const Withyou = () => {
+  const [counterlogins, setCounterlogins] = useState(0);
+
+  useEffect(() => {
+    const getCounter = async () => {
+      const res = await axios.get(COUNTER_LOGINS, {
+        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+      });
+      setCounterlogins(res.data.status);
+    };
+    getCounter();
+  }, []);
+
+  if (counterlogins > 0) {
+    return <>with you {counterlogins} times</>;
+  }
+  if (!counterlogins) {
+    return <></>;
+  }
+};
+
 const Topbar = () => {
   return (
     <div id='topbar'>
@@ -18,7 +41,9 @@ const Topbar = () => {
           src='https://intoxicating.s3.ap-northeast-1.amazonaws.com/IS_LOGO.png'
         ></img>
       </div>
-      <div id='slogan'>Intoxicating Space</div>
+      <div id='slogan'>
+        Intoxicating Space <Withyou />
+      </div>
       <div>search</div>
     </div>
   );

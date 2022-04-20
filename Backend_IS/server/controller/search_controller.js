@@ -3,7 +3,7 @@ const db = require('../util/mysql');
 const showkeyword = async (req, res) => {
   const data = req.body;
   if (!data.keyword) {
-    return res.send('no keyword');
+    return res.json({ error: 'no keyword' });
   }
   const words = data.keyword.split(' ');
   console.log(words);
@@ -16,7 +16,9 @@ const showkeyword = async (req, res) => {
     result.push(search_result);
   }
   if (result.flat().length == 0) {
-    return res.status(400).send('no match data, please try other keywords.');
+    return res
+      .status(200)
+      .json({ error: 'no match data, please try other keywords.' });
   }
   return res.send(result.flat());
 };

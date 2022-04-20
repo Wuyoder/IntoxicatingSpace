@@ -1,21 +1,43 @@
+import { useState, useEffect } from 'react';
+import { USER_PROFILE } from '../../global/constants';
+import axios from 'axios';
+
 const Profile = () => {
-  return (
-    <>
-      <div>Profile page</div>
-      <div id='profile_info'>
-        <div id='user_name'>IS</div>
-        <img
-          id='user_image'
-          alt='user_image'
-          src='https://intoxicating.s3.ap-northeast-1.amazonaws.com/IS_LOGO.png'
-        ></img>
-        <div id='user_creator'>IS</div>
-        <div id='user_show'>IntoxicatingSpace</div>
-        <div id='user_email'>IntoxicatingSpace@mail.com</div>
-        <div id='user_counter'>99Days</div>
-        <div id='user_crown'>crown</div>
-      </div>
-    </>
-  );
+  const [userprofile, setUserprofile] = useState({});
+  useEffect(() => {
+    const getuserprofile = async () => {
+      const res = await axios.get(USER_PROFILE, {
+        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+      });
+      console.log(res.data);
+      setUserprofile(res.data);
+    };
+    getuserprofile();
+  }, []);
+
+  const gologout = () => {
+    localStorage.clear('token');
+    alert('SeeYa');
+    window.location.replace('/');
+  };
+
+  if (userprofile.error) {
+    alert('Please sign in first.');
+    window.location.replace('/login');
+  } else {
+    return (
+      <>
+        <div id='profile_info'>
+          <img id='user_image' alt='user_image' src={userprofile.image}></img>
+          <div id='user_name'>{userprofile.name}</div>
+          <div id='user_email'>{userprofile.email}</div>
+          <button onClick={gologout} Style='background-color:black'>
+            LOG OUT
+          </button>
+        </div>
+        <div></div>
+      </>
+    );
+  }
 };
 export default Profile;

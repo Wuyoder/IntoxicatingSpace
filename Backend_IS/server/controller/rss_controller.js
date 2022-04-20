@@ -1,25 +1,74 @@
 const db = require('../util/mysql');
 const xml = require('xml');
-
 const rssfeed = async (req, res) => {
+  //目標確定show_id
   const id = req.params.rss;
+  //取得show data
   const [show_info] = await db.query(
     'SELECT * FROM creators_shows WHERE show_id = ?',
     [id]
   );
   if (!show_info[0]) {
-    return res.send('wrong show id');
+    return res.status(200).json({ error: 'wrong rss url' });
   }
   const infos = show_info[0];
   if (infos.show_status === 0) {
-    return res.send('This show is offline.');
+    return res.status(200).json({ error: 'This show is offline' });
   }
+  //取得所有單集episode data , for loop
+  const [episode_info] = await db.query(
+    'SELECT * FROM episodes WHERE show_id = ? && episode_status = 1 ORDER BY episode_publish_date DESC',
+    [id]
+  );
+  if (!episode_info[0]) {
+    return res.status(200).json({ error: 'This show (episode) is offline' });
+  }
+  let items = '';
   let explicit;
-  if (infos.show_explicit === 0) {
-    explicit = 'no';
-  } else {
-    explicit = 'yes';
+  for (let i = 0; i < episode_info.length; i++) {
+    if (episode_info[i].episode_explicit === 0) {
+      explicit = 'no';
+    } else {
+      explicit = 'yes';
+    }
+    let basic = episode_info[i].episode_publish_date
+      .toString()
+      .replace('+0800 (台北標準時間)', '');
+    const timeformat =
+      basic.slice(0, 3) +
+      ',' +
+      basic.slice(7, 10) +
+      basic.slice(3, 7) +
+      basic.slice(10, 28);
+    items += `<item>
+      <title><![CDATA[${episode_info[i].episode_title}]]></title>
+      <description><![CDATA[${episode_info[i].episode_des}]]></description>
+      <link>https://intoxicating.space/api/1.0/user/rss/${req.params.rss}</link>
+      <guid isPermaLink="false">${req.params.rss}</guid>
+      <dc:creator><![CDATA[${infos.creator_name}]]></dc:creator>
+      <pubDate>${timeformat}</pubDate>
+      <enclosure url="${episode_info[i].episode_file}" length="${episode_info[i].episode_length}" type="audio/mpeg"/>
+      <itunes:duration>${episode_info[i].episode_duration}</itunes:duration>
+      <itunes:image href="${episode_info[i].episode_image}"/>
+      <googleplay:description><![CDATA[${episode_info[i].episode_des}]]></googleplay:description>
+      <itunes:summary><![CDATA[${episode_info[i].episode_des}]]></itunes:summary>
+      <content:encoded><![CDATA[${episode_info[i].episode_des}]]></content:encoded>
+      <itunes:explicit>${episode_info[i].episode_explicit}</itunes:explicit>
+      <itunes:season>1</itunes:season>
+      <itunes:episode>${episode_info[i].episode_episode}</itunes:episode>
+      <itunes:episodeType>full</itunes:episodeType>
+  </item>`;
   }
+  let last = episode_info[0].episode_publish_date
+    .toString()
+    .replace('+0800 (台北標準時間)', '');
+  const lasttimeformat =
+    last.slice(0, 3) +
+    ',' +
+    last.slice(7, 10) +
+    last.slice(3, 7) +
+    last.slice(10, 28);
+
   let rss = `<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0" xmlns:googleplay="http://www.google.com/schemas/play-podcasts/1.0" xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd" >
   <channel>`;
   rss += `
@@ -32,7 +81,7 @@ const rssfeed = async (req, res) => {
           <link>${infos.show_image}</link>
       </image>
       <generator>IntoxicatingSpace</generator>
-      <lastBuildDate>${infos.show_time_update}</lastBuildDate>
+      <lastBuildDate>${lasttimeformat}</lastBuildDate>
       <atom:link href="https://intoxicating.space/user/show/${id}" rel="self" type="application/rss+xml"/>
       <copyright><![CDATA[${infos.creator_name}]]></copyright>
       <language><![CDATA[zh]]></language>
@@ -54,31 +103,10 @@ const rssfeed = async (req, res) => {
       <itunes:owner>
           <itunes:name><![CDATA[${infos.creator_name}]]></itunes:name>
           <itunes:email>${infos.creator_email}</itunes:email>
-      </itunes:owner>
-    `;
-  //   rss += `
-  //   <item>
-  //     <title><![CDATA[單集節目名稱]]></title>
-  //     <description><![CDATA[<p>這裡是單集節目的說明 <br /></p>]]></description>
-  //     <link>https://加上後面的ID，這裡是單集節目地址/這裡是這集節目的GUID</link>
-  //     <guid isPermaLink="false">這裡是這集節目的GUID</guid>
-  //     <dc:creator><![CDATA[podcast製作者creator的名字]]></dc:creator>
-  //     <pubDate>Fri, 15 Jan 2021 04:58:35 GMT加入此項RSS內容的時間</pubDate>
-  //     <enclosure url="https://節目檔案的位置.mp3" length="28521959節目總byte數" type="audio/mpeg"/>
-  //     <itunes:duration>1752節目總秒數</itunes:duration>
-  //     <itunes:image href="https://單集封面.png"/>
-  //     <googleplay:description><![CDATA[<p>這裡是單集節目的說明 <br /></p>]]></googleplay:description>
-  //     <itunes:summary><![CDATA[<p>這裡是單集節目的說明 <br /></p>]]></itunes:summary>
-  //     <content:encoded><![CDATA[<p>這裡是單集節目的說明 <br /></p>]]></content:encoded>
-  //     <itunes:explicit>no （yes/no決定是否成人內容，單集為yes則會覆蓋此處的no）</itunes:explicit>
-  //     <itunes:season>1寫死為第1季（或是不要使用此situational tags）</itunes:season>
-  //     <itunes:episode>5自動產生集數（或是不要使用此situational tags）</itunes:episode>
-  //     <itunes:episodeType>full</itunes:episodeType>
-  // </item>
-  //   `;
-
+      </itunes:owner>`;
+  rss += items;
   rss += `</channel></rss>`;
-  //return res.send(show_info);
+
   return res.header('Content-Type', 'application/xml').send(rss);
 };
 

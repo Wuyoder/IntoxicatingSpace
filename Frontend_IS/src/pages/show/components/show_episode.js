@@ -1,7 +1,7 @@
 import { useEffect, useState, useContext } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
-import { SHOW } from '../../../global/constants';
+import { SHOWCHOICE } from '../../../global/constants';
 import { AppContext } from '../../../App';
 const ShowEpisode = () => {
   const [episode, setEpisode] = useState([]);
@@ -9,7 +9,7 @@ const ShowEpisode = () => {
     useContext(AppContext);
   useEffect(() => {
     const getEpisode = async () => {
-      const res = await axios.get(`${SHOW}/${showid}`);
+      const res = await axios.get(`${SHOWCHOICE}/${showid}`);
       setEpisode(res.data.items);
     };
     getEpisode();
@@ -23,7 +23,10 @@ const ShowEpisode = () => {
             <div>
               <div className='episode_date'>{item.pubDate}</div>
               <Link
-                to='/episode'
+                to={{
+                  pathname: `/episode`,
+                  hash: `${item.guid}`,
+                }}
                 onClick={() => {
                   setEpisodeid(index);
                   localStorage.setItem('last', item.enclosure?.url);

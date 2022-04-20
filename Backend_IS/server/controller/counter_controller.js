@@ -12,13 +12,13 @@ const counter_logins = async (req, res) => {
   } catch (err) {
     err = new Error();
     err.message = 'wrong token';
-    return res.status(400).json({ error: err.message });
+    return res.status(200).json({ error: err.message });
   }
-  const logins = await db.query(
+  const [logins] = await db.query(
     'SELECT counter_logins FROM counters WHERE user_id =?',
     [who.id]
   );
-  res.json({ counter_logins: who.id });
+  res.json({ status: logins[0].counter_logins });
 };
 
 module.exports = { counter_logins };

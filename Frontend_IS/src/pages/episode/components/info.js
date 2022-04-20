@@ -1,4 +1,4 @@
-import { EPISODE } from '../../../global/constants';
+import { EPISODECHOICE } from '../../../global/constants';
 import { useState, useEffect, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
@@ -15,7 +15,7 @@ const Info = () => {
   const [info, setInfo] = useState({});
   useEffect(() => {
     const getInfo = async () => {
-      const res = await axios.get(`${EPISODE}/${showid}-${episodeid}`);
+      const res = await axios.get(`${EPISODECHOICE}/${showid}-${episodeid}`);
       setInfo(res.data);
     };
     getInfo();

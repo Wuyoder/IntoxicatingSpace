@@ -9,7 +9,7 @@ import React from 'react';
 import { AppContext } from '../../../App';
 
 // 可以一次取得多個再使用
-const HotShow = ({ item, setGopages }) => {
+const HotShow = ({ item }) => {
   // 取得useContext內容
   const { showid, setShowid } = useContext(AppContext);
   // 可以一次取得多個再使用
@@ -19,7 +19,10 @@ const HotShow = ({ item, setGopages }) => {
       <Col>
         <div key={v4()}>
           <Link
-            to='/showchoice'
+            to={{
+              pathname: '/showchoice',
+              hash: `${item.rss_id}`,
+            }}
             onClick={(event) => {
               setShowid(item.rss_id);
               console.log('showid', showid);

@@ -23,7 +23,7 @@ const Showlist = () => {
   const { setShowid } = useContext(AppContext);
   // 可以一次取得多個再使用
 
-  const [showlist, setShowlist] = useState([]);
+  const [showlist, setShowlist] = useState({});
   useEffect(() => {
     const getShowlist = async () => {
       const res = await axios.get(SHOWLIST);
@@ -31,13 +31,37 @@ const Showlist = () => {
     };
     getShowlist();
   }, []);
-  const category = ['熱門', '推薦', '足跡'];
+
   return (
     <>
       <div>
-        <Category category={category[0]} />
+        <Category category={showlist.topic1} />
         <Row xs={6}>
-          {showlist.map((item) => {
+          {showlist.showlist_1?.map((item) => {
+            return (
+              <>
+                <Col>
+                  <Show.HotShow item={item} />
+                </Col>
+              </>
+            );
+          })}
+        </Row>
+        <Category category={showlist.topic2} />
+        <Row xs={6}>
+          {showlist.showlist_2?.map((item) => {
+            return (
+              <>
+                <Col>
+                  <Show.HotShow item={item} />
+                </Col>
+              </>
+            );
+          })}
+        </Row>
+        <Category category={showlist.topic3} />
+        <Row xs={6}>
+          {showlist.showlist_3?.map((item) => {
             return (
               <>
                 <Col>

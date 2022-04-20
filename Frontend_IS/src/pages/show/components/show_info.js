@@ -1,13 +1,13 @@
 import { useEffect, useState, useContext } from 'react';
 import axios from 'axios';
-import { SHOW } from '../../../global/constants';
+import { SHOWCHOICE } from '../../../global/constants';
 import { AppContext } from '../../../App';
 const ShowInfo = () => {
   const [info, setInfo] = useState([]);
   const { showid } = useContext(AppContext);
   useEffect(() => {
     const getInfo = async () => {
-      const res = await axios.get(`${SHOW}/${showid}`);
+      const res = await axios.get(`${SHOWCHOICE}/${showid}`);
       setInfo(res.data);
     };
     getInfo();
