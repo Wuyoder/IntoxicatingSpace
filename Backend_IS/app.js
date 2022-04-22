@@ -25,6 +25,53 @@ app.use('/api/1.0/admin', [require('./server/routes/admin_route')]);
 
 app.use('/api/1.0/user', [require('./server/routes/user_route')]);
 
+// TODO:SOCKET.IO
+
+//將啟動的 Server 送給 socket.io 處理
+const http = require('http');
+const server = http.createServer(app);
+const { Server } = require('socket.io');
+const io = new Server(server, {
+  cors: {
+    origin: '*',
+  },
+});
+
+const { jwtsk } = require('./server/util/jwt');
+const db = require('./server/util/mysql');
+io.on('connection', (socket) => {
+  socket.on('getMessage', async (message) => {
+    const who = await jwtsk(message.token);
+    let membership = 0;
+    let id = 0;
+    if (!who.error) {
+      membership = 1;
+      id = who.id;
+    }
+    const [new_msg] = await db.query(
+      'INSERT INTO chats (show_id, episode_id, membership ,user_id, chat_msg, chat_msg_type, chat_episode_time ) VALUES (?, ?, ?, ?, ?, ?, ?)',
+      [
+        message.show_id,
+        message.episode_id,
+        membership,
+        id,
+        message.msg,
+        message.type,
+        message.currentTime,
+      ]
+    );
+    const [recorded] = await db.query(
+      'SELECT * FROM chats WHERE show_id = ? AND episode_id = ? ORDER BY chat_episode_time',
+      [message.show_id, message.episode_id]
+    );
+    let history;
+    if (!recorded[0]) {
+      history = { error: 'no leave words yet' };
+    }
+    socket.broadcast.emit('getMessage', recorded);
+  });
+});
+
 // Page not found
 app.use(function (req, res, next) {
   res.redirect('/');
@@ -37,6 +84,6 @@ app.use(function (err, req, res, next) {
   res.status(500).send('Internal Server Error');
 });
 
-app.listen(port, () => {
+server.listen(port, () => {
   console.log(`Listening on port ${port}`);
 });

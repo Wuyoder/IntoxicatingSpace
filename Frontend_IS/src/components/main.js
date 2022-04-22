@@ -97,23 +97,22 @@ const Sidebar = () => {
 };
 
 const Player = () => {
-  const { episodeurl } = useContext(AppContext);
-
   ///
+
+  const { podcastplayer, setPod } = useContext(AppContext);
 
   return (
     <div>
-      {/* <button
-        onClick={() => {
-          console.log(document.querySelector('audio').currentTime);
-        }}
-      >
-        now
-      </button> */}
       <AudioPlayer
         id='playbar'
         src={localStorage.getItem('episode')}
-        onPlay={(e) => console.log('Play')}
+        onPlay={(e) =>
+          console.log('Play', document.querySelector('audio').currentTime)
+        }
+        onListen={(e) => {
+          console.log('Play', document.querySelector('audio').currentTime);
+          setPod(document.querySelector('audio').currentTime);
+        }}
         autoPlay={false}
         showSkipControls={false}
         showFilledVolume={true}

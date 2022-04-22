@@ -3,10 +3,13 @@ import Chatroom from './components/chatroom';
 
 const Episode = () => {
   return (
-    <div>
-      <Info />
-      <br />
-      <div>{/* <Chatroom /> */}</div>
+    <div id='chat_parts'>
+      <div>
+        <div>
+          <Info />
+        </div>
+      </div>
+      <Chatroom />
     </div>
   );
 };

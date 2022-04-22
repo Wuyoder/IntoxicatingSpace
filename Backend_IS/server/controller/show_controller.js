@@ -297,6 +297,27 @@ const episode = async (req, res) => {
   res.json({ status: 'episode update ok & status = 1' });
 };
 
+const ishostshow = async (req, res) => {
+  const who = await jwtwrap(req);
+  if (who.error) {
+    return res.json(who);
+  }
+
+  const [show_id] = await db.query(
+    'SELECT show_id FROM creators_shows WHERE user_id = ?',
+    [who.id]
+  );
+  const [host_episode] = await db.query(
+    'SELECT * FROM episodes WHERE show_id = ?',
+    [show_id[0].show_id]
+  );
+  if (!host_episode[0]) {
+    return res.json({ error: 'no episode found' });
+  }
+  return res.send(host_episode);
+  res.json(who);
+};
+
 module.exports = {
   showlist,
   showchoice,
@@ -306,4 +327,5 @@ module.exports = {
   switcher,
   userhistory,
   episode,
+  ishostshow,
 };

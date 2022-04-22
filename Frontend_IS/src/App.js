@@ -1,5 +1,4 @@
 import React, { useEffect, useState, createContext } from 'react';
-import './index.css';
 import Main from './components/main';
 import Showlist from './pages/showlist/showlist';
 import Showchoice from './pages/show/show';
@@ -21,7 +20,9 @@ const App = () => {
   //
   const [test, setTest] = useState('test');
   //
+  const [podcastplayer, setPod] = useState(0);
 
+  //
   const appContextValue = {
     showid,
     setShowid,
@@ -30,13 +31,14 @@ const App = () => {
     episodeurl,
     setEpisodeurl,
     test: [test, setTest],
+    podcastplayer,
+    setPod,
   };
 
-  // 下方return中，已經帶入一包context，詳見showlist.js
+  useEffect(() => {
+    console.log('found change', podcastplayer);
+  }, [podcastplayer]);
 
-  const [gopages, setGopages] = useState('go ahead!');
-
-  console.log(gopages);
   return (
     <BrowserRouter>
       <AppContext.Provider value={appContextValue}>
@@ -44,10 +46,7 @@ const App = () => {
         <div id='middle'>
           <Main.Sidebar />
           <Routes>
-            <Route
-              path='/'
-              element={<Showlist setGopages={setGopages} />}
-            ></Route>
+            <Route path='/' element={<Showlist />}></Route>
             <Route path='/showchoice' element={<Showchoice />}></Route>
             <Route path='/episode' element={<Episode />}></Route>
             <Route path='/creator' element={<Creator />}></Route>
@@ -56,6 +55,7 @@ const App = () => {
             <Route path='/test' element={<Home />}></Route>
           </Routes>
         </div>
+        <div id='filler'></div>
         <Main.Player />
       </AppContext.Provider>
     </BrowserRouter>

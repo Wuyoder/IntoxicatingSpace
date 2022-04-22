@@ -26,29 +26,33 @@ const Info = () => {
     };
     play();
   };
+  //TODO: html tag to plain text
   return (
-    <div className='show' id='show_details'>
-      <div className='show_info' id='show_ifo'>
-        <img
-          className='show_image'
-          alt={info.title}
-          src={info.item?.itunes.image}
-        ></img>
-        <button
-          Style='background-color:black'
-          onClick={(event) => {
-            changeplay();
-            localStorage.setItem('episode', localStorage.getItem('last'));
-          }}
-        >
-          PLAY
-        </button>
-        <div className='show_detail'>{info.title}</div>
-        <div className='show_detail'>{info.item?.itunes.explicit}</div>
-        <div className='show_detail'>{info.author}</div>
-        <div className='show_detail'>{info.item?.content}</div>
-        <div className='show_sub'>subscribe</div>
+    <div>
+      <img
+        className='show_image'
+        alt={info.title}
+        src={info.item?.itunes.image}
+      ></img>
+      <button
+        Style='background-color:black'
+        onClick={(event) => {
+          changeplay();
+          localStorage.setItem('episode', localStorage.getItem('last'));
+        }}
+      >
+        PLAY
+      </button>
+      <div className='show_detail'>{info.title}</div>
+      <div className='show_detail'>{info.item?.itunes.explicit}</div>
+      <div className='show_detail'>{info.author}</div>
+      <div className='show_detail'>
+        {
+          (document.getElementsByClassName('show_detail').innerHTML =
+            info.item?.content)
+        }
       </div>
+      <div className='show_sub'>subscribe</div>
     </div>
   );
 };

@@ -81,7 +81,7 @@ const signup = async (req, res) => {
 
     [
       `${name}'s Podcast!`,
-      `https://intoxicating.space/show/${id}`,
+      `https://intoxicating.space/api/1.0/user/rss/${show_id}`,
       name,
       image,
       show_explicit,

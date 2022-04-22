@@ -1,27 +1,43 @@
 import { Link } from 'react-router-dom';
-const Creatorepisode = () => {
+
+const Creatorepisode = ({ creatorepisode }) => {
   return (
     <>
-      <div id='show_episode'>
-        <div class='episode'>
-          <div>
-            <Link to='/'>
-              <div class='episode_date'>20220412</div>
-              <div class='episode_title'>這是一集關於散步的故事</div>
-              <div class='episode_play'></div>
-            </Link>
+      <div className='episode'>
+        <div>
+          <Link to='/'>
+            <div className='episode_date'>
+              episode_date: {creatorepisode?.episode_publish_date}
+            </div>
+            <div className='episode_title'>
+              episode_title: {creatorepisode?.episode_title}
+            </div>
+            <div className='episode_episode'>
+              episode_episode: {creatorepisode?.episode_episode}
+            </div>
+            <div className='episode_des'>
+              episode_des: {creatorepisode?.episode_des}
+            </div>
+          </Link>
+        </div>
+        <div>
+          <div className='episode_duration'>
+            episode_duration:
+            {creatorepisode?.episode_duration}
           </div>
-          <div>
-            <div class='episode_duration'>100second</div>
+        </div>
+        <div>
+          <div className='episode_status'>
+            episode_status: {creatorepisode?.episode_status}
           </div>
-          <div>
-            <div class='episode_play'>on/off</div>
-          </div>
-          <div>
-            <div class='episode_status'>on/off</div>
+        </div>
+        <div>
+          <div className='episode_click'>
+            episode_click: {creatorepisode?.episode_click}
           </div>
         </div>
       </div>
+      <div>--------------------------------------</div>
     </>
   );
 };

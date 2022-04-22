@@ -1,10 +1,20 @@
 #chatroom {
-  width: 120vh;
-  height: 40vh;
+  width: 60vw;
+  max-width: 60vw;
+  overflow-y: scroll;
+  scroll-behavior: smooth;
+  height: 120px;
+  max-height: 120px;
+  background-color: rgb(83, 87, 95);
+  color: aliceblue;
 }
 
 #input {
   width: 120vh;
   height: 5vh;
   color: black;
+}
+
+.msg {
+  height: 20px;
 }

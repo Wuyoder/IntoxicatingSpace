@@ -14,4 +14,18 @@ const jwtwrap = async (req) => {
   }
   return who;
 };
-module.exports = { jwtwrap };
+
+const jwtsk = async (token) => {
+  let who;
+  try {
+    who = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
+  } catch (err) {
+    err = new Error();
+    err.message = 'wrong token';
+    return { error: err.message };
+  }
+
+  return who;
+};
+
+module.exports = { jwtwrap, jwtsk };
