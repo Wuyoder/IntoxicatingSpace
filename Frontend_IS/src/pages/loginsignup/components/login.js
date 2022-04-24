@@ -13,6 +13,7 @@ const Login = () => {
       console.log(l_result.data);
       localStorage.setItem('token', l_result.data.data.token);
       localStorage.setItem('user_image', l_result.data.data.user.image);
+      localStorage.setItem('creator_image', l_result.data.data.show_image);
       window.location.replace('/');
     }
   };

@@ -6,6 +6,7 @@ import Episode from './pages/episode/episode';
 import Creator from './pages/creator/creator';
 import Profile from './pages/profile/profile';
 import LoginSignup from './pages/loginsignup/loginsignup';
+import Search from './pages/search/search';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Home from './pages/test/index';
 export const AppContext = createContext();
@@ -17,7 +18,7 @@ const App = () => {
   const [showid, setShowid] = useState(1);
   const [episodeid, setEpisodeid] = useState(0);
   const [episodeurl, setEpisodeurl] = useState('123');
-  //
+  const [search, setSearch] = useState([]);
   const [test, setTest] = useState('test');
   //
   const [podcastplayer, setPod] = useState(0);
@@ -33,6 +34,8 @@ const App = () => {
     test: [test, setTest],
     podcastplayer,
     setPod,
+    search,
+    setSearch,
   };
 
   useEffect(() => {
@@ -50,9 +53,9 @@ const App = () => {
             <Route path='/showchoice' element={<Showchoice />}></Route>
             <Route path='/episode' element={<Episode />}></Route>
             <Route path='/creator' element={<Creator />}></Route>
-            <Route path='/profile' element={<Profile />}></Route>
             <Route path='/login' element={<LoginSignup />}></Route>
             <Route path='/test' element={<Home />}></Route>
+            <Route path='/search' element={<Search />}></Route>
           </Routes>
         </div>
         <div id='filler'></div>

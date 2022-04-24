@@ -17,6 +17,8 @@ const { counter_logins } = require('../controller/counter_controller');
 const {
   userprofile,
   creatorprofile,
+  updateuser,
+  updatecreator,
 } = require('../controller/user_controller');
 const { s3upload } = require('../util/S3');
 // test chatroom for socket
@@ -25,8 +27,10 @@ router.route('/signup').post(signup);
 router.route('/signin').post(signin);
 router.route('/s3upload').post(s3upload);
 router.route('/userprofile').get(userprofile);
+router.route('/userprofile').put(updateuser);
 router.route('/userhistory').post(userhistory);
 router.route('/creatorprofile').get(creatorprofile);
+router.route('/creatorprofile').put(updatecreator);
 router.route('/counter_logins').get(counter_logins);
 router.route('/rss/:rss').get(rssfeed);
 router.route('/showlist').get(showlist);

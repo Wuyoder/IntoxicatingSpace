@@ -99,7 +99,6 @@ const showchoice = async (req, res) => {
     err.message = 'wrong rss url';
     return res.json({ error: err.message });
   }
-  console.log(rssObject.title);
   res.send(rssObject);
 };
 
@@ -264,7 +263,7 @@ const episode = async (req, res) => {
     return res.json(who);
   }
   const info = req.body;
-
+  const epi_id = uuid.v4();
   const [episode_check] = await db.query(
     'SELECT * FROM episodes WHERE show_id = ? && episode_id = ? && episode_episode = ?',
     [info.show_id, info.episode_id, info.episode]
@@ -278,7 +277,7 @@ const episode = async (req, res) => {
         'VALUES (?, ? ,?, ?, ?, ?, ?, ?, ?, 1, ?, 1 )',
       [
         info.show_id,
-        uuid.v4(),
+        epi_id,
         info.title,
         info.des,
         info.file,
@@ -294,7 +293,11 @@ const episode = async (req, res) => {
     return res.status(200).json({ error: message });
   }
 
-  res.json({ status: 'episode update ok & status = 1' });
+  const [allepi] = await db.query('SELECT * FROM episodes WHERE show_id = ?', [
+    info.show_id,
+  ]);
+
+  res.send(allepi);
 };
 
 const ishostshow = async (req, res) => {
@@ -312,10 +315,9 @@ const ishostshow = async (req, res) => {
     [show_id[0].show_id]
   );
   if (!host_episode[0]) {
-    return res.json({ error: 'no episode found' });
+    return res.send([]);
   }
   return res.send(host_episode);
-  res.json(who);
 };
 
 module.exports = {

@@ -1,5 +1,54 @@
 <!DOCTYPE html>
-<html>
-  <iframe width="800" height="315" src="./index.html"></iframe>
-  <iframe width="800" height="315" src="./episode.html"></iframe>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="stylesheet" href="index.css" />
+
+    <title>Document</title>
+  </head>
+  <body>
+    <form id="imageForm">
+      <input id="imageInput" type="file" accept="image/*" />
+      <button type="submit">Upload</button>
+    </form>
+
+    <script>
+      const imageForm = document.querySelector('#imageForm');
+      const imageInput = document.querySelector('#imageInput');
+
+      imageForm.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const file = imageInput.files[0];
+        console.log(imageInput.files[0]);
+        // get secure url from our server
+        const res = await fetch('http://localhost:3001/api/1.0/user/s3upload', {
+          method: 'POST',
+          body: { type: 'profile_image' },
+        });
+        console.log(res);
+        console.log(res.url);
+
+        // post the image direclty to the s3 bucket
+        await fetch(res.url, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+          body: file,
+        });
+
+        const imageUrl = url.split('?')[0];
+        console.log(imageUrl);
+
+        // post requst to my server to store any extra data
+
+        const img = document.createElement('img');
+        img.src = imageUrl;
+        document.body.appendChild(img);
+      });
+    </script>
+  </body>
 </html>

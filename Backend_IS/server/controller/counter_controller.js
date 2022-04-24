@@ -1,18 +1,11 @@
 const db = require('../util/mysql');
 const jwt = require('jsonwebtoken');
-const { promisify } = require('util');
+const { jwtwrap } = require('../util/jwt');
 
 const counter_logins = async (req, res) => {
-  let who;
-  try {
-    who = await promisify(jwt.verify)(
-      req.get('Authorization').replace('Bearer ', ''),
-      process.env.JWT_SECRET
-    );
-  } catch (err) {
-    err = new Error();
-    err.message = 'wrong token';
-    return res.status(200).json({ error: err.message });
+  const who = await jwtwrap(req);
+  if (who.error) {
+    return res.status(200).json({ error: who.error });
   }
   const [logins] = await db.query(
     'SELECT counter_logins FROM counters WHERE user_id =?',

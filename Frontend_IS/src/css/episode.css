@@ -3,8 +3,8 @@
   max-width: 60vw;
   overflow-y: scroll;
   scroll-behavior: smooth;
-  height: 120px;
-  max-height: 120px;
+  height: 200px;
+  max-height: 200px;
   background-color: rgb(83, 87, 95);
   color: aliceblue;
 }

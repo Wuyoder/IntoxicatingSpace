@@ -1,13 +1,13 @@
 import { useNavigate, Link, NavLink } from 'react-router-dom';
-import { COUNTER_LOGINS } from '../global/constants';
+import { COUNTER_LOGINS, SEARCH } from '../global/constants';
 import React, { useEffect, useContext, useState } from 'react';
 import axios from 'axios';
 import AudioPlayer from 'react-h5-audio-player';
 import 'react-h5-audio-player/lib/styles.css';
 import { AppContext } from '../App';
 let activeStyle = {
-  textDecoration: 'wavy underline overline  white',
-  color: 'white',
+  backgroundcolor: 'blue',
+  color: 'yellow',
   fontWeight: 'bold',
 };
 const Withyou = () => {
@@ -32,6 +32,21 @@ const Withyou = () => {
 };
 
 const Topbar = () => {
+  const { search, setSearch } = useContext(AppContext);
+  console.log(search);
+
+  const gosearch = async () => {
+    if (document.getElementById('search_input').value != null) {
+      const res = await axios.post(SEARCH, {
+        keyword: document.getElementById('search_input').value,
+      });
+      document.getElementById('search_input').value = '';
+      if (res.data.error !== 'no keyword') {
+        setSearch(res.data);
+      }
+    }
+  };
+
   return (
     <div id='topbar'>
       <div>
@@ -44,12 +59,24 @@ const Topbar = () => {
       <div id='slogan'>
         Intoxicating Space <Withyou />
       </div>
-      <div>search</div>
+      <div>
+        <input id='search_input' Style='background-color:black'></input>
+        <NavLink to='/search'>
+          <button
+            id='search_btn'
+            Style='background-color:black'
+            onClick={gosearch}
+          >
+            Search
+          </button>
+        </NavLink>
+      </div>
     </div>
   );
 };
 
 const Sidebar = () => {
+  const { search, setSearch } = useContext(AppContext);
   return (
     <div id='sidebar'>
       <div>
@@ -58,14 +85,6 @@ const Sidebar = () => {
           style={({ isActive }) => (isActive ? activeStyle : undefined)}
         >
           Home
-        </NavLink>
-      </div>
-      <div>
-        <NavLink
-          to='/profile'
-          style={({ isActive }) => (isActive ? activeStyle : undefined)}
-        >
-          Profile
         </NavLink>
       </div>
       <div>
@@ -97,8 +116,6 @@ const Sidebar = () => {
 };
 
 const Player = () => {
-  ///
-
   const { podcastplayer, setPod } = useContext(AppContext);
 
   return (
@@ -124,53 +141,3 @@ const Player = () => {
 
 const Main = { Topbar, Sidebar, Player };
 export default Main;
-
-{
-  /* <audio
-        id='player'
-        src={localStorage.getItem('episode')}
-        controls='controls'
-        autoPlay={false}
-        preload='auto'
-        width='1000'
-        height='80'
-      ></audio>
-      <div id='btnlist'></div>
-
-      <button
-        id='play'
-        Style='background-color:black'
-        onClick={() => {
-          document.getElementById('player');
-        }}
-      >
-        Play
-      </button>
-      <button id='pause' Style='background-color:black'>
-        Pause
-      </button>
-      <button id='volup' Style='background-color:black'>
-        Vol +
-      </button>
-      <button id='voldown' Style='background-color:black'>
-        Vol -
-      </button>
-      <button id='speed2' Style='background-color:black'>
-        speed 2
-      </button>
-      <button id='speed1' Style='background-color:black'>
-        speed 1
-      </button>
-      <button id='showtime' Style='background-color:black'>
-        currentTime
-      </button>
-      <button id='mute' Style='background-color:black'>
-        mute
-      </button>
-      <button id='forward' Style='background-color:black'>
-        forward10
-      </button>
-      <button id='backward' Style='background-color:black'>
-        backward10
-      </button> */
-}

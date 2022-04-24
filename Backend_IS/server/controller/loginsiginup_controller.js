@@ -49,7 +49,7 @@ const signup = async (req, res) => {
   );
   const user_id = id[0].user_id;
   const show_id = uuid.v4();
-  const show_des = 'This ' + name + "'s Podcast show!";
+  const show_des = 'This is ' + name + "'s Podcast show!";
   const show_explicit = 0;
   const show_category_main = 'Leisure';
   const show_category_sub = 'Hobbies';
@@ -65,7 +65,7 @@ const signup = async (req, res) => {
       show_category_main,
       show_category_sub,
       0,
-      0,
+      1,
       0,
       name,
       email,
@@ -154,8 +154,17 @@ const signin = async (req, res) => {
   const token = jwt.sign(payload, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRED,
   });
+  const [show_image] = await db.query(
+    'SELECT show_image FROM creators_shows WHERE user_id = ?',
+    [user_id]
+  );
   return res.json({
-    data: { token: token, expired: process.env.JWT_EXPIRED, user: payload },
+    data: {
+      token: token,
+      expired: process.env.JWT_EXPIRED,
+      user: payload,
+      show_image: show_image[0].show_image,
+    },
   });
 };
 

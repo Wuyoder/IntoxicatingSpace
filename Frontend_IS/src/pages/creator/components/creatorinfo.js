@@ -10,13 +10,13 @@ const Creatorinfo = ({ creatorprofile }) => {
         <img
           id='show_image'
           alt='show_image'
-          src={creatorprofile.show_image}
+          src={localStorage.getItem('creator_image')}
         ></img>
+        <div>show description :{creatorprofile.show_des}</div>
         <div>show category: {creatorprofile.show_category_main}</div>
         <div id='show_rss'>
           rss feed url : https://intoxicating.space/rss/{creatorprofile.show_id}
         </div>
-        <div id='show_status'>show status: {creatorprofile.show_status}</div>
         <div id='show_last_update'>
           show last update: {creatorprofile.show_time_update}
         </div>

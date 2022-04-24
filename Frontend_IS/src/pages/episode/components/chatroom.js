@@ -32,26 +32,21 @@ const Chatroom = () => {
       initWebSocket();
     }
   }, [ws]);
-  const [find, setFind] = useState([]);
 
   useEffect(() => {
     const autoscroll = () => {
       const scrolltarget = document.getElementById('chatroom');
-      //TODO:need to compare podcastplayer to div hash? value?
+      // compare podcastplayer to div hash? value?
       console.log('---------------allmsg-----------------');
       if (!open[0]) {
-        scrolltarget.scrollTop = podcastplayer;
+        scrolltarget.scrollTop = 0;
         console.log('initial', podcastplayer);
       } else {
         let i = 0;
-        while (open[i]?.chat_episode_time < podcastplayer) {
+        while (open[i]?.chat_episode_time <= podcastplayer) {
           i += 1;
         }
-        console.log('msg index', i);
-        console.log('podcastplayer now', podcastplayer);
-        console.log('msg now', open[i]?.chat_msg);
-        console.log('scroll position', (i + 1) * 15);
-        scrolltarget.scrollTop = (i + 1) * 15;
+        scrolltarget.scrollTop = i * 20;
       }
     };
     autoscroll();
@@ -60,17 +55,14 @@ const Chatroom = () => {
   const initWebSocket = () => {
     //對 getMessage 設定監聽，如果 server 有透過 getMessage 傳送訊息，將會在此被捕捉
     ws.on('getMessage', (message) => {
-      setFind(message);
       const chatroom = document.getElementById('chatroom');
       let history = '';
       console.log(message);
       message.map((item) => {
         return (history += `<div id=${item.chat_id} className='ref' Style='display:none'>${item.chat_episode_time}</div><div className='msg' data-hash=${item.chat_episode_time}>${item.user_id}-${item.chat_msg}-${item.chat_episode_time}</div>`);
-        //console.log(item);
       });
       chatroom.innerHTML = history;
-      //  console.log(message);
-      // test scroll auto by currentTime
+
       const scrolltarget = document.getElementById('chatroom');
       console.log('scrolltarget.scrollTop', scrolltarget.scrollTop);
     });

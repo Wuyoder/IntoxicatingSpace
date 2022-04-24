@@ -17,3 +17,5 @@ export const S3 = `${HOST_NAME}/user/s3upload`;
 export const ISHOST_SHOW = `${HOST_NAME}/user/ishostshow`;
 export const CHAT_msg = `${HOST_NAME}/user/chatmsg`;
 export const CHAT_HISTORY = `${HOST_NAME}/user/chathistory`;
+export const UPDATE_USER = `${HOST_NAME}/user/userprofile`;
+export const UPDATE_CREATOR = `${HOST_NAME}/user/creatorprofile`;

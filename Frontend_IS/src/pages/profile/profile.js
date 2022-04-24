@@ -9,7 +9,6 @@ const Profile = () => {
       const res = await axios.get(USER_PROFILE, {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
       });
-      console.log(res.data);
       setUserprofile(res.data);
     };
     getuserprofile();
@@ -28,7 +27,11 @@ const Profile = () => {
     return (
       <>
         <div id='profile_info'>
-          <img id='user_image' alt='user_image' src={userprofile.image}></img>
+          <img
+            id='user_image'
+            alt='user_image'
+            src={localStorage.getItem('user_image')}
+          ></img>
           <div id='user_name'>{userprofile.name}</div>
           <div id='user_email'>{userprofile.email}</div>
           <button onClick={gologout} Style='background-color:black'>
