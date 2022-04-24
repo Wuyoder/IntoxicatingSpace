@@ -5,8 +5,6 @@ import Container from 'react-bootstrap/Container';
 import Col from 'react-bootstrap/Col';
 import { AppContext } from '../../../App';
 const Searchshow = ({ item }) => {
-  console.log('data to show search');
-  console.log(item);
   const { showid, setShowid, setSearch } = useContext(AppContext);
 
   return (
@@ -20,11 +18,6 @@ const Searchshow = ({ item }) => {
             }}
             onClick={(event) => {
               setShowid(item.rss_id);
-              console.log('showid', showid);
-              console.log(
-                'event.target',
-                event.currentTarget.lastChild.innerHTML
-              );
             }}
           >
             <img

@@ -89,36 +89,37 @@ const Updatecreator = ({ creatorprofile }) => {
   };
 
   return (
-    <div>
-      <h2>Updatecreator</h2>
-      <p>origin show image: </p>
-      <img
-        id='show_iamge'
-        alt='show_iamge'
-        src={localStorage.getItem('creator_image')}
-        Style='height: 150px'
-      ></img>
+    <div className='update_creator_container'>
+      <h2 className='profile_title'>Creator Info Update</h2>
+      <div className='profile_image_container'>
+        <img
+          id='show_iamge'
+          alt='show_iamge'
+          src={localStorage.getItem('creator_image')}
+          Style='height: 150px'
+        ></img>
+      </div>
       <form>
         <input id='new_show_image' type='file' accept='image/*'></input>
         <button
           type='submit'
           Style='background-color:black'
           onClick={goupdateimage}
+          className='btn_type'
+          id='newshowimage'
         >
           Upload show image
         </button>
       </form>
-      <p>creator name</p>
-      <p>origin creator name: {cname}</p>
+      <p className='new_creator_type'>origin creator name: {cname}</p>
       <input id='new_creator_name' Style='background-color:black'></input>
-      <p>origin creator email: {cmail}</p>
+      <p className='new_creator_type'>origin creator email: {cmail}</p>
       <input id='new_creator_email' Style='background-color:black'></input>
-      <p>origin show name: {sname}</p>
+      <p className='new_creator_type'>origin show name: {sname}</p>
       <input id='new_show_name' Style='background-color:black'></input>
-      <p>show description</p>
-      <p>origin show description: {sdes}</p>
+      <p className='new_creator_type'>origin show description: {sdes}</p>
       <input id='new_show_des' Style='background-color:black'></input>
-      <p>origin show category: {scate}</p>
+      <p className='new_creator_type'>origin show category: {scate}</p>
       <select id='new_show_category' Style='background-color:black'>
         <optgroup>
           <option disabled selected>
@@ -271,9 +272,16 @@ const Updatecreator = ({ creatorprofile }) => {
           <option value='Sports_Wrestling'>Wrestling</option>
         </optgroup>
       </select>
-      <button Style='background-color:black' onClick={goupdate}>
-        Upload creator info
-      </button>{' '}
+      <div className='textcenter'>
+        <button
+          Style='background-color:black'
+          onClick={goupdate}
+          className='btn_type'
+          id='new_creator_info'
+        >
+          Upload creator info
+        </button>{' '}
+      </div>
     </div>
   );
 };

@@ -9,6 +9,8 @@ import LoginSignup from './pages/loginsignup/loginsignup';
 import Search from './pages/search/search';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Home from './pages/test/index';
+import { USER_PROFILE } from './global/constants';
+import axios from 'axios';
 export const AppContext = createContext();
 
 const App = () => {
@@ -22,7 +24,7 @@ const App = () => {
   const [test, setTest] = useState('test');
   //
   const [podcastplayer, setPod] = useState(0);
-
+  const [member, setMember] = useState(true);
   //
   const appContextValue = {
     showid,
@@ -36,18 +38,36 @@ const App = () => {
     setPod,
     search,
     setSearch,
+    member,
+    setMember,
   };
 
   useEffect(() => {
-    console.log('found change', podcastplayer);
-  }, [podcastplayer]);
+    const getmember = async () => {
+      const res = await axios.get(USER_PROFILE, {
+        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+      });
+
+      if (res.data.error) {
+        setMember(true);
+      }
+      if (res.data.id) {
+        setMember(false);
+      }
+    };
+    getmember();
+  });
+
+  // useEffect(() => {
+  //   console.log('found change', podcastplayer);
+  // }, [podcastplayer]);
 
   return (
     <BrowserRouter>
       <AppContext.Provider value={appContextValue}>
         <Main.Topbar />
         <div id='middle'>
-          <Main.Sidebar />
+          <Main.Sidebar member={member} />
           <Routes>
             <Route path='/' element={<Showlist />}></Route>
             <Route path='/showchoice' element={<Showchoice />}></Route>

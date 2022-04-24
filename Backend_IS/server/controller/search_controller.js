@@ -6,7 +6,6 @@ const showkeyword = async (req, res) => {
     return res.json({ error: 'no keyword' });
   }
   const words = data.keyword.split(' ');
-  console.log(words);
   let result = [];
   for (let i = 0; i < words.length; i++) {
     let [search_result] = await db.query(

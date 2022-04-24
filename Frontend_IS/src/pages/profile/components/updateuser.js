@@ -83,48 +83,67 @@ const Updateuser = () => {
   };
 
   return (
-    <div>
-      <h3>Updateuser</h3>
-      <p>user name</p>
-      <p>origin name: {username}</p>
-      <input id='new_name' Style='background-color:black'></input>
-      <p>user email</p>
-      <p>origin email: {useremail}</p>
-      <input id='new_email' Style='background-color:black'></input>
-      <p>user password</p>
-      <input
-        id='new_pwd'
-        Style='background-color:black'
-        type='password'
-      ></input>
-      <p>user image</p>
+    <div className='updateuser_container'>
+      <h3 className='profile_title'>User Profile Update</h3>
       <div>
-        <button
-          value='update'
-          Style='background-color:black'
-          onClick={goupdate}
-        >
-          Update info
-        </button>
-        <div>
+        <div className='profile_image_container'>
           <img
             id='user_image'
             alt='user_image'
             src={localStorage.getItem('user_image')}
           ></img>
-          <div>
-            <form id='imageForm'>
+        </div>
+        <div>
+          <form id='imageForm'>
+            <div className='textcenter'>
               <input id='imageInput' type='file' accept='image/*' />
+            </div>
+            <div className='textcenter'>
               <button
                 type='submit'
                 Style='background-color:black'
                 onClick={goupdateimage}
+                className='new_userimage_btn'
               >
                 Upload image
               </button>
-            </form>
-          </div>
+            </div>
+          </form>
         </div>
+      </div>
+
+      <p className='oringin_item' id='origin_name_sub'>
+        origin name : " {username} "
+      </p>
+
+      <input
+        id='new_name'
+        className='input_type'
+        Style='background-color:black'
+      ></input>
+
+      <p className='oringin_item'>origin email: {useremail}</p>
+      <input
+        id='new_email'
+        Style='background-color:black'
+        className='input_type'
+      ></input>
+      <p className='oringin_item'>new password</p>
+      <input
+        id='new_pwd'
+        Style='background-color:black'
+        type='password'
+        className='input_type'
+      ></input>
+      <div>
+        <button
+          value='update'
+          Style='background-color:black'
+          onClick={goupdate}
+          className='btn_type'
+        >
+          Update info
+        </button>
       </div>
     </div>
   );

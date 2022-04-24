@@ -27,27 +27,45 @@ const Creator = () => {
   const [updateuser, setUpdateuser] = useState(true);
   const [updatcreator, setUpdatecreator] = useState(true);
   const [newepisode, setNewepisode] = useState(true);
+  const [biguser, setBiguser] = useState(true);
+  const [bigcreator, setBigcreator] = useState(false);
+  const [bigepi, setBigepi] = useState(false);
+
   return (
-    <>
-      <div>
+    <div className='creator_container'>
+      <div className='creator_btn_container'>
         <div>
-          <button
-            Style='background-color:black'
-            onClick={() => {
-              setUpdateuser(!updateuser);
-            }}
-          >
-            set user
-          </button>
+          <div>
+            <button
+              Style='background-color:black'
+              onClick={() => {
+                setUpdateuser(!updateuser);
+                setBiguser(true);
+                setBigcreator(false);
+                setBigepi(false);
+                setUpdatecreator(false);
+                setNewepisode(false);
+              }}
+              className='creator_btn'
+            >
+              User
+            </button>
+          </div>
         </div>
         <div>
           <button
             Style='background-color:black'
             onClick={() => {
               setUpdatecreator(!updatcreator);
+              setBiguser(false);
+              setBigcreator(true);
+              setBigepi(false);
+              setUpdateuser(false);
+              setNewepisode(false);
             }}
+            className='creator_btn'
           >
-            set creator
+            Creator &amp; Podcast
           </button>
         </div>
         <div>
@@ -55,19 +73,27 @@ const Creator = () => {
             Style='background-color:black'
             onClick={() => {
               setNewepisode(!newepisode);
+              setBiguser(false);
+              setBigcreator(false);
+              setBigepi(true);
+              setUpdateuser(false);
+              setUpdatecreator(false);
             }}
+            className='creator_btn'
           >
-            new episode
+            Episode
           </button>
         </div>
       </div>
-      <div>{updateuser ? <Profile /> : <Updateuser />}</div>
+      <div>{biguser ? updateuser ? <Profile /> : <Updateuser /> : null}</div>
       <div>
-        {updatcreator ? (
-          <Creatorinfo creatorprofile={creatorprofile} />
-        ) : (
-          <Updatecreator creatorprofile={creatorprofile} />
-        )}
+        {bigcreator ? (
+          updatcreator ? (
+            <Creatorinfo creatorprofile={creatorprofile} />
+          ) : (
+            <Updatecreator creatorprofile={creatorprofile} />
+          )
+        ) : null}
       </div>
       <div>
         {/* {creatorepisode.map((item) => {
@@ -76,14 +102,16 @@ const Creator = () => {
       </div>
       <div>
         <div>
-          {newepisode ? (
-            <Episode creatorepisode={creatorepisode} />
-          ) : (
-            <Newepisode creatorprofile={creatorprofile} />
-          )}
+          {bigepi ? (
+            newepisode ? (
+              <Episode creatorepisode={creatorepisode} />
+            ) : (
+              <Newepisode creatorprofile={creatorprofile} />
+            )
+          ) : null}
         </div>
       </div>
-    </>
+    </div>
   );
 };
 export default Creator;

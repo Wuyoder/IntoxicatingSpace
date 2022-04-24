@@ -27,14 +27,34 @@ const Profile = () => {
     return (
       <>
         <div id='profile_info'>
-          <img
-            id='user_image'
-            alt='user_image'
-            src={localStorage.getItem('user_image')}
-          ></img>
-          <div id='user_name'>{userprofile.name}</div>
-          <div id='user_email'>{userprofile.email}</div>
-          <button onClick={gologout} Style='background-color:black'>
+          <div className='profile_title'>User Profile</div>
+          <div className='profile_image_container'>
+            <img
+              id='user_image'
+              alt='user_image'
+              src={localStorage.getItem('user_image')}
+            ></img>
+          </div>
+          <div className='profile_container'>
+            <div className='profile_sub1'>
+              <div className='profile_row'>name </div>
+              <div className='profile_row'>email </div>
+            </div>
+            <div className='profile_sub2'>
+              <div id='user_name' className='profile_text'>
+                {userprofile.name}
+              </div>
+              <div id='user_email' className='profile_text'>
+                {userprofile.email}
+              </div>
+            </div>
+          </div>
+
+          <button
+            onClick={gologout}
+            Style='background-color:black'
+            className='login_btn'
+          >
             LOG OUT
           </button>
         </div>

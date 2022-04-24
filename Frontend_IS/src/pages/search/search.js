@@ -5,12 +5,8 @@ import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 const Search = () => {
   const { search, setSearch } = useContext(AppContext);
-  console.log('into search page');
-  console.log(search);
 
   if (search.error) {
-    console.log(search);
-
     return (
       <div>
         <h1>No matching records found.</h1>
@@ -19,7 +15,6 @@ const Search = () => {
     );
   }
 
-  console.log('match keyword', search);
   return (
     <div>
       <Row xs={6}>

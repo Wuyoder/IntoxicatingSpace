@@ -5,11 +5,7 @@ import axios from 'axios';
 import AudioPlayer from 'react-h5-audio-player';
 import 'react-h5-audio-player/lib/styles.css';
 import { AppContext } from '../App';
-let activeStyle = {
-  backgroundcolor: 'blue',
-  color: 'yellow',
-  fontWeight: 'bold',
-};
+
 const Withyou = () => {
   const [counterlogins, setCounterlogins] = useState(0);
 
@@ -24,7 +20,7 @@ const Withyou = () => {
   }, []);
 
   if (counterlogins > 0) {
-    return <>with you {counterlogins} times</>;
+    return <>With You {counterlogins} Days</>;
   }
   if (!counterlogins) {
     return <></>;
@@ -33,8 +29,6 @@ const Withyou = () => {
 
 const Topbar = () => {
   const { search, setSearch } = useContext(AppContext);
-  console.log(search);
-
   const gosearch = async () => {
     if (document.getElementById('search_input').value != null) {
       const res = await axios.post(SEARCH, {
@@ -56,60 +50,81 @@ const Topbar = () => {
           src='https://intoxicating.s3.ap-northeast-1.amazonaws.com/IS_LOGO.png'
         ></img>
       </div>
-      <div id='slogan'>
-        Intoxicating Space <Withyou />
+      <div className='withyou'>
+        <p className='withyou'>
+          Intoxicating Space <Withyou />
+        </p>
       </div>
-      <div>
-        <input id='search_input' Style='background-color:black'></input>
-        <NavLink to='/search'>
-          <button
-            id='search_btn'
-            Style='background-color:black'
-            onClick={gosearch}
-          >
-            Search
-          </button>
-        </NavLink>
+      <div className='search_container'>
+        <div className='search_item'>
+          <input id='search_input' Style='background-color:black'></input>
+        </div>
+        <div className='search_item'>
+          <NavLink to='/search'>
+            <button
+              id='search_btn'
+              Style='background-color:black'
+              onClick={gosearch}
+              className='search_btn'
+            >
+              Search
+            </button>
+          </NavLink>
+        </div>
       </div>
     </div>
   );
 };
 
-const Sidebar = () => {
-  const { search, setSearch } = useContext(AppContext);
+let activeStyle = {
+  color: 'aqua',
+  fontWeight: 'bold',
+};
+
+const Sidebar = ({ member }) => {
   return (
     <div id='sidebar'>
-      <div>
+      <div className='sidebar-container'>
         <NavLink
           to='/'
           style={({ isActive }) => (isActive ? activeStyle : undefined)}
+          Style='text-decoration: none'
+          className='sidebar_btn'
         >
           Home
         </NavLink>
       </div>
-      <div>
+      <div className='sidebar-container'>
         <NavLink
           to='/creator'
           style={({ isActive }) => (isActive ? activeStyle : undefined)}
+          Style='text-decoration: none'
+          className='sidebar_btn'
         >
           Creator
         </NavLink>
       </div>
-      <div>
+      {/* <div className='sidebar-container'>
         <NavLink
           to='/dashboard'
           style={({ isActive }) => (isActive ? activeStyle : undefined)}
+          Style='text-decoration: none'
+          className='sidebar_btn'
         >
           Dashboard
         </NavLink>
-      </div>
-      <div>
-        <NavLink
-          to='/login'
-          style={({ isActive }) => (isActive ? activeStyle : undefined)}
-        >
-          Login/Signup
-        </NavLink>
+      </div> */}
+      <div className='sidebar-container'>
+        {member ? (
+          <NavLink
+            to='/login'
+            style={({ isActive }) => (isActive ? activeStyle : undefined)}
+            Style='text-decoration: none'
+            className='sidebar_btn'
+          >
+            Login
+          </NavLink>
+        ) : null}
       </div>
     </div>
   );

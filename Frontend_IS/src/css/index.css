@@ -27,7 +27,7 @@ code {
 }
 #topbar {
   width: 100%;
-  height: 10vh;
+  height: 12vh;
   background-color: #0b1a26;
   display: flex;
   flex-direction: row;
@@ -66,7 +66,7 @@ code {
 }
 
 #sidebar {
-  width: 15vw;
+  width: 10%;
   height: 200vh;
   background-color: #14212e;
   display: flex;
@@ -135,4 +135,223 @@ body {
 
 #filler {
   height: 100px;
+}
+.sidebar_btn {
+  color: aliceblue;
+  font-size: 25px;
+  text-decoration: none;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  margin: 50px;
+  padding: 10px;
+}
+.sidebar_btn:hover {
+  color: aqua;
+}
+.sidebar-container {
+  margin: 20px;
+}
+.withyou {
+  color: aliceblue;
+  font-size: 30px;
+  font-weight: 600;
+}
+.withyou:hover {
+  color: aqua;
+}
+.search_btn {
+  border-radius: 5%;
+  height: 40px;
+  width: 80px;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+.search_btn:hover {
+  color: aqua;
+}
+.search_container {
+  display: flex;
+  flex-direction: row;
+  width: 20vw;
+  margin: 30px;
+}
+.search_item {
+  margin: 10px;
+}
+#search_input {
+  border-radius: 5%;
+  height: 40px;
+  padding: 0 15px 0 15px;
+}
+.creator_container {
+  display: block;
+}
+.creator_btn_container {
+  display: flex;
+  flex-direction: row;
+}
+.creator_btn {
+  border-radius: 5%;
+  height: 40px;
+  width: 30vw;
+  font-size: 20px;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+.creator_btn:hover {
+  color: aqua;
+}
+#profile_info {
+  padding: 20px;
+  width: 30vw;
+  height: 50vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.profile_container {
+  display: flex;
+  flex-direction: row;
+  margin: 10px;
+}
+.profile_row {
+  width: 60px;
+  height: 50px;
+  font-size: 20px;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  color: aqua;
+}
+.profile_text {
+  width: 100px;
+  height: 50px;
+  font-size: 20px;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+.profile_title {
+  width: auto;
+  height: 50px;
+  font-size: 20px;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  color: aqua;
+  text-align: center;
+}
+.profile_image_container {
+  text-align: center;
+  margin: 10px;
+}
+.profile_sub1 {
+  width: auto;
+  margin: 0 5% 0 10%;
+  text-align: right;
+}
+
+.profile_sub2 {
+  text-align: left;
+  width: auto;
+}
+.login_btn {
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  border-radius: 5%;
+  height: 40px;
+}
+.login_btn:hover {
+  color: aqua;
+}
+.updateuser_container {
+  display: flex;
+  flex-direction: column;
+  width: 30vw;
+  text-align: center;
+  padding: 20px;
+}
+.new_userimage_btn {
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  border-radius: 5%;
+  height: 40px;
+  width: 120px;
+  margin: 10px 0 10px 0;
+}
+.new_userimage_btn:hover {
+  color: aqua;
+}
+#imageForm {
+  display: flex;
+  flex-direction: column;
+  height: 40px;
+  text-align: center;
+  margin: 0 0 15px 0;
+}
+
+#imageInput {
+  text-align: center;
+  width: auto;
+}
+#origin_name_sub {
+  margin-top: 25px;
+}
+.textcenter {
+  text-align: center;
+}
+.userupdate_sub {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+.username {
+  margin: 10px;
+}
+.oringin_item {
+  font-size: 20px;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  color: aqua;
+  margin: 0 0 10px 0;
+}
+.input_type {
+  border-radius: 5%;
+  padding: 0 10px 0 15px;
+  margin: 0 0 10px 0;
+}
+#new_name,
+#new_email,
+#new_pwd {
+  height: 40px;
+}
+.btn_type {
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  border-radius: 5%;
+  height: 40px;
+  width: 120px;
+}
+.btn_type:hover {
+  color: aqua;
+}
+.cp_container,
+.update_creator_container {
+  width: 60vw;
+  padding: 20px;
+  text-align: center;
+  height: 60vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.creator_type {
+  font-size: 20px;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  color: aqua;
+  margin: 0 0 10px 0;
+  text-align: left;
+  padding: 0 0 0 10%;
+}
+#newshowimage {
+  width: 200px;
+}
+#new_creator_info {
+  width: 250px;
+}
+.update_creator_container {
+  text-align: center;
+}
+.new_creator_type {
+  font-size: 20px;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  color: aqua;
+  margin: 10px 0 0 0;
 }
