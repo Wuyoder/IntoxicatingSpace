@@ -14,20 +14,24 @@ const ShowInfo = () => {
   }, []);
 
   return (
-    <div>
-      <div className='show_name'>{info.title}</div>
-      <div className='show_detail'>{info.itunes?.author}</div>
-      <img
-        className='show_image'
-        alt={info.title}
-        src={info.itunes?.image}
-      ></img>
-      <div className='show_detail'>{info.itunes?.categories[0]}</div>
-      <div className='show_detail'>{info.description}</div>
-      <div className='show_sub' id='sub_btn'>
-        subscribe
+    <div className='show_info_container'>
+      <div className='show_info_l'>
+        <div className='show_name'>{info.title}</div>
+        <img
+          className='show_image_choice'
+          alt={info.title}
+          src={info.itunes?.image}
+        ></img>
+        <div className='show_detail'>{info.itunes?.author}</div>
+        <div className='show_detail'>{info.itunes?.categories[0]}</div>
       </div>
-      <div id='show_episode'></div>
+      <div className='show_info_r'>
+        <div className='show_des'>{info.description}</div>
+        <div Style='display:none' className='show_sub' id='sub_btn'>
+          subscribe
+        </div>
+        <div id='show_episode'></div>
+      </div>
     </div>
   );
 };

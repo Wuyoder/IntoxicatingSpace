@@ -8,31 +8,27 @@ const Searchshow = ({ item }) => {
   const { showid, setShowid, setSearch } = useContext(AppContext);
 
   return (
-    <Container>
-      <Col>
-        <div key={v4()}>
-          <Link
-            to={{
-              pathname: '/showchoice',
-              hash: `${item.rss_id}`,
-            }}
-            onClick={(event) => {
-              setShowid(item.rss_id);
-            }}
-          >
-            <img
-              src={item.rss_image}
-              alt={item.title}
-              show={item.title}
-              className='show_image show'
-            ></img>
-            <div className='show_name show'>{item.rss_title}</div>
-            <div Style='display:none'>{item.rss_id}</div>
-          </Link>
-          <div className='show_category show'>{item.rss_category_main}</div>
-        </div>
-      </Col>
-    </Container>
+    <div key={v4()}>
+      <Link
+        to={{
+          pathname: '/showchoice',
+          hash: `${item.rss_id}`,
+        }}
+        onClick={(event) => {
+          setShowid(item.rss_id);
+        }}
+      >
+        <img
+          src={item.rss_image}
+          alt={item.title}
+          show={item.title}
+          className='show_image show'
+        ></img>
+        <div className='search-show_name show'>{item.rss_title}</div>
+        <div Style='display:none'>{item.rss_id}</div>
+      </Link>
+      <div className='search_show_category show'>{item.rss_category_main}</div>
+    </div>
   );
 };
 export default Searchshow;

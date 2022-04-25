@@ -1,13 +1,24 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import { UPDATE_USER, USER_PROFILE, S3 } from '../../../global/constants';
+import {
+  UPDATE_USER,
+  USER_PROFILE,
+  S3,
+  CREATOR_PROFILE,
+} from '../../../global/constants';
 import { UPDATE_CREATOR } from '../../../global/constants';
+
 const Updatecreator = ({ creatorprofile }) => {
-  const [cname, setCname] = useState(creatorprofile.creator_name);
-  const [cmail, setCmail] = useState(creatorprofile.creator_email);
-  const [sname, setSname] = useState(creatorprofile.show_name);
-  const [scate, setScate] = useState(creatorprofile.show_category_main);
-  const [sdes, setSdes] = useState(creatorprofile.show_des);
+  const [cprofile, setCprofile] = useState([]);
+  useEffect(() => {
+    const getcreatorinfo = async () => {
+      const res = await axios.get(CREATOR_PROFILE, {
+        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+      });
+      setCprofile(res.data[0]);
+    };
+    getcreatorinfo();
+  });
 
   const goupdate = async () => {
     let new_creator_name = document.getElementById('new_creator_name').value;
@@ -28,19 +39,12 @@ const Updatecreator = ({ creatorprofile }) => {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
       }
     );
-    if (!res.data.error) {
-      setCname(res.data.creator_name);
-      setCmail(res.data.creator_email);
-      setSname(res.data.show_name);
-      setScate(res.data.show_category_main);
-      setSdes(res.data.show_des);
-    } else {
-      alert(res.data.error);
-    }
+
     document.getElementById('new_creator_name').value = '';
     document.getElementById('new_creator_email').value = '';
     document.getElementById('new_show_name').value = '';
     document.getElementById('new_show_category').value = '';
+    document.getElementById('new_show_des').value = '';
   };
 
   const goupdateimage = async (e) => {
@@ -90,7 +94,9 @@ const Updatecreator = ({ creatorprofile }) => {
 
   return (
     <div className='update_creator_container'>
-      <h2 className='profile_title'>Creator Info Update</h2>
+      <h2 className='profile_title' id='update_creator_info'>
+        Creator Info Update
+      </h2>
       <div className='profile_image_container'>
         <img
           id='show_iamge'
@@ -111,15 +117,40 @@ const Updatecreator = ({ creatorprofile }) => {
           Upload show image
         </button>
       </form>
-      <p className='new_creator_type'>origin creator name: {cname}</p>
-      <input id='new_creator_name' Style='background-color:black'></input>
-      <p className='new_creator_type'>origin creator email: {cmail}</p>
-      <input id='new_creator_email' Style='background-color:black'></input>
-      <p className='new_creator_type'>origin show name: {sname}</p>
-      <input id='new_show_name' Style='background-color:black'></input>
-      <p className='new_creator_type'>origin show description: {sdes}</p>
-      <input id='new_show_des' Style='background-color:black'></input>
-      <p className='new_creator_type'>origin show category: {scate}</p>
+      <p className='new_creator_type'>
+        origin creator name: {cprofile.creator_name}
+      </p>
+      <input
+        className='input_type'
+        id='new_creator_name'
+        Style='background-color:black'
+      ></input>
+      <p className='new_creator_type'>
+        origin creator email: {cprofile.creator_email}
+      </p>
+      <input
+        className='input_type'
+        id='new_creator_email'
+        Style='background-color:black'
+      ></input>
+      <p className='new_creator_type'>origin show name: {cprofile.show_name}</p>
+      <input
+        className='input_type'
+        id='new_show_name'
+        Style='background-color:black'
+      ></input>
+      <p className='new_creator_type'>
+        origin show description: {cprofile.show_des}
+      </p>
+      <input
+        className='input_type'
+        id='new_show_des'
+        Style='background-color:black'
+      ></input>
+      <p className='new_creator_type'>
+        origin show category: {cprofile.show_category_main} -{' '}
+        {cprofile.show_category_sub}
+      </p>
       <select id='new_show_category' Style='background-color:black'>
         <optgroup>
           <option disabled selected>

@@ -28,31 +28,41 @@ const Info = () => {
   };
   //TODO: html tag to plain text
   return (
-    <div>
-      <img
-        className='show_image'
-        alt={info.title}
-        src={info.item?.itunes.image}
-      ></img>
-      <button
-        Style='background-color:black'
-        onClick={(event) => {
-          changeplay();
-          localStorage.setItem('episode', localStorage.getItem('last'));
-        }}
-      >
-        PLAY
-      </button>
-      <div className='show_detail'>{info.title}</div>
-      <div className='show_detail'>{info.item?.itunes.explicit}</div>
-      <div className='show_detail'>{info.author}</div>
-      <div className='show_detail'>
-        {
-          (document.getElementsByClassName('show_detail').innerHTML =
-            info.item?.content)
-        }
+    <div className='chat_info'>
+      <div className='chat_info_l'>
+        <div className='show_detail'>{info.title}</div>
+        <div>
+          <img
+            className='show_image'
+            alt={info.title}
+            src={info.item?.itunes.image}
+          ></img>
+        </div>
+        <div className='show_detail'>{info.author}</div>
+        <div>
+          <button
+            Style='background-color:black'
+            onClick={() => {
+              changeplay();
+              localStorage.setItem('episode', localStorage.getItem('last'));
+            }}
+            className='btn_type'
+          >
+            PLAY
+          </button>
+        </div>
       </div>
-      <div className='show_sub'>subscribe</div>
+      <div className='chat_info_r'>
+        <div className='show_detail'>
+          {
+            (document.getElementsByClassName('show_detail').innerHTML =
+              info.item?.content)
+          }
+        </div>
+        <div className='show_sub' Style='display:none'>
+          subscribe
+        </div>
+      </div>
     </div>
   );
 };

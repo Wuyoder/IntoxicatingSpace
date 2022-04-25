@@ -25,14 +25,41 @@ const Signup = () => {
   return (
     <>
       <div id='signup'>
-        username<input id='S_name' required></input>
-        email<input id='S_email' required></input>
-        password<input type='password' id='S_pwd' required></input>
-        birthday<input type='date' id='S_birth' required></input>
+        <div className='signup_title'>username</div>
         <input
-          id='S_btn'
+          id='S_name'
+          className='input_type'
+          Style='background-color:black; color:white'
+          required
+        ></input>
+        <div className='signup_title'>email</div>
+        <input
+          id='S_email'
+          className='input_type'
+          Style='background-color:black; color:white'
+          required
+        ></input>
+        <div className='signup_title'>password</div>
+        <input
+          type='password'
+          id='S_pwd'
+          className='input_type'
+          Style='background-color:black; color:white'
+          required
+        ></input>
+        <div className='signup_title'>birthday</div>
+        <input
+          type='date'
+          id='S_birth'
+          className='input_type'
+          Style='background-color:black; color:white'
+          required
+        ></input>
+        <input
           type='button'
           value='signup'
+          className='btn_type'
+          Style='background-color:black'
           onClick={gosignup}
         ></input>
       </div>

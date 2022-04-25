@@ -21,9 +21,28 @@ const Login = () => {
   return (
     <>
       <div id='login'>
-        email<input id='L_email' required></input>
-        password<input id='L_pwd' type='password' required></input>
-        <input id='L_btn' type='button' value='login' onClick={gologin}></input>
+        <div className='signup_title'>email</div>
+        <input
+          id='L_email'
+          className='input_type'
+          Style='background-color:black; color:white'
+          required
+        ></input>
+        <div className='signup_title'>password</div>
+        <input
+          id='L_pwd'
+          type='password'
+          className='input_type'
+          Style='background-color:black; color:white'
+          required
+        ></input>
+        <input
+          type='button'
+          value='login'
+          className='btn_type'
+          Style='background-color:black'
+          onClick={gologin}
+        ></input>
       </div>
     </>
   );

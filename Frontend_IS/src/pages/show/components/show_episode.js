@@ -16,12 +16,32 @@ const ShowEpisode = () => {
   }, []);
 
   return (
-    <>
+    <div className='show_epi_container'>
       {episode.map((item, index) => {
         return (
-          <div className='episode'>
-            <div>
-              <div className='episode_date'>{item.pubDate}</div>
+          <div className='episode_single'>
+            <div className='duration_container'>
+              <div className='episode_duration'>
+                {(() => {
+                  const modi = item.itunes.duration.toString().indexOf(':');
+                  if (modi < 0) {
+                    let min = Math.floor(item.itunes.duration / 60);
+                    let sec = item.itunes.duration % 60;
+                    let modisec;
+                    if (sec < 9) {
+                      modisec = '0' + sec.toString();
+                    } else {
+                      modisec = sec;
+                    }
+                    return `${min}:${modisec}`;
+                  } else {
+                    return item.itunes.duration;
+                  }
+                })()}
+              </div>
+            </div>
+            <div className='episode_container'>
+              <div className='episode_date'>PubDate ( {item.pubDate} )</div>
               <Link
                 to={{
                   pathname: `/episode`,
@@ -36,13 +56,10 @@ const ShowEpisode = () => {
               </Link>
               <div className='episode_play'></div>
             </div>
-            <div>
-              <div className='episode_duration'>{item.itunes.duration}</div>
-            </div>
           </div>
         );
       })}
-    </>
+    </div>
   );
 };
 export default ShowEpisode;

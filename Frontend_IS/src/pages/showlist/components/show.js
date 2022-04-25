@@ -40,7 +40,9 @@ const HotShow = ({ item }) => {
             <div className='show_name show'>{item.rss_title}</div>
             <div Style='display:none'>{item.rss_id}</div>
           </Link>
-          <div className='show_category show'>{item.rss_category_main}</div>
+          <div className='show_category show' Style='display:none'>
+            {item.rss_category_main}
+          </div>
         </div>
       </Col>
     </Container>

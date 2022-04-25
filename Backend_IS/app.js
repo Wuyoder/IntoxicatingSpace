@@ -60,8 +60,9 @@ io.on('connection', (socket) => {
         message.currentTime,
       ]
     );
+
     const [recorded] = await db.query(
-      'SELECT * FROM chats WHERE show_id = ? AND episode_id = ? ORDER BY chat_episode_time',
+      'SELECT a.*, b.user_name FROM intoxicating.chats as a  right JOIN intoxicating.users as b ON b.user_id = a.user_id WHERE a.show_id = ? AND a.episode_id = ?  ORDER BY a.chat_episode_time ;',
       [message.show_id, message.episode_id]
     );
     let history;

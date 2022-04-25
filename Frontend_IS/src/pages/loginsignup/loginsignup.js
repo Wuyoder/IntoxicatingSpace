@@ -6,27 +6,31 @@ import { useState } from 'react';
 const LoginSignup = () => {
   const [now, setNow] = useState(true);
   return (
-    <>
+    <div className='login_container'>
       <div>
         <button
+          id='gologin'
+          className='btn_type'
           Style='background-color:black'
           onClick={() => {
             setNow(true);
           }}
         >
-          Login
+          Go Login
         </button>
         <button
+          id='gosignup'
+          className='btn_type'
           Style='background-color:black'
           onClick={() => {
             setNow(false);
           }}
         >
-          Signup
+          Go Signup
         </button>
       </div>
       {now ? <Login /> : <Signup />}
-    </>
+    </div>
   );
 };
 export default LoginSignup;

@@ -311,7 +311,7 @@ const ishostshow = async (req, res) => {
     [who.id]
   );
   const [host_episode] = await db.query(
-    'SELECT * FROM episodes WHERE show_id = ?',
+    'SELECT * FROM episodes WHERE show_id = ? ORDER BY episode_publish_date DESC',
     [show_id[0].show_id]
   );
   if (!host_episode[0]) {

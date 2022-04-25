@@ -35,42 +35,48 @@ const Showlist = () => {
   return (
     <>
       <div>
-        <Category category={showlist.topic1} />
-        <Row xs={6}>
-          {showlist.showlist_1?.map((item) => {
-            return (
-              <>
-                <Col>
-                  <Show.HotShow item={item} />
-                </Col>
-              </>
-            );
-          })}
-        </Row>
-        <Category category={showlist.topic2} />
-        <Row xs={6}>
-          {showlist.showlist_2?.map((item) => {
-            return (
-              <>
-                <Col>
-                  <Show.HotShow item={item} />
-                </Col>
-              </>
-            );
-          })}
-        </Row>
-        <Category category={showlist.topic3} />
-        <Row xs={6}>
-          {showlist.showlist_3?.map((item) => {
-            return (
-              <>
-                <Col>
-                  <Show.HotShow item={item} />
-                </Col>
-              </>
-            );
-          })}
-        </Row>
+        <div className='showlist_row'>
+          <Category category={showlist.topic1} />
+          <Row xs={6}>
+            {showlist.showlist_1?.map((item) => {
+              return (
+                <>
+                  <Col>
+                    <Show.HotShow item={item} />
+                  </Col>
+                </>
+              );
+            })}
+          </Row>
+        </div>
+        <div className='showlist_row'>
+          <Category category={showlist.topic2} />
+          <Row xs={6}>
+            {showlist.showlist_2?.map((item) => {
+              return (
+                <>
+                  <Col>
+                    <Show.HotShow item={item} />
+                  </Col>
+                </>
+              );
+            })}
+          </Row>
+        </div>
+        <div className='showlist_row'>
+          <Category category={showlist.topic3} />
+          <Row xs={6}>
+            {showlist.showlist_3?.map((item) => {
+              return (
+                <>
+                  <Col>
+                    <Show.HotShow item={item} />
+                  </Col>
+                </>
+              );
+            })}
+          </Row>
+        </div>
       </div>
     </>
   );

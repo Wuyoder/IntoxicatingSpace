@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { USER_PROFILE } from '../../global/constants';
 import axios from 'axios';
-
+import Image from './components/image';
 const Profile = () => {
   const [userprofile, setUserprofile] = useState({});
   useEffect(() => {
@@ -21,7 +21,6 @@ const Profile = () => {
   };
 
   if (userprofile.error) {
-    alert('Please sign in first.');
     window.location.replace('/login');
   } else {
     return (
@@ -29,11 +28,7 @@ const Profile = () => {
         <div id='profile_info'>
           <div className='profile_title'>User Profile</div>
           <div className='profile_image_container'>
-            <img
-              id='user_image'
-              alt='user_image'
-              src={localStorage.getItem('user_image')}
-            ></img>
+            <Image />
           </div>
           <div className='profile_container'>
             <div className='profile_sub1'>

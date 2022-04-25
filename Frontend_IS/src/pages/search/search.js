@@ -8,23 +8,19 @@ const Search = () => {
 
   if (search.error) {
     return (
-      <div>
-        <h1>No matching records found.</h1>
-        <h2>Please try other keywords</h2>
+      <div className='search_nomatch'>
+        <h1>No Matching Podcast Found.</h1>
+        <h2>please try other keywords</h2>
       </div>
     );
   }
 
   return (
-    <div>
-      <Row xs={6}>
-        <>
-          <Col>
-            {search.map((item) => {
-              return <Searchshow item={item} />;
-            })}
-          </Col>
-        </>
+    <div className='search_shows'>
+      <Row xs={1} md={6} id='boot_row'>
+        {search.map((item) => {
+          return <Searchshow item={item} />;
+        })}
       </Row>
     </div>
   );

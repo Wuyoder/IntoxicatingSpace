@@ -114,33 +114,63 @@ const Newepisode = ({ creatorprofile }) => {
   };
 
   return (
-    <div>
-      <h3>Newepisode</h3>
-      <form>
-        <div>episode title :</div>
-        <input id='episode_title' Style='background-color:black'></input>
-        <div>episode description:</div>
-        <input id='episode_des' Style='background-color:black'></input>
-        <div>episode number:</div>
-        <input id='episode_num' Style='background-color:black'></input>
-        <div>episode explicit :</div>
+    <div className='newepi-container'>
+      <h3 className='profile_title'>New Episode</h3>
+      <form id='newepi_form'>
+        <div className='single_epi_title'>episode title</div>
+        <input
+          id='episode_title'
+          className='input_type'
+          Style='background-color:black'
+        ></input>
+        <div className='single_epi_title'>episode description</div>
+        <textarea
+          className='input_type'
+          id='episode_des'
+          Style='background-color:black;resize:none'
+        ></textarea>
+        <div className='single_epi_title'>episode number</div>
+        <input
+          type='number'
+          min='1'
+          step='1'
+          className='input_type'
+          id='episode_num'
+          Style='background-color:black'
+        ></input>
+        <div className='single_epi_title'>episode explicit </div>
         <select id='episode_explicit' Style='background-color:black'>
           <option value='0'>no</option>
           <option value='1'>yes</option>
         </select>
-        <div>episode image :</div>
-        <input id='episode_image' type='file' accept='image/*' required></input>
-        <div>episode file (.mp3):</div>
+        <div className='single_epi_title'>episode image :</div>
         <input
+          className='input_type'
+          id='episode_image'
+          type='file'
+          accept='image/*'
+          required
+        ></input>
+        <div className='single_epi_title'>episode file</div>
+        <input
+          className='input_type'
           id='episode_file'
           type='file'
           accept='audio/*'
           required
           onChange={getduration}
         ></input>
-        <button type='submit' Style='background-color:black' onClick={gonewepi}>
-          upload new episode!
-        </button>
+        <div>
+          <button
+            type='submit'
+            Style='background-color:black'
+            onClick={gonewepi}
+            className='btn_type'
+            id='newepi_btn'
+          >
+            upload new episode!
+          </button>
+        </div>
       </form>
     </div>
   );

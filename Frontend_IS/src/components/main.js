@@ -30,13 +30,15 @@ const Withyou = () => {
 const Topbar = () => {
   const { search, setSearch } = useContext(AppContext);
   const gosearch = async () => {
-    if (document.getElementById('search_input').value != null) {
+    if (document.getElementById('search_input').value !== '') {
       const res = await axios.post(SEARCH, {
         keyword: document.getElementById('search_input').value,
       });
       document.getElementById('search_input').value = '';
       if (res.data.error !== 'no keyword') {
         setSearch(res.data);
+      } else {
+        setSearch({ error: 'no keyword' });
       }
     }
   };
@@ -95,14 +97,16 @@ const Sidebar = ({ member }) => {
         </NavLink>
       </div>
       <div className='sidebar-container'>
-        <NavLink
-          to='/creator'
-          style={({ isActive }) => (isActive ? activeStyle : undefined)}
-          Style='text-decoration: none'
-          className='sidebar_btn'
-        >
-          Creator
-        </NavLink>
+        {!member ? (
+          <NavLink
+            to='/creator'
+            style={({ isActive }) => (isActive ? activeStyle : undefined)}
+            Style='text-decoration: none'
+            className='sidebar_btn'
+          >
+            Creator
+          </NavLink>
+        ) : null}
       </div>
       {/* <div className='sidebar-container'>
         <NavLink
@@ -131,7 +135,7 @@ const Sidebar = ({ member }) => {
 };
 
 const Player = () => {
-  const { podcastplayer, setPod } = useContext(AppContext);
+  const { podcastplayer, setPod, audio, setAudio } = useContext(AppContext);
 
   return (
     <div>
@@ -150,6 +154,9 @@ const Player = () => {
         showFilledVolume={true}
         Style='background-color:black'
       />
+      {(() => {
+        setAudio(document.querySelector('audio'));
+      })()}
     </div>
   );
 };

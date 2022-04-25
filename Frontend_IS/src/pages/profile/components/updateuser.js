@@ -1,10 +1,12 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { UPDATE_USER, USER_PROFILE, S3 } from '../../../global/constants';
+import Image from './image';
 const Updateuser = () => {
   const [userprofile, setUserprofile] = useState({});
   const [username, setUsername] = useState([]);
   const [useremail, setUseremail] = useState([]);
+  const [imgurl, setImgurl] = useState('');
   useEffect(() => {
     const getuserprofile = async () => {
       const res = await axios.get(USER_PROFILE, {
@@ -48,38 +50,44 @@ const Updateuser = () => {
     e.preventDefault();
     const imageInput = document.querySelector('#imageInput');
     const file = imageInput.files[0];
-    const res = await axios.post(
-      S3,
-      { type: 'profile_image' },
-      {
-        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
-      }
-    );
-    if (res.data.presignedURL) {
-      const s3res = await fetch(res.data.presignedURL, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-        body: file,
-      });
-      localStorage.setItem('user_image', res.data.presignedURL.split('?')[0]);
-      if (s3res.status === 200) {
-        await axios.put(
-          UPDATE_USER,
-          {
-            newprofileimage: res.data.presignedURL.split('?')[0],
+    console.log(imageInput.files[0]);
+    if (imageInput.files[0]) {
+      const res = await axios.post(
+        S3,
+        { type: 'profile_image' },
+        {
+          headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+        }
+      );
+      if (res.data.presignedURL) {
+        const s3res = await fetch(res.data.presignedURL, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'multipart/form-data',
           },
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem('token')}`,
+          body: file,
+        });
+        localStorage.setItem('user_image', res.data.presignedURL.split('?')[0]);
+        setImgurl(res.data.presignedURL.split('?')[0]);
+        if (s3res.status === 200) {
+          await axios.put(
+            UPDATE_USER,
+            {
+              newprofileimage: res.data.presignedURL.split('?')[0],
             },
-          }
-        );
-        document.getElementById('user_image').src =
-          localStorage.getItem('newimage');
+            {
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`,
+              },
+            }
+          );
+        }
       }
+    } else {
+      alert('please choose new image first');
     }
+    document.getElementById('user_image').src =
+      localStorage.getItem('user_image');
   };
 
   return (
@@ -87,11 +95,7 @@ const Updateuser = () => {
       <h3 className='profile_title'>User Profile Update</h3>
       <div>
         <div className='profile_image_container'>
-          <img
-            id='user_image'
-            alt='user_image'
-            src={localStorage.getItem('user_image')}
-          ></img>
+          <Image imgurl={imgurl} />
         </div>
         <div>
           <form id='imageForm'>

@@ -25,6 +25,7 @@ const App = () => {
   //
   const [podcastplayer, setPod] = useState(0);
   const [member, setMember] = useState(true);
+  const [audio, setAudio] = useState(0);
   //
   const appContextValue = {
     showid,
@@ -40,6 +41,8 @@ const App = () => {
     setSearch,
     member,
     setMember,
+    audio,
+    setAudio,
   };
 
   useEffect(() => {

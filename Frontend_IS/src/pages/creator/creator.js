@@ -11,6 +11,13 @@ import Newepisode from '../creator/components/newepisode';
 const Creator = () => {
   const [creatorprofile, setCreatorprofile] = useState([]);
   const [creatorepisode, setCreatorepisode] = useState([]);
+  const [updateuser, setUpdateuser] = useState(true);
+  const [updatcreator, setUpdatecreator] = useState(true);
+  const [newepisode, setNewepisode] = useState(true);
+  const [biguser, setBiguser] = useState(true);
+  const [bigcreator, setBigcreator] = useState(false);
+  const [bigepi, setBigepi] = useState(false);
+
   useEffect(() => {
     const getcreatorinfo = async () => {
       const res1 = await axios.get(CREATOR_PROFILE, {
@@ -23,13 +30,7 @@ const Creator = () => {
       setCreatorepisode(res2.data);
     };
     getcreatorinfo();
-  }, []);
-  const [updateuser, setUpdateuser] = useState(true);
-  const [updatcreator, setUpdatecreator] = useState(true);
-  const [newepisode, setNewepisode] = useState(true);
-  const [biguser, setBiguser] = useState(true);
-  const [bigcreator, setBigcreator] = useState(false);
-  const [bigepi, setBigepi] = useState(false);
+  }, [updateuser, updateuser, newepisode, biguser, bigcreator, bigepi]);
 
   return (
     <div className='creator_container'>

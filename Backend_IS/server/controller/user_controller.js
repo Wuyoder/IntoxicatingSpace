@@ -115,7 +115,7 @@ const updatecreator = async (req, res) => {
     );
     return res.json({ status: 'update show image url OK' });
   }
-
+  console.log(req.body);
   let change = '';
   if (
     req.body.cname === '' &&
@@ -163,16 +163,13 @@ const updatecreator = async (req, res) => {
   const creatorquery =
     'UPDATE creators_shows SET ' + allchange + 'WHERE user_id = ?;';
   const [creatorupdate] = await db.query(creatorquery, [who.id]);
-  let result;
-  if (creatorupdate.affectedRows != 0) {
+  if (creatorupdate.affectedRows !== 0) {
     const [newcreatorinfo] = await db.query(
       'SELECT * FROM creators_shows WHERE user_id = ?',
       [who.id]
     );
-    result = newcreatorinfo[0];
+    res.send(newcreatorinfo[0]);
   }
-
-  res.send(result);
 };
 
 module.exports = { userprofile, creatorprofile, updateuser, updatecreator };
