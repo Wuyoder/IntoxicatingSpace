@@ -1,8 +1,8 @@
 import axios from 'axios';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { EPISODE, S3 } from '../../../global/constants';
-
-const Newepisode = ({ creatorprofile }) => {
+//import
+const Newepisode = ({ creatorprofile, setNewepisode, newepisode }) => {
   const [duration, setDuration] = useState(0);
   const getduration = () => {
     let epifile = document.getElementById('episode_file');
@@ -49,13 +49,27 @@ const Newepisode = ({ creatorprofile }) => {
               },
             }
           );
-          const s3res1 = await fetch(res1.data.presignedURL, {
-            method: 'PUT',
-            headers: {
-              'Content-Type': 'multipart/form-data',
-            },
-            body: epiimage.files[0],
-          });
+          const s3res1 = await axios.put(
+            res1.data.presignedURL,
+            epiimage.files[0],
+            {
+              headers: {
+                'Content-Type': 'multipart/form-data',
+              },
+              onUploadProgress: (e) => {
+                var percentCompleted = Math.round((e.loaded * 100) / e.total);
+                if (percentCompleted < 100) {
+                  document.getElementById(
+                    'uploadPercent1'
+                  ).innerHTML = `${percentCompleted}%`;
+                } else {
+                  document.getElementById('uploadPercent1').innerHTML =
+                    'completed!';
+                }
+                console.log('image', percentCompleted);
+              },
+            }
+          );
 
           ///for file
           const res2 = await axios.post(
@@ -67,18 +81,30 @@ const Newepisode = ({ creatorprofile }) => {
               },
             }
           );
-          const s3res2 = await fetch(res2.data.presignedURL, {
-            method: 'PUT',
-            headers: {
-              'Content-Type': 'multipart/form-data',
-            },
-            body: epifile.files[0],
-          });
+          const s3res2 = await axios.put(
+            res2.data.presignedURL,
+            epifile.files[0],
+            {
+              headers: {
+                'Content-Type': 'multipart/form-data',
+              },
+              onUploadProgress: (e) => {
+                var percentCompleted = Math.round((e.loaded * 100) / e.total);
+                if (percentCompleted < 100) {
+                  document.getElementById(
+                    'uploadPercent2'
+                  ).innerHTML = `${percentCompleted}%`;
+                } else {
+                  document.getElementById('uploadPercent2').innerHTML =
+                    'completed!';
+                }
+                console.log('image', percentCompleted);
+              },
+            }
+          );
 
           const imageurl = res1.data.presignedURL.split('?')[0];
           const fileurl = res2.data.presignedURL.split('?')[0];
-
-          //先打S3上傳完，把key留下來，在upload DB
 
           const newepi = await axios.post(
             EPISODE,
@@ -107,7 +133,7 @@ const Newepisode = ({ creatorprofile }) => {
           document.getElementById('episode_num').value = '';
 
           console.log(newepi);
-          window.location.replace('/creator');
+          setNewepisode(false);
         }
       }
     }
@@ -149,18 +175,37 @@ const Newepisode = ({ creatorprofile }) => {
           id='episode_image'
           type='file'
           accept='image/*'
+          Style='display:none'
           required
         ></input>
         <div className='single_epi_title'>episode file</div>
+
         <input
           className='input_type'
           id='episode_file'
           type='file'
           accept='audio/*'
           required
+          Style='display:none'
           onChange={getduration}
         ></input>
         <div>
+          <img
+            onClick={() => {
+              document.getElementById('episode_image').click();
+            }}
+            src={require('../../../global/photo.png')}
+            alt='upload'
+            className='upimg'
+          />
+          <img
+            onClick={() => {
+              document.getElementById('episode_file').click();
+            }}
+            src={require('../../../global/voice.png')}
+            alt='upload'
+            className='upimg'
+          />
           <button
             type='submit'
             Style='background-color:black'
@@ -170,6 +215,8 @@ const Newepisode = ({ creatorprofile }) => {
           >
             upload new episode!
           </button>
+          <div id='uploadPercent1'></div>
+          <div id='uploadPercent2'></div>
         </div>
       </form>
     </div>

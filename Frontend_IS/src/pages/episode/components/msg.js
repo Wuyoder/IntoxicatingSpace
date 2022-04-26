@@ -34,6 +34,7 @@ const Msg = ({ item }) => {
               .toString()
               .split('T')[1]
               .split('.')[0];
+            return `( ${modiday} )`;
             return `( ${modiday} - ${moditime} )`;
           })()}
         </div>

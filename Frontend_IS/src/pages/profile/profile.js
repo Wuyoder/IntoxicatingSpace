@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { USER_PROFILE } from '../../global/constants';
 import axios from 'axios';
 import Image from './components/image';
+import Button from 'react-bootstrap/Button';
 const Profile = () => {
   const [userprofile, setUserprofile] = useState({});
   useEffect(() => {
@@ -44,14 +45,13 @@ const Profile = () => {
               </div>
             </div>
           </div>
-
-          <button
+          <Button
             onClick={gologout}
             Style='background-color:black'
             className='login_btn'
           >
             LOG OUT
-          </button>
+          </Button>
         </div>
         <div></div>
       </>

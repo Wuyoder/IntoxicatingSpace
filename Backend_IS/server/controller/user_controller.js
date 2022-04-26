@@ -115,7 +115,6 @@ const updatecreator = async (req, res) => {
     );
     return res.json({ status: 'update show image url OK' });
   }
-  console.log(req.body);
   let change = '';
   if (
     req.body.cname === '' &&

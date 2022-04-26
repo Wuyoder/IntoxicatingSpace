@@ -59,12 +59,21 @@ const Updatecreator = ({ creatorprofile }) => {
       }
     );
     if (res.data.presignedURL) {
-      const s3res = await fetch(res.data.presignedURL, {
-        method: 'PUT',
+      const s3res = await axios.put(res.data.presignedURL, file, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
-        body: file,
+        onUploadProgress: (e) => {
+          var percentCompleted = Math.round((e.loaded * 100) / e.total);
+          if (percentCompleted < 100) {
+            document.getElementById(
+              'uploadPercent'
+            ).innerHTML = `${percentCompleted}%`;
+          } else {
+            document.getElementById('uploadPercent').innerHTML = 'completed!';
+          }
+          console.log(percentCompleted);
+        },
       });
       localStorage.setItem(
         'creator_image',
@@ -106,7 +115,20 @@ const Updatecreator = ({ creatorprofile }) => {
         ></img>
       </div>
       <form>
-        <input id='new_show_image' type='file' accept='image/*'></input>
+        <img
+          onClick={() => {
+            document.getElementById('new_show_image').click();
+          }}
+          src={require('../../../global/photo.png')}
+          alt='upload'
+          className='upimg'
+        />
+        <input
+          Style='display:none'
+          id='new_show_image'
+          type='file'
+          accept='image/*'
+        ></input>
         <button
           type='submit'
           Style='background-color:black'
@@ -116,6 +138,7 @@ const Updatecreator = ({ creatorprofile }) => {
         >
           Upload show image
         </button>
+        <div id='uploadPercent'></div>
       </form>
       <p className='new_creator_type'>
         origin creator name: {cprofile.creator_name}

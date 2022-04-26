@@ -448,7 +448,7 @@ body {
   font-size: 20px;
   font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
   color: aqua;
-  margin-bottom: -10px;
+  margin-bottom: 10px;
 }
 .single_epi_detail {
   font-size: 20px;
@@ -657,4 +657,27 @@ body {
 #L_pwd {
   height: 40px;
   padding: 0 15px 0 15px;
+}
+.upload_element {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+}
+.upimg {
+  height: 40px;
+  margin: 1vw 2vw 0 4vw;
+}
+.upimg:hover {
+  box-shadow: #adb3b8;
+  background-color: #3c4247;
+  border-radius: 5px;
+}
+#uploadPercent,
+#uploadPercent1,
+#uploadPercent2 {
+  min-width: 4vw;
+  color: aqua;
+  font-size: 20px;
+  padding-top: 8px;
+  margin: 1vw 0 0 1vw;
 }

@@ -8,6 +8,7 @@ import Updateuser from '../profile/components/updateuser';
 import Updatecreator from './components/updatecreator';
 import Episode from '../creator/components/episode';
 import Newepisode from '../creator/components/newepisode';
+import Button from 'react-bootstrap/Button';
 const Creator = () => {
   const [creatorprofile, setCreatorprofile] = useState([]);
   const [creatorepisode, setCreatorepisode] = useState([]);
@@ -37,7 +38,7 @@ const Creator = () => {
       <div className='creator_btn_container'>
         <div>
           <div>
-            <button
+            <Button
               Style='background-color:black'
               onClick={() => {
                 setUpdateuser(!updateuser);
@@ -50,11 +51,11 @@ const Creator = () => {
               className='creator_btn'
             >
               User
-            </button>
+            </Button>
           </div>
         </div>
         <div>
-          <button
+          <Button
             Style='background-color:black'
             onClick={() => {
               setUpdatecreator(!updatcreator);
@@ -67,10 +68,10 @@ const Creator = () => {
             className='creator_btn'
           >
             Creator &amp; Podcast
-          </button>
+          </Button>
         </div>
         <div>
-          <button
+          <Button
             Style='background-color:black'
             onClick={() => {
               setNewepisode(!newepisode);
@@ -83,7 +84,7 @@ const Creator = () => {
             className='creator_btn'
           >
             Episode
-          </button>
+          </Button>
         </div>
       </div>
       <div>{biguser ? updateuser ? <Profile /> : <Updateuser /> : null}</div>
@@ -107,7 +108,9 @@ const Creator = () => {
             newepisode ? (
               <Episode creatorepisode={creatorepisode} />
             ) : (
-              <Newepisode creatorprofile={creatorprofile} />
+              <Newepisode
+                creatorprofile={(creatorprofile, setNewepisode, newepisode)}
+              />
             )
           ) : null}
         </div>

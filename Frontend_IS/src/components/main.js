@@ -20,7 +20,7 @@ const Withyou = () => {
   }, []);
 
   if (counterlogins > 0) {
-    return <>With You {counterlogins} Days</>;
+    return <>With You {counterlogins} Times</>;
   }
   if (!counterlogins) {
     return <></>;
@@ -93,7 +93,7 @@ const Sidebar = ({ member }) => {
           Style='text-decoration: none'
           className='sidebar_btn'
         >
-          Home
+          HOME
         </NavLink>
       </div>
       <div className='sidebar-container'>
@@ -104,7 +104,7 @@ const Sidebar = ({ member }) => {
             Style='text-decoration: none'
             className='sidebar_btn'
           >
-            Creator
+            CREATOR
           </NavLink>
         ) : null}
       </div>
@@ -115,7 +115,7 @@ const Sidebar = ({ member }) => {
           Style='text-decoration: none'
           className='sidebar_btn'
         >
-          Dashboard
+          DASHBOARD
         </NavLink>
       </div> */}
       <div className='sidebar-container'>
@@ -126,7 +126,7 @@ const Sidebar = ({ member }) => {
             Style='text-decoration: none'
             className='sidebar_btn'
           >
-            Login
+            LOGIN
           </NavLink>
         ) : null}
       </div>

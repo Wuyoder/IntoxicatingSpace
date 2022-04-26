@@ -2,6 +2,7 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { UPDATE_USER, USER_PROFILE, S3 } from '../../../global/constants';
 import Image from './image';
+import AWS from 'aws-sdk/dist/aws-sdk-react-native';
 const Updateuser = () => {
   const [userprofile, setUserprofile] = useState({});
   const [username, setUsername] = useState([]);
@@ -51,6 +52,7 @@ const Updateuser = () => {
     const imageInput = document.querySelector('#imageInput');
     const file = imageInput.files[0];
     console.log(imageInput.files[0]);
+
     if (imageInput.files[0]) {
       const res = await axios.post(
         S3,
@@ -60,13 +62,24 @@ const Updateuser = () => {
         }
       );
       if (res.data.presignedURL) {
-        const s3res = await fetch(res.data.presignedURL, {
-          method: 'PUT',
+        const s3res = await axios.put(res.data.presignedURL, file, {
           headers: {
             'Content-Type': 'multipart/form-data',
           },
-          body: file,
+          onUploadProgress: (e) => {
+            var percentCompleted = Math.round((e.loaded * 100) / e.total);
+            if (percentCompleted < 100) {
+              document.getElementById(
+                'uploadPercent'
+              ).innerHTML = `${percentCompleted}%`;
+            } else {
+              document.getElementById('uploadPercent').innerHTML = 'completed!';
+            }
+            console.log(percentCompleted);
+          },
         });
+        console.log(s3res);
+
         localStorage.setItem('user_image', res.data.presignedURL.split('?')[0]);
         setImgurl(res.data.presignedURL.split('?')[0]);
         if (s3res.status === 200) {
@@ -98,21 +111,41 @@ const Updateuser = () => {
           <Image imgurl={imgurl} />
         </div>
         <div>
-          <form id='imageForm'>
+          <form id='imageForm' Style='display:none'>
             <div className='textcenter'>
-              <input id='imageInput' type='file' accept='image/*' />
-            </div>
-            <div className='textcenter'>
-              <button
-                type='submit'
-                Style='background-color:black'
-                onClick={goupdateimage}
-                className='new_userimage_btn'
-              >
-                Upload image
-              </button>
+              <input
+                id='imageInput'
+                type='file'
+                accept='image/*'
+                Style='display:none'
+              />
             </div>
           </form>
+          <div className='textcenter'>
+            <div className='upload_element'>
+              <div>
+                <img
+                  onClick={() => {
+                    document.getElementById('imageInput').click();
+                  }}
+                  src={require('../../../global/photo.png')}
+                  alt='upload'
+                  className='upimg'
+                />
+              </div>
+              <div>
+                <button
+                  type='submit'
+                  Style='background-color:black'
+                  onClick={goupdateimage}
+                  className='new_userimage_btn'
+                >
+                  Upload image
+                </button>
+              </div>
+              <div id='uploadPercent'></div>
+            </div>
+          </div>
         </div>
       </div>
 

@@ -10,7 +10,9 @@ const Episingle = ({ item, i }) => {
       </div>
       <div className='single_epi_info'>
         <h3 className='single_epi_title'>{item.episode_title}</h3>
-        <div className='single_epi_detail'>number: {i + 1}</div>
+        <div className='single_epi_detail' Style='display:none'>
+          number: {i + 1}
+        </div>
         <div className='single_epi_detail'>description: {item.episode_des}</div>
         <div className='single_epi_detail'>
           publish date:
