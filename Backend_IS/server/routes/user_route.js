@@ -11,6 +11,9 @@ const {
   userhistory,
   episode,
   ishostshow,
+  historylist,
+  sublist,
+  subshows,
 } = require('../controller/show_controller');
 const { showkeyword } = require('../controller/search_controller');
 const { counter_logins } = require('../controller/counter_controller');
@@ -19,6 +22,7 @@ const {
   creatorprofile,
   updateuser,
   updatecreator,
+  updateepisode,
 } = require('../controller/user_controller');
 const { s3upload } = require('../util/S3');
 // test chatroom for socket
@@ -29,6 +33,7 @@ router.route('/s3upload').post(s3upload);
 router.route('/userprofile').get(userprofile);
 router.route('/userprofile').put(updateuser);
 router.route('/userhistory').post(userhistory);
+router.route('/userhistory').get(historylist);
 router.route('/creatorprofile').get(creatorprofile);
 router.route('/creatorprofile').put(updatecreator);
 router.route('/counter_logins').get(counter_logins);
@@ -41,8 +46,10 @@ router.route('/showsubscribe').post(showsubscribe);
 router.route('/showunsub').post(showunsub);
 router.route('/switcher').post(switcher);
 router.route('/episode').post(episode);
+router.route('/episode').put(updateepisode);
 router.route('/showkeyword').post(showkeyword);
-// test chatroom for socket
 router.route('/chatmsg').post(chatmsg);
 router.route('/chathistory').post(chathistory);
+router.route('/sublist').get(sublist);
+router.route('/subshows').get(subshows);
 module.exports = router;

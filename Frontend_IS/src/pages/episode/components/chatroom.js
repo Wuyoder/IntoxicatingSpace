@@ -8,7 +8,7 @@ import Msg from './msg';
 const Chatroom = () => {
   const [ws, setWs] = useState(null);
   const [open, setOpen] = useState([]);
-  const { episodeid, getcurrent, podcastplayer } = useContext(AppContext);
+  const { audio, episodeid, podcastplayer } = useContext(AppContext);
   const [value, setValue] = useState('');
   //頁面載入時的動作
   useEffect(() => {
@@ -17,7 +17,7 @@ const Chatroom = () => {
         //console.log(window.location.pathname.slice(9).split('-')[0]); TODO: show_id
         //console.log(window.location.pathname.slice(9).split('-')[1]); TODO: episode_id
         show_id: window.location.pathname.slice(9).split('-')[0],
-        episode_id: window.location.pathname.slice(9).split('-')[1],
+        episode_id: episodeid,
       });
       setOpen(leavemsg.data);
       setValue(leavemsg.data.length);
@@ -27,7 +27,7 @@ const Chatroom = () => {
     };
     openhistory();
     connectWebSocket();
-  }, [value]);
+  }, [value, episodeid]);
 
   useEffect(() => {
     if (ws) {
@@ -73,7 +73,7 @@ const Chatroom = () => {
         show_id: window.location.pathname.slice(9).split('-')[0],
         episode_id: episodeid,
         type: 'text',
-        currentTime: podcastplayer,
+        currentTime: audio.currentTime,
       };
       ws.emit('getMessage', message);
       msg.value = '';

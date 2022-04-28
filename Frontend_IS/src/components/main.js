@@ -135,7 +135,7 @@ const Sidebar = ({ member }) => {
 };
 
 const Player = () => {
-  const { setAudio } = useContext(AppContext);
+  const { setAudio, setPod } = useContext(AppContext);
 
   return (
     <div>
@@ -143,6 +143,9 @@ const Player = () => {
         id='playbar'
         src={localStorage.getItem('episode')}
         autoPlay={false}
+        onListen={(e) => {
+          setPod(e.srcElement.currentTime);
+        }}
         showSkipControls={false}
         showFilledVolume={true}
         Style='background-color:black'

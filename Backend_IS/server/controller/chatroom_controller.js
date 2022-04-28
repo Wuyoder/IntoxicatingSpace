@@ -39,7 +39,20 @@ const chathistory = async (req, res) => {
   );
 
   if (!recorded[0]) {
-    return res.json({ error: 'no leave words yet' });
+    return res.send([
+      {
+        chat_id: 1,
+        show_id: 'show_id',
+        episode_id: 'episode_id',
+        membership: 1,
+        user_id: 1,
+        chat_msg: 'NO MESSSAGE HERE, PLEASE LEAVE YOUR WORDS.',
+        chat_msg_type: 'text',
+        chat_episode_time: 1,
+        time_click: '2046-04-01T00:00:00.000Z',
+        user_name: 'IS',
+      },
+    ]);
   }
 
   res.send(recorded);

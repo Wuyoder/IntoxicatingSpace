@@ -172,7 +172,7 @@ const showunsub = async (req, res) => {
     [req.body.id]
   );
 
-  res.send('unsubcribe OK');
+  res.send({ status: 'unsubcribe OK' });
 };
 
 const switcher = async (req, res) => {
@@ -184,30 +184,63 @@ const switcher = async (req, res) => {
     return res.status(200).json({ error: 'type missing' });
   }
   let result;
+  //switch 應該要直接對調結果
   if (req.body.type === 'show') {
-    if (!req.body.id || !req.body.status) {
+    if (!req.body.show_id) {
       return res.status(200).json({ error: 'show id or status missing' });
     }
-    [result] = await db.query(
-      'UPDATE creators_shows SET show_status = ? WHERE user_id = ?',
-      [req.body.status, who.id]
+    let showstatus_after = 0;
+    const [status_before] = await db.query(
+      'SELECT show_status FROM creators_shows WHERE show_id = ?',
+      [req.body.show_id]
     );
+    if (status_before[0].show_status === 1) {
+      [result] = await db.query(
+        'UPDATE creators_shows SET show_status = 0 WHERE show_id = ?',
+        [req.body.show_id]
+      );
+      await db.query('UPDATE rss SET rss_status = 0 WHERE rss_url LIKE ?', [
+        `%${req.body.show_id}%`,
+      ]);
+    }
+    if (status_before[0].show_status === 0) {
+      [result] = await db.query(
+        'UPDATE creators_shows SET show_status = 1 WHERE show_id = ?',
+        [req.body.show_id]
+      );
+      await db.query('UPDATE rss SET rss_status = 1 WHERE rss_url LIKE ?', [
+        `%${req.body.show_id}%`,
+      ]);
+      showstatus_after = 1;
+    }
+    return res.json({
+      status: { type: req.body.type, status: showstatus_after },
+    });
   }
   if (req.body.type === 'episode') {
-    if (!req.body.id || !req.body.status) {
+    if (!req.body.episode_id || !req.body.show_id) {
       return res.status(200).json({ error: 'episode id or status missing' });
     }
-    [result] = await db.query(
-      'UPDATE episodes SET episode_status = ? WHERE user_id = ?',
-      [req.body.status, who.id]
+    let epistatus_after = 0;
+    const [status_before] = await db.query(
+      'SELECT episode_status FROM episodes WHERE show_id = ? AND episode_id = ?',
+      [req.body.show_id, req.body.episode_id]
     );
+    if (status_before[0].episode_status === 1) {
+      [result] = await db.query(
+        'UPDATE episodes SET episode_status = 0 WHERE show_id = ? AND episode_id = ?',
+        [req.body.show_id, req.body.episode_id]
+      );
+    }
+    if (status_before[0].episode_status === 0) {
+      [result] = await db.query(
+        'UPDATE episodes SET episode_status = 1 WHERE show_id = ? AND episode_id = ?',
+        [req.body.show_id, req.body.episode_id]
+      );
+      epistatus_after = 1;
+    }
+    res.json({ status: { type: req.body.type, status: epistatus_after } });
   }
-  if (result.affectedRows === 0) {
-    return res.status(200).json({ error: 'wrong id, please check input' });
-  }
-  res
-    .status(200)
-    .json({ status: { type: req.body.type, record: req.body.status } });
 };
 
 const userhistory = async (req, res) => {
@@ -320,6 +353,49 @@ const ishostshow = async (req, res) => {
   return res.send(host_episode);
 };
 
+const historylist = async (req, res) => {
+  const who = await jwtwrap(req);
+  if (who.error) {
+    return res.json(who);
+  }
+  const [history] = await db.query(
+    'SELECT a.* , b.* FROM history_shows AS a RIGHT JOIN rss AS b ON a.show_id = b.rss_id WHERE user_id = ? ORDER BY a.time_click DESC LIMIT 12',
+    [who.id]
+  );
+
+  res.send(history);
+};
+
+const sublist = async (req, res) => {
+  const who = await jwtwrap(req);
+  if (who.error) {
+    return res.json(who);
+  }
+  const [sub] = await db.query(
+    'SELECT rss_id FROM subscribes WHERE user_id = ?',
+    [who.id]
+  );
+  let list = [];
+  for (let i = 0; i < sub.length; i++) {
+    list.push(sub[i].rss_id);
+  }
+  console.log('result', list);
+  res.send(list);
+};
+
+const subshows = async (req, res) => {
+  const who = await jwtwrap(req);
+  if (who.error) {
+    return res.json(who);
+  }
+  const [subshows] = await db.query(
+    'SELECT a.* FROM rss AS a RIGHT JOIN subscribes AS b ON a.rss_id = b.rss_id WHERE b.user_id = ?',
+    [who.id]
+  );
+
+  res.send(subshows);
+};
+
 module.exports = {
   showlist,
   showchoice,
@@ -330,4 +406,7 @@ module.exports = {
   userhistory,
   episode,
   ishostshow,
+  historylist,
+  sublist,
+  subshows,
 };

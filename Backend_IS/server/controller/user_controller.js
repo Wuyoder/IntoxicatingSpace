@@ -108,14 +108,24 @@ const updatecreator = async (req, res) => {
   if (who.error) {
     return res.status(200).json({ error: who.error });
   }
+  const [show_target] = await db.query(
+    'SELECT show_id FROM creators_shows WHERE user_id = ?',
+    [who.id]
+  );
   if (req.body.newshowimage) {
     await db.query(
       'UPDATE creators_shows SET show_image = ? WHERE user_id = ? ',
       [req.body.newshowimage, who.id]
     );
+
+    const [show_RSS] = await db.query(
+      'UPDATE rss SET rss_image = ? WHERE rss_url LIKE ?',
+      [req.body.newshowimage, `%${show_target[0].show_id}%`]
+    );
     return res.json({ status: 'update show image url OK' });
   }
   let change = '';
+  let rsschange = '';
   if (
     req.body.cname === '' &&
     req.body.cmail === '' &&
@@ -136,6 +146,7 @@ const updatecreator = async (req, res) => {
   }
   if (req.body.cname !== '') {
     change += `creator_name = '${req.body.cname}' ,`;
+    rsschange += `rss_creator = '${req.body.cname}' ,`;
   }
   if (req.body.cmail !== '') {
     validation = Joiput.validate({
@@ -148,20 +159,27 @@ const updatecreator = async (req, res) => {
   }
   if (req.body.sname !== '') {
     change += `show_name = '${req.body.sname}' ,`;
+    rsschange += `rss_title = '${req.body.sname}' ,`;
   }
   const category = req.body.scategory;
   if (category !== 'choose new category') {
     const cmain = category.split('_')[0];
     const csub = category.split('_')[1];
     change += `show_category_main = '${cmain}', show_category_sub = '${csub}' ,`;
+    rsschange += `rss_category_main = '${cmain}', rss_category_sub = '${csub}' ,`;
   }
   if (req.body.sdes !== '') {
     change += `show_des = '${req.body.sdes}' ,`;
   }
   allchange = change.slice(0, change.length - 1);
+  allrsschange = rsschange.slice(0, rsschange.length - 1);
   const creatorquery =
     'UPDATE creators_shows SET ' + allchange + 'WHERE user_id = ?;';
+  const rssquery = 'UPDATE rss SET ' + allrsschange + 'WHERE rss_url LIKE ?;';
   const [creatorupdate] = await db.query(creatorquery, [who.id]);
+  const [rssupdate] = await db.query(rssquery, [`%${show_target[0].show_id}%`]);
+  console.log('creatorupdate', creatorupdate);
+  console.log('rssupdate', rssupdate);
   if (creatorupdate.affectedRows !== 0) {
     const [newcreatorinfo] = await db.query(
       'SELECT * FROM creators_shows WHERE user_id = ?',
@@ -171,4 +189,78 @@ const updatecreator = async (req, res) => {
   }
 };
 
-module.exports = { userprofile, creatorprofile, updateuser, updatecreator };
+const updateepisode = async (req, res) => {
+  const who = await jwtwrap(req);
+  if (who.error) {
+    return res.status(200).json({ error: who.error });
+  }
+  try {
+    const infos = req.body;
+    if (
+      infos.show_id === '' &&
+      infos.episode_id === '' &&
+      infos.title === '' &&
+      infos.des === '' &&
+      infos.file === '' &&
+      infos.duration === '' &&
+      infos.length === '' &&
+      infos.explicit === '' &&
+      infos.image === '' &&
+      infos.episode === ''
+    ) {
+      return res.json({ error: 'nothing change' });
+    }
+    let change = '';
+    if (infos.title !== '') {
+      change += `episode_title = '${infos.title}' ,`;
+    }
+    if (infos.des !== '') {
+      change += `episode_des = '${infos.des}' ,`;
+    }
+    if (infos.file !== '') {
+      change += `episode_file = '${infos.file}' ,`;
+    }
+    if (infos.duration !== '') {
+      change += `episode_duration = '${infos.duration}' ,`;
+    }
+    if (infos.length !== '') {
+      change += `episode_length = '${infos.length}' ,`;
+    }
+    if (infos.explicit !== '') {
+      change += `episode_explicit = '${infos.explicit}' ,`;
+    }
+    if (infos.image !== '') {
+      change += `episode_image = '${infos.image}' ,`;
+    }
+    if (infos.episode !== '') {
+      change += `episode_episode = '${infos.episode}' ,`;
+    }
+
+    allchange = change.slice(0, change.length - 1);
+    const epiquery =
+      'UPDATE episodes SET ' +
+      allchange +
+      'WHERE show_id = ? AND episode_id = ?';
+    const [epiupdate] = await db.query(epiquery, [
+      infos.show_id,
+      infos.episode_id,
+    ]);
+    if (epiupdate.affectedRows !== 0) {
+      const [newepiinfo] = await db.query(
+        'SELECT * FROM episodes WHERE show_id = ? AND episode_id = ?;',
+        [infos.show_id, infos.episode_id]
+      );
+      res.send(newepiinfo[0]);
+    }
+  } catch (err) {
+    res.json({ error: err });
+  }
+};
+
+module.exports = {
+  userprofile,
+  creatorprofile,
+  updateuser,
+  updatecreator,
+  updateepisode,
+};
