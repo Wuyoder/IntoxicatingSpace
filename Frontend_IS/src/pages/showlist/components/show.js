@@ -1,17 +1,26 @@
 import { v4 } from 'uuid';
-import { useEffect, useState, useContext } from 'react';
+import { useContext } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Container from 'react-bootstrap/Container';
 import Col from 'react-bootstrap/Col';
-import { useNavigate, Link, NavLink } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import React from 'react';
 import { AppContext } from '../../../App';
+import { USER_HISTORY } from '../../../global/constants';
+import axios from 'axios';
 
-// 可以一次取得多個再使用
 const HotShow = ({ item }) => {
-  // 取得useContext內容
-  const { showid, setShowid } = useContext(AppContext);
-  // 可以一次取得多個再使用
+  const goclickshow = async (event) => {
+    //setShowid(item.rss_id);
+    //event.currentTarget.lastChild.innerHTML rss id
+    const res = await axios.post(
+      USER_HISTORY,
+      { type: 'show', show: event.currentTarget.lastChild.innerHTML },
+      {
+        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+      }
+    );
+  };
 
   return (
     <Container>
@@ -19,17 +28,10 @@ const HotShow = ({ item }) => {
         <div key={v4()}>
           <Link
             to={{
-              pathname: '/showchoice',
-              hash: `${item.rss_id}`,
+              pathname: `/showchoice/${item.rss_id}`,
+              lable: `${item.rss_id}`,
             }}
-            onClick={(event) => {
-              setShowid(item.rss_id);
-              console.log('showid', showid);
-              console.log(
-                'event.target',
-                event.currentTarget.lastChild.innerHTML
-              );
-            }}
+            onClick={goclickshow}
           >
             <img
               src={item.rss_image}

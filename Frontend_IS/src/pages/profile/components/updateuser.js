@@ -2,7 +2,6 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { UPDATE_USER, USER_PROFILE, S3 } from '../../../global/constants';
 import Image from './image';
-import AWS from 'aws-sdk/dist/aws-sdk-react-native';
 const Updateuser = () => {
   const [userprofile, setUserprofile] = useState({});
   const [username, setUsername] = useState([]);

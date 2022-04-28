@@ -5,11 +5,13 @@ import { SHOWCHOICE } from '../../../global/constants';
 import { AppContext } from '../../../App';
 const ShowEpisode = () => {
   const [episode, setEpisode] = useState([]);
-  const { showid, episodeid, setEpisodeid, episodeurl, setEpisodeurl, test } =
+  const { episodeid, setEpisodeid, episodeurl, setEpisodeurl, test } =
     useContext(AppContext);
   useEffect(() => {
     const getEpisode = async () => {
-      const res = await axios.get(`${SHOWCHOICE}/${showid}`);
+      const res = await axios.get(
+        `${SHOWCHOICE}/${window.location.pathname.slice(12)}`
+      );
       setEpisode(res.data.items);
     };
     getEpisode();
@@ -44,11 +46,12 @@ const ShowEpisode = () => {
               <div className='episode_date'>PubDate ( {item.pubDate} )</div>
               <Link
                 to={{
-                  pathname: `/episode`,
-                  hash: `${item.guid}`,
+                  pathname: `/episode/${window.location.pathname.slice(
+                    12
+                  )}-${index}`,
                 }}
                 onClick={() => {
-                  setEpisodeid(index);
+                  setEpisodeid(item.guid);
                   localStorage.setItem('last', item.enclosure?.url);
                 }}
               >

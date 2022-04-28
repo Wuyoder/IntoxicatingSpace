@@ -135,20 +135,13 @@ const Sidebar = ({ member }) => {
 };
 
 const Player = () => {
-  const { podcastplayer, setPod, audio, setAudio } = useContext(AppContext);
+  const { setAudio } = useContext(AppContext);
 
   return (
     <div>
       <AudioPlayer
         id='playbar'
         src={localStorage.getItem('episode')}
-        onPlay={(e) =>
-          console.log('Play', document.querySelector('audio').currentTime)
-        }
-        onListen={(e) => {
-          console.log('Play', document.querySelector('audio').currentTime);
-          setPod(document.querySelector('audio').currentTime);
-        }}
         autoPlay={false}
         showSkipControls={false}
         showFilledVolume={true}

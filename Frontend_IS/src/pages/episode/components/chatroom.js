@@ -8,14 +8,16 @@ import Msg from './msg';
 const Chatroom = () => {
   const [ws, setWs] = useState(null);
   const [open, setOpen] = useState([]);
-  const { getcurrent, podcastplayer } = useContext(AppContext);
+  const { episodeid, getcurrent, podcastplayer } = useContext(AppContext);
   const [value, setValue] = useState('');
   //頁面載入時的動作
   useEffect(() => {
     const openhistory = async () => {
       const leavemsg = await axios.post(CHAT_HISTORY, {
-        show_id: 'show_id',
-        episode_id: 'episode_id',
+        //console.log(window.location.pathname.slice(9).split('-')[0]); TODO: show_id
+        //console.log(window.location.pathname.slice(9).split('-')[1]); TODO: episode_id
+        show_id: window.location.pathname.slice(9).split('-')[0],
+        episode_id: window.location.pathname.slice(9).split('-')[1],
       });
       setOpen(leavemsg.data);
       setValue(leavemsg.data.length);
@@ -68,8 +70,8 @@ const Chatroom = () => {
       let message = {
         token: token,
         msg: msg.value,
-        show_id: 'show_id',
-        episode_id: 'episode_id',
+        show_id: window.location.pathname.slice(9).split('-')[0],
+        episode_id: episodeid,
         type: 'text',
         currentTime: podcastplayer,
       };

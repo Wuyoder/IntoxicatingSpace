@@ -1,6 +1,5 @@
 import Episingle from './episingle';
-import axios from 'axios';
-import { useState, useEffect } from 'react';
+
 const Episode = ({ creatorepisode }) => {
   return (
     <div>

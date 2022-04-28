@@ -4,18 +4,18 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { AppContext } from '../../../App';
 const Info = () => {
-  const { showid, episodeid, episodeurl, setEpisodeurl } =
-    useContext(AppContext);
-
-  const Test = () => {
-    const { showid, setEpisodeurl } = useContext(AppContext);
-    return { showid, setEpisodeurl };
-  };
+  const { setEpisodeurl } = useContext(AppContext);
 
   const [info, setInfo] = useState({});
   useEffect(() => {
+    //console.log(window.location.pathname.slice(9).split('-')[0]); TODO: show_id
+    //console.log(window.location.pathname.slice(9).split('-')[1]); TODO: episode_id
     const getInfo = async () => {
-      const res = await axios.get(`${EPISODECHOICE}/${showid}-${episodeid}`);
+      const res = await axios.get(
+        `${EPISODECHOICE}/${window.location.pathname.slice(9).split('-')[0]}-${
+          window.location.pathname.slice(9).split('-')[1]
+        }`
+      );
       setInfo(res.data);
     };
     getInfo();
@@ -26,7 +26,6 @@ const Info = () => {
     };
     play();
   };
-  //TODO: html tag to plain text
   return (
     <div className='chat_info'>
       <div className='chat_info_l'>

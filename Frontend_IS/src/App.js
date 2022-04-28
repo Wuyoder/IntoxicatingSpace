@@ -17,8 +17,8 @@ const App = () => {
   //匯出useContext內容，可以包含useState一起放下去，就可以跨區setState
 
   //決定show id頁面的出現
-  const [showid, setShowid] = useState(1);
-  const [episodeid, setEpisodeid] = useState(0);
+  const [showid, setShowid] = useState([]);
+  const [episodeid, setEpisodeid] = useState('');
   const [episodeurl, setEpisodeurl] = useState('123');
   const [search, setSearch] = useState([]);
   const [test, setTest] = useState('test');
@@ -73,8 +73,8 @@ const App = () => {
           <Main.Sidebar member={member} />
           <Routes>
             <Route path='/' element={<Showlist />}></Route>
-            <Route path='/showchoice' element={<Showchoice />}></Route>
-            <Route path='/episode' element={<Episode />}></Route>
+            <Route path='/showchoice/:rss_id' element={<Showchoice />}></Route>
+            <Route path='/episode/:rss_id/' element={<Episode />}></Route>
             <Route path='/creator' element={<Creator />}></Route>
             <Route path='/login' element={<LoginSignup />}></Route>
             <Route path='/test' element={<Home />}></Route>

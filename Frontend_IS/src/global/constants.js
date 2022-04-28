@@ -19,3 +19,7 @@ export const CHAT_msg = `${HOST_NAME}/user/chatmsg`;
 export const CHAT_HISTORY = `${HOST_NAME}/user/chathistory`;
 export const UPDATE_USER = `${HOST_NAME}/user/userprofile`;
 export const UPDATE_CREATOR = `${HOST_NAME}/user/creatorprofile`;
+export const UPDATE_EPI = `${HOST_NAME}/user/episode`;
+export const HISTORY_LIST = `${HOST_NAME}/user/userhistory`;
+export const USER_SUBLIST = `${HOST_NAME}/user/sublist`;
+export const SUBSHOWS = `${HOST_NAME}/user/subshows`;

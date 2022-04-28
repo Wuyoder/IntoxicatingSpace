@@ -11,8 +11,8 @@ const Searchshow = ({ item }) => {
     <div key={v4()}>
       <Link
         to={{
-          pathname: '/showchoice',
-          hash: `${item.rss_id}`,
+          pathname: `/showchoice/${item.rss_id}`,
+          label: `${item.rss_id}`,
         }}
         onClick={(event) => {
           setShowid(item.rss_id);

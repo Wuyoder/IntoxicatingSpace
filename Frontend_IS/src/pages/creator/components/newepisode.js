@@ -2,7 +2,7 @@ import axios from 'axios';
 import { useState, useEffect, useContext } from 'react';
 import { EPISODE, S3 } from '../../../global/constants';
 //import
-const Newepisode = ({ creatorprofile, setNewepisode, newepisode }) => {
+const Newepisode = ({ creatorprofile }) => {
   const [duration, setDuration] = useState(0);
   const getduration = () => {
     let epifile = document.getElementById('episode_file');
@@ -133,7 +133,6 @@ const Newepisode = ({ creatorprofile, setNewepisode, newepisode }) => {
           document.getElementById('episode_num').value = '';
 
           console.log(newepi);
-          setNewepisode(false);
         }
       }
     }
