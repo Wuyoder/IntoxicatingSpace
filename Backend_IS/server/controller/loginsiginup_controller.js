@@ -4,7 +4,6 @@ const bcrypt = require('bcrypt');
 const saltRounds = 10;
 const uuid = require('uuid');
 const jwt = require('jsonwebtoken');
-//const { s3upload } = require('../util/S3');
 
 const signup = async (req, res) => {
   const { name, email, pwd, birth } = req.body;

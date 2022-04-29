@@ -10,12 +10,18 @@ const Chatroom = () => {
   const [open, setOpen] = useState([]);
   const { audio, episodeid, podcastplayer } = useContext(AppContext);
   const [value, setValue] = useState('');
+  const [mem, setMem] = useState(false);
   //頁面載入時的動作
+  useEffect(() => {
+    if (localStorage.getItem('token')) {
+      setMem(true);
+    }
+  }, []);
   useEffect(() => {
     const openhistory = async () => {
       const leavemsg = await axios.post(CHAT_HISTORY, {
-        //console.log(window.location.pathname.slice(9).split('-')[0]); TODO: show_id
-        //console.log(window.location.pathname.slice(9).split('-')[1]); TODO: episode_id
+        //console.log(window.location.pathname.slice(9).split('-')[0]);
+        //console.log(window.location.pathname.slice(9).split('-')[1]);
         show_id: window.location.pathname.slice(9).split('-')[0],
         episode_id: episodeid,
       });
@@ -42,7 +48,7 @@ const Chatroom = () => {
       // compare podcastplayer to div hash? value?
       if (!open[0]) {
         scrolltarget.scrollTop = 0;
-        console.log('initial', podcastplayer);
+        console.log('currentTime', podcastplayer);
       } else {
         let i = 0;
         while (open[i]?.chat_episode_time <= podcastplayer) {
@@ -52,6 +58,7 @@ const Chatroom = () => {
       }
     };
     autoscroll();
+    return;
   }, [podcastplayer, open]);
 
   const initWebSocket = () => {
@@ -81,7 +88,14 @@ const Chatroom = () => {
       alert('please share you message with ');
     }
   };
-
+  const enter = (e) => {
+    let msg = document.getElementById('msg').value;
+    if (e.key === 'Enter' && msg !== '') {
+      console.log(e.key);
+      console.log(msg);
+      document.getElementById('send_msg').click();
+    }
+  };
   return (
     <div id='chatbox'>
       <div>
@@ -90,15 +104,25 @@ const Chatroom = () => {
             return <Msg item={item} />;
           })}
         </div>
-        <input id='msg' Style='background-color:black'></input>
-        <input
-          id='send_msg'
-          className='input_type'
-          type='button'
-          value='Send '
-          onClick={sendMessage}
-          Style='background-color:black'
-        />
+        {mem ? (
+          <>
+            <input
+              id='msg'
+              Style='background-color:black'
+              onKeyDown={enter}
+            ></input>
+            <input
+              id='send_msg'
+              className='input_type'
+              type='button'
+              value='Send '
+              onClick={sendMessage}
+              Style='background-color:black'
+            />
+          </>
+        ) : (
+          <div>Please Signin first to join the talks.</div>
+        )}
       </div>
     </div>
   );

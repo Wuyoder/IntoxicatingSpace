@@ -1,7 +1,7 @@
 const db = require('../util/mysql');
 const xml = require('xml');
 const rssfeed = async (req, res) => {
-  //目標確定show_id
+  //目標確定show uuid
   const id = req.params.rss;
   //取得show data
   const [show_info] = await db.query(
@@ -23,6 +23,9 @@ const rssfeed = async (req, res) => {
   if (!episode_info[0]) {
     return res.status(200).json({ error: 'This show (episode) is offline' });
   }
+  const [rss_id] = await db.query('SELECT * FROM rss WHERE rss_title = ?', [
+    show_info[0].show_name,
+  ]);
   let items = '';
   let explicit;
   for (let i = 0; i < episode_info.length; i++) {
@@ -43,8 +46,8 @@ const rssfeed = async (req, res) => {
     items += `<item>
       <title><![CDATA[${episode_info[i].episode_title}]]></title>
       <description><![CDATA[${episode_info[i].episode_des}]]></description>
-      <link>https://intoxicating.space/api/1.0/user/rss/${req.params.rss}</link>
-      <guid isPermaLink="false">${req.params.rss}</guid>
+      <link>https://intoxicating.space/episode/${rss_id[0].rss_id}-${i}</link>
+      <guid isPermaLink="false">${rss_id[0].rss_id}-${i}</guid>
       <dc:creator><![CDATA[${infos.creator_name}]]></dc:creator>
       <pubDate>${timeformat}</pubDate>
       <enclosure url="${episode_info[i].episode_file}" length="${episode_info[i].episode_length}" type="audio/mpeg"/>
@@ -74,7 +77,7 @@ const rssfeed = async (req, res) => {
   rss += `
     <title><![CDATA[${infos.show_name}]]></title>
   <description><![CDATA[${infos.show_des}]]></description>
-      <link>https://intoxicating.space/show/${id}</link>
+      <link>https://intoxicating.space/showchoice/${rss_id[0].rss_id}</link>
       <image>
           <url>${infos.show_image}</url>
           <title>${infos.show_name}</title>
@@ -82,7 +85,7 @@ const rssfeed = async (req, res) => {
       </image>
       <generator>IntoxicatingSpace</generator>
       <lastBuildDate>${lasttimeformat}</lastBuildDate>
-      <atom:link href="https://intoxicating.space/user/show/${id}" rel="self" type="application/rss+xml"/>
+      <atom:link href="https://intoxicating.space/api/1.0/user/rss/${id}" rel="self" type="application/rss+xml"/>
       <copyright><![CDATA[${infos.creator_name}]]></copyright>
       <language><![CDATA[zh]]></language>
       <category><![CDATA[${infos.show_category_main}]]></category>

@@ -1,7 +1,5 @@
 const db = require('../util/mysql');
 const { jwtwrap } = require('../util/jwt');
-const uuid = require('uuid');
-const { showunsub } = require('./show_controller');
 
 const chatmsg = async (req, res) => {
   const who = await jwtwrap(req);

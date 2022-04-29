@@ -42,6 +42,12 @@ const Topbar = () => {
       }
     }
   };
+  const enter = (e) => {
+    let keyword = document.getElementById('search_input').value;
+    if (e.key === 'Enter' && keyword !== '') {
+      document.getElementById('search_btn').click();
+    }
+  };
 
   return (
     <div id='topbar'>
@@ -59,7 +65,11 @@ const Topbar = () => {
       </div>
       <div className='search_container'>
         <div className='search_item'>
-          <input id='search_input' Style='background-color:black'></input>
+          <input
+            id='search_input'
+            Style='background-color:black'
+            onKeyDown={enter}
+          ></input>
         </div>
         <div className='search_item'>
           <NavLink to='/search'>
@@ -144,7 +154,7 @@ const Player = () => {
         src={localStorage.getItem('episode')}
         autoPlay={false}
         onListen={(e) => {
-          setPod(e.srcElement.currentTime);
+          setPod(document.querySelector('audio').currentTime);
         }}
         showSkipControls={false}
         showFilledVolume={true}

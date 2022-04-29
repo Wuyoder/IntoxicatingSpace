@@ -25,7 +25,7 @@ const HotShow = ({ item }) => {
   return (
     <Container>
       <Col>
-        <div key={v4()}>
+        <div key={`show-${item.rss_id}`}>
           <Link
             to={{
               pathname: `/showchoice/${item.rss_id}`,

@@ -8,7 +8,7 @@ const Searchshow = ({ item }) => {
   const { showid, setShowid, setSearch } = useContext(AppContext);
 
   return (
-    <div key={v4()}>
+    <div key={`search-${item.rss_id}`}>
       <Link
         to={{
           pathname: `/showchoice/${item.rss_id}`,
