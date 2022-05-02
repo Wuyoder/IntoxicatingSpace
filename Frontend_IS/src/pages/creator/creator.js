@@ -114,9 +114,7 @@ const Creator = () => {
               newepisode ? (
                 <Episode creatorepisode={creatorepisode} />
               ) : (
-                <Newepisode
-                  creatorprofile={(creatorprofile, setNewepisode, newepisode)}
-                />
+                <Newepisode creatorprofile={creatorprofile} />
               )
             ) : null}
           </div>

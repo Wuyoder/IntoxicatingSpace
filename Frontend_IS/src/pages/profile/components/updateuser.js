@@ -132,6 +132,7 @@ const Updateuser = () => {
                     src={require('../../../global/photo.png')}
                     alt='upload'
                     className='upimg'
+                    id='upuser_image'
                   />
                 </div>
                 <div>

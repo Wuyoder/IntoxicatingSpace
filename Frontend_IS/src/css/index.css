@@ -258,22 +258,11 @@ body {
 .msg {
   margin-top: 5px;
 }
-.newepi-container {
-  width: 90vw;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  text-align: center;
-  padding: 20px;
-  height: 120vh;
-}
+
 #newepi_btn {
   width: 200px;
 }
 
-#new_show_category {
-  padding-left: 8vw;
-}
 #new_creator_info {
   margin-top: 15px;
   margin-left: 3vw;
@@ -291,21 +280,7 @@ body {
   display: flex;
   flex-direction: row;
 }
-.single_epi_info {
-  width: 40vw;
-  margin-left: 40px;
-}
-.single_epi_title {
-  font-size: 20px;
-  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-  font-family: 'Ubuntu', sans-serif;
-  color: aqua;
-  margin-bottom: 10px;
-}
-.single_epi_detail {
-  font-size: 20px;
-  font-weight: 400;
-}
+
 #copyrssfeed {
   height: 20px;
 }
@@ -321,7 +296,6 @@ body {
   text-align: center;
 }
 #episode_title,
-#episode_des,
 #episode_num,
 #episode_image,
 #episode_explicit {
@@ -331,13 +305,7 @@ body {
   margin-top: 10px;
   padding: 0 20px 0 20px;
 }
-#episode_des {
-  min-height: 200px;
-  max-height: 200px;
-  padding: 20px;
-  min-width: 35vw;
-  max-width: 35vw;
-}
+
 #episode_num,
 #episode_explicit {
   width: 10vw;
@@ -428,7 +396,7 @@ body {
 #uploadPercent1,
 #uploadPercent2 {
   min-width: 4vw;
-  color: aqua;
+  color: aliceblue;
   font-size: 20px;
   padding-top: 8px;
   margin: 1vw 0 0 1vw;

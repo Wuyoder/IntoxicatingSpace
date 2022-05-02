@@ -1,12 +1,11 @@
 import axios from 'axios';
 import { useState, useEffect, useContext } from 'react';
 import { EPISODE, S3 } from '../../../global/constants';
-//import
+import { Button, Card, TextField } from '@mui/material';
 const Newepisode = ({ creatorprofile }) => {
   const [duration, setDuration] = useState(0);
   const getduration = () => {
     let epifile = document.getElementById('episode_file');
-    console.log('into function');
     const video = document.createElement('video');
     video.preload = 'metadata';
     video.onloadedmetadata = function () {
@@ -18,7 +17,7 @@ const Newepisode = ({ creatorprofile }) => {
 
   const gonewepi = async (e) => {
     e.preventDefault();
-    let epititle = document.getElementById('episode_title');
+    let epititle = document.getElementById('newepi_title');
     let epides = document.getElementById('episode_des');
     let epiexplicit = document.getElementById('episode_explicit');
     let epiimage = document.getElementById('episode_image');
@@ -66,7 +65,6 @@ const Newepisode = ({ creatorprofile }) => {
                   document.getElementById('uploadPercent1').innerHTML =
                     'completed!';
                 }
-                console.log('image', percentCompleted);
               },
             }
           );
@@ -98,7 +96,6 @@ const Newepisode = ({ creatorprofile }) => {
                   document.getElementById('uploadPercent2').innerHTML =
                     'completed!';
                 }
-                console.log('image', percentCompleted);
               },
             }
           );
@@ -128,97 +125,94 @@ const Newepisode = ({ creatorprofile }) => {
           if (!newepi.data.error) {
             alert('new episode already published');
           }
-          document.getElementById('episode_title').value = '';
+          document.getElementById('newepi_title').value = '';
           document.getElementById('episode_des').value = '';
           document.getElementById('episode_num').value = '';
-
-          console.log(newepi);
         }
       }
     }
   };
 
   return (
-    <div className='newepi-container'>
+    <Card variant='outlined' id='newepi_card'>
       <h3 className='profile_title'>New Episode</h3>
-      <form id='newepi_form'>
-        <div className='single_epi_title'>episode title</div>
-        <input
-          id='episode_title'
-          className='input_type'
-          Style='background-color:black'
-        ></input>
-        <div className='single_epi_title'>episode description</div>
-        <textarea
-          className='input_type'
-          id='episode_des'
-          Style='background-color:black;resize:none'
-        ></textarea>
-        <div className='single_epi_title'>episode number</div>
-        <input
-          type='number'
-          min='1'
-          step='1'
-          className='input_type'
-          id='episode_num'
-          Style='background-color:black'
-        ></input>
-        <div className='single_epi_title'>episode explicit </div>
-        <select id='episode_explicit' Style='background-color:black'>
-          <option value='0'>no</option>
-          <option value='1'>yes</option>
-        </select>
-        <div className='single_epi_title'>episode image :</div>
-        <input
-          className='input_type'
-          id='episode_image'
-          type='file'
-          accept='image/*'
-          Style='display:none'
-          required
-        ></input>
-        <div className='single_epi_title'>episode file</div>
-
-        <input
-          className='input_type'
-          id='episode_file'
-          type='file'
-          accept='audio/*'
-          required
-          Style='display:none'
-          onChange={getduration}
-        ></input>
+      <div className='newepi-container'>
         <div>
-          <img
-            onClick={() => {
-              document.getElementById('episode_image').click();
-            }}
-            src={require('../../../global/photo.png')}
-            alt='upload'
-            className='upimg'
-          />
-          <img
-            onClick={() => {
-              document.getElementById('episode_file').click();
-            }}
-            src={require('../../../global/voice.png')}
-            alt='upload'
-            className='upimg'
-          />
-          <button
-            type='submit'
-            Style='background-color:black'
-            onClick={gonewepi}
-            className='btn_type'
-            id='newepi_btn'
-          >
-            upload new episode!
-          </button>
-          <div id='uploadPercent1'></div>
-          <div id='uploadPercent2'></div>
+          <form id='newepi_form'>
+            <div className='single_epi_title'>Episode Title</div>
+            <TextField label='Episode Title' id='newepi_title'></TextField>
+            <div className='single_epi_title'>Episode Description</div>
+            <textarea
+              id='episode_des'
+              Style='background-color:black;resize:none'
+            ></textarea>
+            <div className='single_epi_title'>Episode Number</div>
+            <input type='number' min='1' step='1' id='episode_num'></input>
+            <div className='single_epi_title'>explicit </div>
+            <select id='episode_explicit'>
+              <option value='0'>no</option>
+              <option value='1'>yes</option>
+            </select>
+            <div id='image_btn_container1'>
+              <div className='single_epi_title'>Image File</div>
+              <div>
+                <img
+                  onClick={() => {
+                    document.getElementById('episode_image').click();
+                  }}
+                  src={require('../../../global/photo.png')}
+                  alt='upload'
+                  className='upimg'
+                  id='photo_btn'
+                />
+              </div>
+              <div id='uploadPercent1'></div>
+            </div>
+
+            <input
+              id='episode_image'
+              type='file'
+              accept='image/*'
+              Style='display:none'
+              required
+            ></input>
+            <div id='image_btn_container2'>
+              <div className='single_epi_title'>Audio File</div>
+              <div>
+                <img
+                  onClick={() => {
+                    document.getElementById('episode_file').click();
+                  }}
+                  src={require('../../../global/microphone.png')}
+                  alt='upload'
+                  className='upimg'
+                  id='microphone_btn'
+                />
+              </div>
+              <div id='uploadPercent2'></div>
+            </div>
+            <input
+              id='episode_file'
+              type='file'
+              accept='audio/*'
+              required
+              Style='display:none'
+              onChange={getduration}
+            ></input>
+            <div>
+              <Button
+                type='submit'
+                onClick={gonewepi}
+                className='btn_type'
+                id='newepi_btn'
+              >
+                upload new episode!
+              </Button>
+            </div>
+          </form>
         </div>
-      </form>
-    </div>
+      </div>
+    </Card>
   );
 };
 export default Newepisode;

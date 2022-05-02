@@ -1,6 +1,15 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { S3, UPDATE_EPI, SWITCHER } from '../../../global/constants';
+import {
+  Button,
+  Card,
+  CardContent,
+  CardMedia,
+  CardActionArea,
+  Typography,
+  TextField,
+} from '@mui/material';
 const Episingle = ({ item, i }) => {
   const [edit, setEdit] = useState(true);
   const [episitu, setEpisitu] = useState(true);
@@ -167,107 +176,148 @@ const Episingle = ({ item, i }) => {
     );
     setEpisitu(!episitu);
   };
-
+  const goaudiofile = () => {
+    document.getElementById('newepi_file').click();
+  };
+  const goimagefile = () => {
+    document.getElementById('newepi_image').click();
+  };
   return (
-    <div className='single_epi_container'>
-      <button
-        onClick={goedit}
-        Style='background-color:black'
-        className='btn_type'
-      >
+    <Card variant='outlined' className='single_epi_card'>
+      <Button onClick={goedit} id='single_epi_edit'>
         Edit
-      </button>
-      {edit ? (
-        <div>
-          <div>
-            <img
-              alt='episode_image'
-              src={item.episode_image}
-              Style='height: 150px'
-            ></img>
-          </div>
-          <div className='single_epi_info'>
-            <h3 className='single_epi_title'>{item.episode_title}</h3>
-            <div className='single_epi_detail'>
-              number: {item.episode_episode}
-            </div>
-            <div className='single_epi_detail'>
-              description: {item.episode_des}
-            </div>
-            <div className='single_epi_detail'>
-              publish date:
-              {(() => {
-                let modiday = item.episode_publish_date.toString().slice(0, 10);
-                let moditime = item.episode_publish_date
-                  .toString()
-                  .split('T')[1]
-                  .split('.')[0];
-                return ` ${modiday} - ${moditime} `;
-              })()}
-            </div>
-            <div className='single_epi_detail'>
-              explicit: {item.episode_explicit === 0 ? <>no</> : <>yes</>}
-            </div>{' '}
-            Status :{episitu ? <div>ON</div> : <div>OFF</div>}
-          </div>
-        </div>
-      ) : (
-        <>
-          <div>
-            <div>title</div>
-            <input id='newepi_title' Style='background-color:black'></input>
-            <div>description</div>
-            <input id='newepi_des' Style='background-color:black'></input>
-            <div>file</div>
-            <input
-              type='file'
-              id='newepi_file'
-              Style='background-color:black'
-              accept='audio/*'
-              onChange={getduration}
-            ></input>
-            <div id='uploadPercent1'></div>
-            <div></div>
-            <div>explicit</div>
-            <select id='newepi_explicit' Style='background-color:black'>
-              <option value='0'>no</option>
-              <option value='1'>yes</option>
-            </select>
-            <div>image</div>
-            <input
-              type='file'
-              id='newepi_image'
-              Style='background-color:black'
-              accept='image/*'
-            ></input>
-            <div id='uploadPercent2'></div>
-            <div>episode</div>
-            <input
-              //placeholder={item.episode_episode}
-              type='number'
-              min='1'
-              step='1'
-              id='newepi_episode'
-              Style='background-color:black'
-            ></input>
+      </Button>
+      <div className='single_epi_container'>
+        {edit ? (
+          <div id='single_epi_parts'>
             <div>
-              <button Style='background-color:black' onClick={goupdateepi}>
-                update episode
-              </button>
+              <img
+                alt='episode_image'
+                src={item.episode_image}
+                Style='height: 150px'
+              ></img>
             </div>
-            {episitu ? (
-              <button Style='background-color:black' onClick={goswitch}>
-                ON
-              </button>
-            ) : (
-              <button Style='background-color:black' onClick={goswitch}>
-                OFF
-              </button>
-            )}
+            <div className='single_epi_info'>
+              <div id='single_epi_info_l'>
+                <div className='single_epi_title'>Title</div>
+                <div className='single_epi_detail'>Number</div>
+                <div className='single_epi_detail'>Description</div>
+                <div className='single_epi_detail'>Puddate</div>
+                <div className='single_epi_detail'>Explicit</div>
+                <div className='single_epi_detail'>Status</div>
+              </div>
+              <div id='single_epi_info_r'>
+                <div className='single_epi_titles'>{item.episode_title}</div>
+                <div className='single_epi_details'>{item.episode_episode}</div>
+                <div className='single_epi_details'>{item.episode_des}</div>
+                <div className='single_epi_details'>
+                  {(() => {
+                    let modiday = item.episode_publish_date
+                      .toString()
+                      .slice(0, 10);
+                    let moditime = item.episode_publish_date
+                      .toString()
+                      .split('T')[1]
+                      .split('.')[0];
+                    return ` ${modiday} - ${moditime} `;
+                  })()}
+                </div>
+                <div className='single_epi_details'>
+                  {item.episode_explicit === 0 ? <>no</> : <>yes</>}
+                </div>
+                {episitu ? <>ON</> : <>OFF</>}
+              </div>
+            </div>
           </div>
-        </>
-      )}
-    </div>
+        ) : (
+          <>
+            <div id='single_edit_parts'>
+              <div id='single_edit_parts_l'>
+                <div className='edit_parts'>Title</div>
+                <div className='edit_parts'>Description</div>
+                <div className='edit_parts'>Audio File</div>
+                <div className='edit_parts'>Image File</div>
+                <div className='edit_parts'>Explicit</div>
+                <div className='edit_parts'>Episode Number</div>
+                <div></div>
+                <div className='edit_parts'>Episode Status</div>
+              </div>
+              <div id='single_edit_parts_r'>
+                <TextField id='newepi_title' label='Title'></TextField>
+                <TextField id='newepi_des' label='Description'></TextField>
+                <div className='image_btn_container'>
+                  <div>
+                    <img
+                      src={require('../../../global/microphone.png')}
+                      alt='audiofile'
+                      id='audiofile_btn'
+                      onClick={goaudiofile}
+                      className='upimg'
+                    ></img>
+                  </div>
+                  <div id='uploadPercent1'>
+                    <div id='pre_upload'>upload progress...</div>
+                  </div>
+                </div>
+                <input
+                  type='file'
+                  id='newepi_file'
+                  accept='audio/*'
+                  onChange={getduration}
+                  Style='display:none'
+                ></input>
+                <div className='image_btn_container'>
+                  <div>
+                    <img
+                      src={require('../../../global/photo.png')}
+                      alt='imagefile'
+                      id='imagefile_btn'
+                      onClick={goimagefile}
+                      className='upimg'
+                    ></img>
+                  </div>
+                  <div id='uploadPercent2'>
+                    <div id='pre_upload'>upload progress...</div>
+                  </div>
+                </div>
+                <input
+                  type='file'
+                  id='newepi_image'
+                  accept='image/*'
+                  Style='display:none'
+                ></input>
+
+                <select id='newepi_explicit'>
+                  <option value='0'>no</option>
+                  <option value='1'>yes</option>
+                </select>
+                <div></div>
+                <input
+                  type='number'
+                  min='1'
+                  step='1'
+                  id='newepi_episode'
+                ></input>
+                <div>
+                  <Button onClick={goupdateepi} id='single_update_btn'>
+                    update episode
+                  </Button>
+                </div>
+                {episitu ? (
+                  <Button onClick={goswitch} id='single_status_on'>
+                    ON
+                  </Button>
+                ) : (
+                  <Button onClick={goswitch} id='single_status_off'>
+                    OFF
+                  </Button>
+                )}
+              </div>
+            </div>
+          </>
+        )}
+      </div>
+    </Card>
   );
 };
 export default Episingle;

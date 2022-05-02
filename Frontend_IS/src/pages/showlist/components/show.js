@@ -19,7 +19,7 @@ const HotShow = ({ item }) => {
     //event.currentTarget.lastChild.innerHTML rss id
     const res = await axios.post(
       USER_HISTORY,
-      { type: 'show', show: event.currentTarget.lastChild.innerHTML },
+      { type: 'show', show: item.rss_id },
       {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
       }
