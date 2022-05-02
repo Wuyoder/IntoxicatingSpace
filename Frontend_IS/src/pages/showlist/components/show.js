@@ -1,13 +1,17 @@
-import { v4 } from 'uuid';
-import { useContext } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Container from 'react-bootstrap/Container';
 import Col from 'react-bootstrap/Col';
 import { Link } from 'react-router-dom';
 import React from 'react';
-import { AppContext } from '../../../App';
 import { USER_HISTORY } from '../../../global/constants';
 import axios from 'axios';
+import {
+  Card,
+  CardContent,
+  CardMedia,
+  CardActionArea,
+  Typography,
+} from '@mui/material';
 
 const HotShow = ({ item }) => {
   const goclickshow = async (event) => {
@@ -23,31 +27,42 @@ const HotShow = ({ item }) => {
   };
 
   return (
-    <Container>
-      <Col>
-        <div key={`show-${item.rss_id}`}>
-          <Link
-            to={{
-              pathname: `/showchoice/${item.rss_id}`,
-              lable: `${item.rss_id}`,
-            }}
-            onClick={goclickshow}
-          >
-            <img
-              src={item.rss_image}
-              alt={item.title}
-              show={item.title}
-              className='show_image show'
-            ></img>
-            <div className='show_name show'>{item.rss_title}</div>
-            <div Style='display:none'>{item.rss_id}</div>
-          </Link>
-          <div className='show_category show' Style='display:none'>
-            {item.rss_category_main}
-          </div>
-        </div>
-      </Col>
-    </Container>
+    <Link
+      to={{
+        pathname: `/showchoice/${item.rss_id}`,
+        lable: `${item.rss_id}`,
+      }}
+      onClick={goclickshow}
+      className='show_item'
+    >
+      <Card
+        variant='outlined'
+        key={`show-${item.rss_id}`}
+        className='card_container'
+      >
+        <CardActionArea>
+          <CardMedia
+            component='img'
+            height='140'
+            image={item.rss_image}
+            alt={item.title}
+            className='card_image'
+          ></CardMedia>
+          <CardContent id='card_content'>
+            <Typography variant='body1' color='text.primary'>
+              {item.rss_title}
+            </Typography>
+            <Typography
+              variant='body2'
+              color='text.secondary'
+              Style='display:none'
+            >
+              ({item.rss_category_main})
+            </Typography>
+          </CardContent>
+        </CardActionArea>
+      </Card>
+    </Link>
   );
 };
 const Show = { HotShow };

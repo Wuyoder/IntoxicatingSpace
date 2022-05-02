@@ -7,6 +7,7 @@ import {
   UNSUB,
 } from '../../../global/constants';
 import { Helmet } from 'react-helmet';
+import { Button, Card, CardContent, Typography } from '@mui/material';
 const ShowInfo = () => {
   const [info, setInfo] = useState([]);
   const [originsub, setOriginsub] = useState(false);
@@ -92,64 +93,79 @@ const ShowInfo = () => {
       </Helmet>
       <div className='show_info_container'>
         <div className='show_info_l'>
-          <div className='show_name'>{info.title}</div>
-          <img
-            className='show_image_choice'
-            alt={info.title}
-            src={info.itunes?.image}
-          ></img>
-          <div className='show_detail'>{info.itunes?.author}</div>
-          <div className='show_detail'>{info.itunes?.categories[0]}</div>
-          <div></div>
+          <Card variant='outlined' id='show_info_l'>
+            <CardContent>
+              <Typography
+                variant='body1'
+                color='text.primary'
+                id='show_card_title'
+              >
+                {info.title}
+              </Typography>
+              <img
+                className='show_image_choice'
+                alt={info.title}
+                src={info.itunes?.image}
+              ></img>
+              <Typography
+                variant='body1'
+                color='text.primary'
+                id='show_card_author'
+              >
+                {info.itunes?.author}
+              </Typography>
+              <Typography
+                variant='body1'
+                color='text.primary'
+                id='show_card_cate'
+              >
+                {info.itunes?.categories[0]}
+              </Typography>
+            </CardContent>
+          </Card>
+          <div id='sub_more_container'>
+            <div id='sub_container'>
+              {mem ? (
+                originsub ? (
+                  <Button id='unsub_btn' onClick={unsubclick}>
+                    Unsub
+                  </Button>
+                ) : (
+                  <Button id='sub_btn' onClick={subclick}>
+                    Sub
+                  </Button>
+                )
+              ) : null}
+            </div>
+            <div id='more_container'>
+              {description ? (
+                <Button onClick={more} id='more_btn'>
+                  more
+                </Button>
+              ) : (
+                <Button onClick={less} id='less_btn'>
+                  less
+                </Button>
+              )}
+            </div>
+          </div>
         </div>
         <div className='show_info_r'>
-          <div className='show_des' id='des'>
-            {document.getElementById('des')
-              ? (() => {
-                  document.getElementById('des').innerHTML = info.description;
-                })()
-              : info.description}
-            {description ? (
-              <button onClick={more} Style='background-color:black'>
-                more
-              </button>
-            ) : (
-              <button onClick={less} Style='background-color:black'>
-                less
-              </button>
-            )}
-          </div>
-          <div>
-            {description ? (
-              <button onClick={more} Style='background-color:black'>
-                more
-              </button>
-            ) : (
-              <button onClick={less} Style='background-color:black'>
-                less
-              </button>
-            )}
-          </div>
-          {mem ? (
-            originsub ? (
-              <button
-                id='unsub_btn'
-                Style='background-color:black'
-                onClick={unsubclick}
-              >
-                Unsub
-              </button>
-            ) : (
-              <button
-                id='sub_btn'
-                Style='background-color:black'
-                onClick={subclick}
-              >
-                Sub
-              </button>
-            )
-          ) : null}
-          <div></div>
+          <Card variant='outlined' id='show_info_r'>
+            <div className='show_des' id='des'>
+              {document.getElementById('des')
+                ? (() => {
+                    document.getElementById('des').innerHTML = info.description;
+                  })()
+                : info.description}
+              {description ? (
+                <button onClick={more}>more</button>
+              ) : (
+                <button onClick={less}>less</button>
+              )}
+            </div>
+            <div></div>
+          </Card>
         </div>
       </div>
     </>

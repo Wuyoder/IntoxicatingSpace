@@ -1,10 +1,11 @@
-import { useNavigate, Link, NavLink } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { COUNTER_LOGINS, SEARCH } from '../global/constants';
 import React, { useEffect, useContext, useState } from 'react';
 import axios from 'axios';
 import AudioPlayer from 'react-h5-audio-player';
 import 'react-h5-audio-player/lib/styles.css';
 import { AppContext } from '../App';
+import { Button, TextField } from '@mui/material';
 
 const Withyou = () => {
   const [counterlogins, setCounterlogins] = useState(0);
@@ -20,7 +21,7 @@ const Withyou = () => {
   }, []);
 
   if (counterlogins > 0) {
-    return <>With You {counterlogins} Times</>;
+    return <>with you {counterlogins} days and nights.</>;
   }
   if (!counterlogins) {
     return <></>;
@@ -49,15 +50,16 @@ const Topbar = () => {
     }
   };
 
+  //  <div>
+  //    <img
+  //      id='main_logo'
+  //      alt='main_logo'
+  //      src='https://intoxicating.s3.ap-northeast-1.amazonaws.com/IS_LOGO.png'
+  //    ></img>
+  //  </div>;
+
   return (
     <div id='topbar'>
-      <div>
-        <img
-          id='main_logo'
-          alt='main_logo'
-          src='https://intoxicating.s3.ap-northeast-1.amazonaws.com/IS_LOGO.png'
-        ></img>
-      </div>
       <div className='withyou'>
         <p className='withyou'>
           Intoxicating Space <Withyou />
@@ -65,22 +67,24 @@ const Topbar = () => {
       </div>
       <div className='search_container'>
         <div className='search_item'>
-          <input
+          <TextField
+            className='topbarinput'
+            label='Keyword'
+            variant='outlined'
             id='search_input'
-            Style='background-color:black'
             onKeyDown={enter}
-          ></input>
+          ></TextField>
         </div>
         <div className='search_item'>
-          <NavLink to='/search'>
-            <button
+          <NavLink to='/search' Style='text-decoration:none'>
+            <Button
+              variant='contained'
               id='search_btn'
-              Style='background-color:black'
               onClick={gosearch}
               className='search_btn'
             >
               Search
-            </button>
+            </Button>
           </NavLink>
         </div>
       </div>
@@ -89,57 +93,67 @@ const Topbar = () => {
 };
 
 let activeStyle = {
-  color: 'aqua',
-  fontWeight: 'bold',
+  color: 'darkcyan',
 };
 
 const Sidebar = ({ member }) => {
   return (
     <div id='sidebar'>
+      <div>
+        <img
+          id='sidebar_logo'
+          alt='logo'
+          src={require('../global/LogoBlue.png')}
+        ></img>
+      </div>
       <div className='sidebar-container'>
-        <NavLink
-          to='/'
-          style={({ isActive }) => (isActive ? activeStyle : undefined)}
-          Style='text-decoration: none'
+        <Button
+          variant='contained'
+          id='sidebar_home_btn'
           className='sidebar_btn'
         >
-          HOME
-        </NavLink>
+          <NavLink
+            to='/'
+            style={({ isActive }) => (isActive ? activeStyle : undefined)}
+            Style='text-decoration: none'
+          >
+            HOME
+          </NavLink>
+        </Button>
       </div>
       <div className='sidebar-container'>
         {!member ? (
-          <NavLink
-            to='/creator'
-            style={({ isActive }) => (isActive ? activeStyle : undefined)}
-            Style='text-decoration: none'
+          <Button
+            variant='contained'
+            id='sidebar_creator_btn'
             className='sidebar_btn'
           >
-            CREATOR
-          </NavLink>
-        ) : null}
-      </div>
-      {/* <div className='sidebar-container'>
-        <NavLink
-          to='/dashboard'
-          style={({ isActive }) => (isActive ? activeStyle : undefined)}
-          Style='text-decoration: none'
-          className='sidebar_btn'
-        >
-          DASHBOARD
-        </NavLink>
-      </div> */}
-      <div className='sidebar-container'>
-        {member ? (
-          <NavLink
-            to='/login'
-            style={({ isActive }) => (isActive ? activeStyle : undefined)}
-            Style='text-decoration: none'
+            <NavLink
+              to='/creator'
+              style={({ isActive }) => (isActive ? activeStyle : undefined)}
+              Style='text-decoration: none'
+            >
+              CREATOR
+            </NavLink>
+          </Button>
+        ) : (
+          <Button
+            variant='contained'
+            id='sidebar_login_btn'
             className='sidebar_btn'
           >
-            LOGIN
-          </NavLink>
-        ) : null}
+            <NavLink
+              to='/login'
+              style={({ isActive }) => (isActive ? activeStyle : undefined)}
+              Style='text-decoration: none'
+            >
+              LOGIN
+            </NavLink>
+          </Button>
+        )}
       </div>
+
+      <div className='sidebar-container'></div>
     </div>
   );
 };

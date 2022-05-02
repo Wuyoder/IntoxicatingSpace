@@ -10,7 +10,7 @@ const Msg = ({ item }) => {
   };
 
   return (
-    <>
+    <div id='chat_msg_container'>
       <div className='msg'>
         <div className='msg_name'>{item.user_name}</div>
         <div className='msg_msg'>{item.chat_msg}</div>
@@ -39,7 +39,7 @@ const Msg = ({ item }) => {
           })()}
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

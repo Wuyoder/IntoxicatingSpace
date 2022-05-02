@@ -4,6 +4,14 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { AppContext } from '../../../App';
 import { Helmet } from 'react-helmet';
+import {
+  Button,
+  Card,
+  CardContent,
+  CardMedia,
+  CardActionArea,
+  Typography,
+} from '@mui/material';
 const Info = () => {
   const { setEpisodeurl } = useContext(AppContext);
   const [description, setDescription] = useState(true);
@@ -60,47 +68,55 @@ const Info = () => {
 
       <div className='chat_info'>
         <div className='chat_info_l'>
-          <div className='show_detail'>{info.title}</div>
-          <div>
-            <img
-              className='show_image'
-              alt={info.title}
-              src={info.item?.itunes.image}
-            ></img>
-          </div>
-          <div className='show_detail'>{info.author}</div>
-          <div>
-            <button
-              Style='background-color:black'
-              onClick={() => {
-                changeplay();
-                localStorage.setItem('episode', localStorage.getItem('last'));
-              }}
-              className='btn_type'
-            >
-              PLAY
-            </button>
+          <Card variant='outlined' id='episode_choice'>
+            <Typography>{info.title}</Typography>
+            <div>
+              <img
+                id='episode_choice_image'
+                className='show_image'
+                alt={info.title}
+                src={info.item?.itunes.image}
+              ></img>
+            </div>
+            <Typography>{info.author}</Typography>
+          </Card>
+          <div id='play_more_container'>
+            <div>
+              <Button
+                onClick={() => {
+                  changeplay();
+                  localStorage.setItem('episode', localStorage.getItem('last'));
+                }}
+                id='play_btn'
+              >
+                PLAY
+              </Button>
+            </div>
+            <div>
+              {description ? (
+                <Button onClick={more} id='more_des_btn'>
+                  more
+                </Button>
+              ) : (
+                <Button onClick={less} id='less_des_btn'>
+                  less
+                </Button>
+              )}
+            </div>
           </div>
         </div>
-        <div className='chat_info_r'>
-          <div className='show_detail' id='epi_des'>
-            {document.getElementById('epi_des')
-              ? (() => {
-                  document.getElementById('epi_des').innerHTML =
-                    info.item?.content;
-                })()
-              : info.item?.content}
+        <Card variant='outlined' id='episode_choice_des'>
+          <div className='chat_info_r'>
+            <div className='show_detail' id='epi_des'>
+              {document.getElementById('epi_des')
+                ? (() => {
+                    document.getElementById('epi_des').innerHTML =
+                      info.item?.content;
+                  })()
+                : info.item?.content}
+            </div>
           </div>
-          {description ? (
-            <button onClick={more} Style='background-color:black'>
-              more
-            </button>
-          ) : (
-            <button onClick={less} Style='background-color:black'>
-              less
-            </button>
-          )}
-        </div>
+        </Card>
       </div>
     </>
   );

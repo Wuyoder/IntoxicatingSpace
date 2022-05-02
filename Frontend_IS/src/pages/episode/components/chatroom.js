@@ -4,7 +4,15 @@ import { AppContext } from '../../../App';
 import axios from 'axios';
 import { CHAT_HISTORY } from '../../../global/constants';
 import Msg from './msg';
-
+import {
+  Button,
+  Card,
+  CardContent,
+  CardMedia,
+  CardActionArea,
+  Typography,
+  TextField,
+} from '@mui/material';
 const Chatroom = () => {
   const [ws, setWs] = useState(null);
   const [open, setOpen] = useState([]);
@@ -97,34 +105,39 @@ const Chatroom = () => {
     }
   };
   return (
-    <div id='chatbox'>
+    <Card variant='outlined' id='chatbox'>
       <div>
-        <div id='chatroom'>
-          {open.map((item) => {
-            return <Msg item={item} />;
-          })}
+        <div>
+          <div id='chatroom'>
+            {open.map((item) => {
+              return <Msg item={item} />;
+            })}
+          </div>
+          <div id='msg_container'>
+            {mem ? (
+              <>
+                <TextField
+                  label='Message'
+                  variant='outlined'
+                  id='msg'
+                  onKeyDown={enter}
+                ></TextField>
+                <Button
+                  id='send_msg'
+                  className='input_type'
+                  value='Send '
+                  onClick={sendMessage}
+                >
+                  Send
+                </Button>
+              </>
+            ) : (
+              <div>Please Signin first to join the talks.</div>
+            )}
+          </div>
         </div>
-        {mem ? (
-          <>
-            <input
-              id='msg'
-              Style='background-color:black'
-              onKeyDown={enter}
-            ></input>
-            <input
-              id='send_msg'
-              className='input_type'
-              type='button'
-              value='Send '
-              onClick={sendMessage}
-              Style='background-color:black'
-            />
-          </>
-        ) : (
-          <div>Please Signin first to join the talks.</div>
-        )}
       </div>
-    </div>
+    </Card>
   );
 };
 export default Chatroom;

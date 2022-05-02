@@ -1,16 +1,13 @@
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family: 'Ubuntu', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-color: black;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+  font-family: 'Ubuntu', sans-serif;
 }
 * {
   box-sizing: border-box;
@@ -22,9 +19,7 @@ code {
   margin: 0;
   color: aliceblue;
 }
-#playbar {
-  background-color: #0b1a26;
-}
+
 #topbar {
   width: 100%;
   height: 12vh;
@@ -34,50 +29,12 @@ code {
   justify-content: space-between;
   align-items: center;
   padding: 0 5vh 0 10vh;
-  color: aliceblue;
-}
-
-.rhap_container {
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  line-height: 1;
-  font-family: inherit;
-  width: 100%;
-  padding: 10px 15px;
-  background-color: #0b1a26;
-  box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.2);
-  color: aliceblue;
-  position: fixed;
-  left: 0;
-  bottom: 0;
-}
-.rhap_time {
-  color: aliceblue;
-  font-size: 16px;
-  user-select: none;
-  -webkit-user-select: none;
 }
 
 #middle {
   display: flex;
   flex-direction: row;
   color: aliceblue;
-}
-
-#sidebar {
-  width: 10%;
-  height: 200vh;
-  background-color: #14212e;
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  flex-direction: column;
-  color: aliceblue;
-}
-
-#sidebar.a {
-  margin: 10px;
 }
 
 #main {
@@ -133,14 +90,12 @@ body {
   color: aliceblue;
 }
 
-#filler {
-  height: 100px;
-}
 .sidebar_btn {
   color: aliceblue;
   font-size: 25px;
   text-decoration: none;
   font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-family: 'Ubuntu', sans-serif;
   margin: 50px;
   padding: 10px;
 }
@@ -150,37 +105,7 @@ body {
 .sidebar-container {
   margin: 20px;
 }
-.withyou {
-  color: aliceblue;
-  font-size: 30px;
-  font-weight: 600;
-}
-.withyou:hover {
-  color: aqua;
-}
-.search_btn {
-  border-radius: 5%;
-  height: 40px;
-  width: 80px;
-  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-}
-.search_btn:hover {
-  color: aqua;
-}
-.search_container {
-  display: flex;
-  flex-direction: row;
-  width: 20vw;
-  margin: 30px;
-}
-.search_item {
-  margin: 10px;
-}
-#search_input {
-  border-radius: 5%;
-  height: 40px;
-  padding: 0 15px 0 15px;
-}
+
 .creator_container {
   display: block;
 }
@@ -194,6 +119,7 @@ body {
   width: 30vw;
   font-size: 20px;
   font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-family: 'Ubuntu', sans-serif;
 }
 .creator_btn:hover {
   color: aqua;
@@ -216,6 +142,7 @@ body {
   height: 50px;
   font-size: 20px;
   font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-family: 'Ubuntu', sans-serif;
   color: aqua;
 }
 .profile_text {
@@ -223,12 +150,14 @@ body {
   height: 50px;
   font-size: 20px;
   font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-family: 'Ubuntu', sans-serif;
 }
 .profile_title {
   width: auto;
   height: 50px;
   font-size: 20px;
   font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-family: 'Ubuntu', sans-serif;
   color: aqua;
   text-align: center;
 }
@@ -248,6 +177,7 @@ body {
 }
 .login_btn {
   font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-family: 'Ubuntu', sans-serif;
   border-radius: 5%;
   height: 40px;
 }
@@ -263,6 +193,7 @@ body {
 }
 .new_userimage_btn {
   font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-family: 'Ubuntu', sans-serif;
   border-radius: 5%;
   height: 40px;
   width: 120px;
@@ -300,6 +231,7 @@ body {
 .oringin_item {
   font-size: 20px;
   font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-family: 'Ubuntu', sans-serif;
   color: aqua;
   margin: 0 0 10px 0;
 }
@@ -315,6 +247,7 @@ body {
 }
 .btn_type {
   font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-family: 'Ubuntu', sans-serif;
   border-radius: 5%;
   height: 40px;
   width: 120px;
@@ -344,6 +277,7 @@ body {
 .creator_type {
   font-size: 20px;
   font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-family: 'Ubuntu', sans-serif;
   color: aqua;
   margin: 0 0 10px 0;
   text-align: left;
@@ -361,6 +295,7 @@ body {
 .new_creator_type {
   font-size: 20px;
   font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-family: 'Ubuntu', sans-serif;
   color: aqua;
   margin: 10px 0 0 3vw;
 }
@@ -447,6 +382,7 @@ body {
 .single_epi_title {
   font-size: 20px;
   font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-family: 'Ubuntu', sans-serif;
   color: aqua;
   margin-bottom: 10px;
 }
@@ -504,21 +440,12 @@ body {
   margin-top: 5px;
   margin-bottom: 0;
 }
-.show_info_container {
-  width: 80vw;
-  padding: 30px 30px 0 30px;
-  display: flex;
-  flex-direction: row;
-}
-.show_info_l {
-  min-width: 20vw;
-  text-align: center;
-}
+
 .show_name,
 .show_detail {
   margin: 5px 0 5px 0;
 }
-.show_des,
+
 .show_detail {
   overflow: hidden;
   text-overflow: ellipsis;
@@ -529,82 +456,11 @@ body {
 .show_image_choice {
   height: 150px;
 }
-.show_image_choice:hover {
-  height: 155px;
-}
-.show_info_r {
-  padding-top: 10px;
-  text-align: left;
-  align-self: center;
-}
-.show_epi_container {
-  width: 80vw;
-  padding: 0 30px 0 30px;
-}
-.episode_date {
-  color: #adb3b8;
-  font-size: 12px;
-}
-.episode_single {
-  margin: 3vh 0 0 0;
-  display: flex;
-  flex-direction: row;
-}
-.duration_container {
-  min-width: 10vw;
-  text-align: center;
-}
-.episode_container {
-  text-align: left;
-}
-.episode_title:hover {
-  color: aqua;
-}
+
 .search_nomatch {
   padding: 30px;
 }
-#chatroom {
-  width: 60vw;
-  max-width: 60vw;
-  overflow-y: scroll;
-  scroll-behavior: smooth;
-  height: 300px;
-  max-height: 300px;
-  background-color: rgb(83, 87, 95);
-  color: aliceblue;
-}
-#chatbox {
-  width: 60vw;
-  padding: 30px;
-  margin-left: 5vw;
-}
-#msg {
-  width: 30vw;
-  margin-top: 10px;
-  margin-right: 20px;
-  padding: 0 15px 0 15px;
-}
-#send_msg:hover {
-  color: aqua;
-}
-.chat_info {
-  width: 80vw;
-  padding: 30px 30px 0 30px;
-  display: flex;
-  flex-direction: row;
-}
-.chat_info_l {
-  min-width: 15vw;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  justify-content: left;
-}
-.chat_info_r {
-  min-width: 60vw;
-  max-width: 60vw;
-  margin-left: 1vw;
-}
+
 .showlist_row {
   margin: 1vw 0 0 1vw;
 }
@@ -613,9 +469,7 @@ body {
   font-size: 18px;
   color: aliceblue;
 }
-.show_image {
-  border-radius: 10px;
-}
+
 .search_shows {
   min-width: 70vw;
   padding: 30px;
@@ -627,9 +481,7 @@ body {
 .search_show_category {
   margin-bottom: 3vh;
 }
-.search-show_name:hover {
-  color: aqua;
-}
+
 .row-cols-6 {
   display: flex;
   flex-direction: row;
@@ -642,6 +494,7 @@ body {
 .signup_title {
   font-size: 20px;
   font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-family: 'Ubuntu', sans-serif;
   color: aqua;
   margin: 5px 0 5px 0;
 }

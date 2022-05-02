@@ -1,0 +1,407 @@
+/* global ---------------------------------------------------*/
+a {
+  color: aliceblue;
+}
+::-webkit-scrollbar {
+  width: 5px;
+}
+::-webkit-scrollbar-track {
+  -webkit-border-radius: 10px;
+  border-radius: 10px;
+  margin: 80px 0 5px 0;
+}
+::-webkit-scrollbar-thumb {
+  -webkit-border-radius: 4px;
+  border-radius: 4px;
+  background: rgb(219, 219, 219);
+}
+/* TOPBAR ---------------------------------------------------*/
+#topbar {
+  background-color: #6f96a6;
+  width: 100%;
+  height: 6vh;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0;
+}
+.withyou {
+  font-weight: 400;
+  font-size: 1.1em;
+  margin: 0 0 0 2vw;
+  font-family: 'Ubuntu', sans-serif;
+}
+.topbarinput {
+  background-color: #6f96a6;
+}
+#search_input {
+  height: 4vh;
+  width: 14vw;
+  padding: 0 2vw 0 1vw;
+  color: aliceblue;
+}
+#search_input.css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input {
+  border: aliceblue;
+}
+fieldset.MuiOutlinedInput-notchedOutline.css-1d3z3hw-MuiOutlinedInput-notchedOutline {
+  border-color: #677980;
+  color: #677980;
+  border-radius: 50px;
+}
+
+.css-14s5rfu-MuiFormLabel-root-MuiInputLabel-root {
+  color: aliceblue !important;
+  display: none !important;
+}
+#search_btn {
+  background-color: #6f96a6;
+  color: aliceblue;
+  height: 4vh;
+  width: 7vw;
+}
+#search_btn:hover {
+  background-color: #6f96a6;
+  color: #091d2d;
+}
+.search_container {
+  display: flex;
+  margin-right: 3vw;
+}
+.search_item {
+  margin: 0.5vw;
+}
+
+/* SIDEBAR ---------------------------------------------------*/
+#sidebar {
+  background: linear-gradient(#274050, #222a32);
+  width: 9vw;
+  height: auto;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-direction: column;
+}
+#sidebar_logo {
+  max-width: 4vw;
+  margin-top: 2vh;
+  margin-bottom: 2vh;
+}
+
+.css-sghohy-MuiButtonBase-root-MuiButton-root {
+  background-color: #274050;
+  color: aliceblue;
+}
+#sidebar_home_btn {
+  background-color: #274050 !important;
+  width: 6vw;
+  color: aliceblue;
+}
+#sidebar_creator_btn {
+  background-color: #274050 !important;
+  width: 6vw;
+  color: aliceblue;
+}
+#sidebar_login_btn {
+  background-color: #274050 !important;
+  width: 6vw;
+  color: aliceblue;
+  margin-top: 0;
+}
+#sidebar_home_btn:hover,
+#sidebar_creator_btn:hover,
+#sidebar_login_btn:hover {
+  color: #677980;
+}
+
+/* PLAYBAR ---------------------------------------------------*/
+.rhap_container {
+  height: 10vh;
+  width: 100vw;
+  padding: 1vh 3vw 1vh 3vw;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  background: linear-gradient(#222a32, #091d2d);
+  border-style: none;
+  color: aliceblue;
+}
+.rhap_time {
+  color: aliceblue;
+  font-size: 1em;
+}
+/* SHOWLIST ---------------------------------------------------*/
+#showlist_container {
+  width: 80vw;
+  margin: 0 0 0 5vw;
+}
+.show_list_title {
+  font-size: 1.3em;
+  margin: 0 0 0.5vh -2vw;
+  color: #6f96a6;
+}
+.card_container {
+  width: 10vw;
+  height: 10vw;
+  background-color: #222a32;
+}
+.card_image {
+  width: 7vw;
+  height: 7vw;
+}
+#card_content {
+  height: 3vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+.css-1v5z4dq-MuiPaper-root-MuiCard-root {
+  background: linear-gradient(#15191e, #222a32);
+  border: 2px solid #1c2228 !important;
+}
+.css-1gqyz35-MuiTypography-root {
+  color: aliceblue !important;
+  font-size: 0.5em !important;
+}
+.css-46bh2p-MuiCardContent-root {
+  text-align: center;
+  padding: 0.5vh 0 0 0;
+}
+.show_item {
+  text-decoration: none;
+}
+
+/* SHOWCHOICE ---------------------------------------------------*/
+.show_info_container {
+  width: 80vw;
+  height: auto;
+  padding: 2vw 2vw 0 2vw;
+  display: flex;
+  flex-direction: row;
+}
+
+.show_info_l {
+  min-width: 16vw;
+  max-width: 16vw;
+  text-align: center;
+  margin: 0 1vw 0 0;
+  padding: 0;
+}
+#show_card_title {
+  margin: 0 0 1vh 0;
+  font-size: 1em !important;
+}
+#show_card_author {
+  margin: 1vh 0 0 0;
+  font-size: 1em !important;
+}
+#show_card_cate {
+  margin: 1vh 0 1vh 0;
+  font-size: 1em !important;
+}
+.css-46bh2p-MuiCardContent-root:last-child {
+  padding-bottom: 0;
+}
+#sub_more_container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  margin: 1vh;
+}
+#sub_btn,
+#unsub_btn,
+#more_btn,
+#less_btn {
+  min-width: 5vw;
+  max-width: 5vw;
+  background-color: #222a32;
+  color: aliceblue;
+  border: 2px solid rgba(70, 65, 65, 0.595);
+}
+#unsub_btn,
+#less_btn {
+  color: #677980;
+}
+#show_info_r {
+  margin-top: 0;
+  min-width: 60vw;
+  max-width: 60vw;
+  min-height: 35vh;
+  max-height: 35vh;
+  overflow-y: scroll;
+  scroll-behavior: smooth;
+  padding: 1vw;
+}
+.show_info_r {
+  text-align: left;
+  align-self: center;
+}
+.show_des {
+  font-size: 1em;
+  padding: 1vh;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 8;
+  -webkit-box-orient: vertical;
+}
+.show_epi_container {
+  width: 80vw;
+  padding: 0 30px 0 30px;
+}
+.episode_card_container {
+  margin: 0 0 1vh 3vw;
+  min-width: 70vw;
+  max-width: 70vw;
+  background: linear-gradient(#222a32, #29323b);
+}
+.episode_card_link {
+  text-decoration: none;
+}
+.episode_single:hover {
+  background-color: #6f96a6;
+}
+.episode_container {
+  text-align: left;
+}
+.episode_single {
+  margin: 2vh 0 2vh 0;
+  display: flex;
+  flex-direction: row;
+}
+.episode_date {
+  color: #adb3b8;
+  font-size: 0.5em;
+}
+.duration_container {
+  min-width: 10vw;
+  text-align: center;
+}
+.episode_duration {
+  margin-top: 1vh;
+}
+
+/* EPICHOICE ---------------------------------------------------*/
+.chat_info {
+  width: 80vw;
+  padding: 1.5vw 3vw 0 3vw;
+  display: flex;
+  flex-direction: row;
+}
+.chat_info_l {
+  min-width: 15vw;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: left;
+}
+.chat_info_r {
+  min-width: 60vw;
+  max-width: 60vw;
+  margin: 1vw;
+}
+#play_more_container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+#play_btn,
+#more_des_btn,
+#less_des_btn {
+  margin: 2vh 0 0 0;
+  max-width: 5vw;
+  min-width: 5vw;
+  background-color: #222a32;
+  color: aliceblue;
+  border: 2px solid rgba(70, 65, 65, 0.595);
+}
+#less_des_btn {
+  color: #677980;
+}
+#episode_choice {
+  padding: 1vh 0 1vh 0;
+  min-width: 15vw;
+  max-width: 15vw;
+  min-height: 30vh;
+  max-height: 30vh;
+}
+#episode_choice_image {
+  min-width: 10vw;
+  max-width: 10vw;
+  min-height: 10vw;
+  border-radius: 10px;
+  margin: 1vh 0 1vh 0;
+}
+#episode_choice_des {
+  margin: 0 0 0 1vw;
+}
+#episode_choice_des {
+  margin-top: 0;
+  min-width: 65vw;
+  max-width: 65vw;
+  min-height: 35vh;
+  max-height: 35vh;
+  overflow-y: scroll;
+  scroll-behavior: smooth;
+  padding: 1vw 1vw 1vw 1vw;
+}
+#epi_des {
+  font-size: 1em;
+  padding: 1vh;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 8;
+  -webkit-box-orient: vertical;
+}
+
+#chatbox {
+  margin: 2vh 0 0 0;
+  width: 75vw;
+  padding: 2vw 2vw 1vw 2vw;
+  margin-left: 5vw;
+}
+#send_msg {
+  background-color: #091d2d;
+  color: aliceblue;
+  min-width: 5vw;
+  margin: 0 0 0 0;
+}
+#msg_container {
+  max-width: 46vw;
+  margin: 2vh 0 0 0;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+#msg {
+  color: aliceblue;
+  min-height: 5vh;
+  width: 35vw;
+  margin-top: 1vh;
+  padding: 0 2vw 0 2vw;
+}
+#chatroom {
+  width: 70vw;
+  max-width: 70vw;
+  overflow-y: scroll;
+  scroll-behavior: smooth;
+  height: 300px;
+  max-height: 300px;
+  background-color: rgba(83, 87, 95, 0);
+  color: aliceblue;
+}
+/* FILLER ---------------------------------------------------*/
+
+#filler_container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: auto;
+  justify-content: space-around;
+}
+#filler {
+  height: 13vh;
+  background-color: #222a32;
+  color: #274050;
+  margin: 0 0 0 1vw;
+}

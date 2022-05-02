@@ -18,6 +18,13 @@ const Login = () => {
     }
   };
 
+  const enter = (e) => {
+    const pwd = document.getElementById('L_pwd').value;
+    if (e.key === 'Enter' && pwd !== '') {
+      document.getElementById('login_btn').click();
+    }
+  };
+
   return (
     <>
       <div id='login'>
@@ -34,12 +41,14 @@ const Login = () => {
           type='password'
           className='input_type'
           Style='background-color:black; color:white'
+          onKeyDown={enter}
           required
         ></input>
         <input
           type='button'
           value='login'
           className='btn_type'
+          id='login_btn'
           Style='background-color:black'
           onClick={gologin}
         ></input>
