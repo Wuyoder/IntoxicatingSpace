@@ -124,73 +124,18 @@ body {
 .creator_btn:hover {
   color: aqua;
 }
-#profile_info {
-  padding: 20px;
-  width: 30vw;
-  height: 50vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
+
 .profile_container {
   display: flex;
   flex-direction: row;
   margin: 10px;
 }
-.profile_row {
-  width: 60px;
-  height: 50px;
-  font-size: 20px;
-  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-  font-family: 'Ubuntu', sans-serif;
-  color: aqua;
-}
-.profile_text {
-  width: 100px;
-  height: 50px;
-  font-size: 20px;
-  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-  font-family: 'Ubuntu', sans-serif;
-}
-.profile_title {
-  width: auto;
-  height: 50px;
-  font-size: 20px;
-  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-  font-family: 'Ubuntu', sans-serif;
-  color: aqua;
-  text-align: center;
-}
+
 .profile_image_container {
   text-align: center;
   margin: 10px;
 }
-.profile_sub1 {
-  width: auto;
-  margin: 0 5% 0 10%;
-  text-align: right;
-}
 
-.profile_sub2 {
-  text-align: left;
-  width: auto;
-}
-.login_btn {
-  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-  font-family: 'Ubuntu', sans-serif;
-  border-radius: 5%;
-  height: 40px;
-}
-.login_btn:hover {
-  color: aqua;
-}
-.updateuser_container {
-  display: flex;
-  flex-direction: column;
-  width: 30vw;
-  text-align: center;
-  padding: 20px;
-}
 .new_userimage_btn {
   font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
   font-family: 'Ubuntu', sans-serif;
@@ -255,25 +200,7 @@ body {
 .btn_type:hover {
   color: aqua;
 }
-.cp_container {
-  width: 60vw;
-  padding: 20px;
-  text-align: center;
-  min-height: 70vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-.update_creator_container {
-  width: 60vw;
-  padding: 20px;
-  text-align: center;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  margin-left: 14vw;
-}
+
 .creator_type {
   font-size: 20px;
   font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
@@ -344,17 +271,6 @@ body {
   width: 200px;
 }
 
-#new_creator_name,
-#new_creator_email,
-#new_show_name,
-#new_show_des,
-#new_show_category {
-  margin: 10px 0 0 0;
-  padding: 0 20px 0 20px;
-  width: 30vw;
-  margin-left: 15vw;
-  height: 40px;
-}
 #new_show_category {
   padding-left: 8vw;
 }
@@ -396,13 +312,7 @@ body {
 #copyrssfeed:hover {
   height: 30px;
 }
-#rssfeed {
-  background-color: #222a32;
-  width: 50vw;
-  padding-left: 30px;
-  border: none;
-  color: aqua;
-}
+
 #newepi_form {
   height: 100vh;
   display: flex;
@@ -487,10 +397,7 @@ body {
   flex-direction: row;
   justify-content: left;
 }
-.login_container {
-  min-width: 30vw;
-  padding: 30px;
-}
+
 .signup_title {
   font-size: 20px;
   font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
@@ -502,15 +409,7 @@ body {
 #gosignup {
   width: 10vw;
 }
-#S_name,
-#S_email,
-#S_pwd,
-#S_birth,
-#L_email,
-#L_pwd {
-  height: 40px;
-  padding: 0 15px 0 15px;
-}
+
 .upload_element {
   display: flex;
   flex-direction: row;

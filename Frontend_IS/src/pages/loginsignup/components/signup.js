@@ -1,6 +1,14 @@
 import axios from 'axios';
 import { SIGNUP, LOGIN } from '../../../global/constants';
-
+import {
+  Button,
+  Card,
+  CardContent,
+  CardMedia,
+  CardActionArea,
+  Typography,
+  TextField,
+} from '@mui/material';
 const Signup = () => {
   const gosignup = async () => {
     const name = document.getElementById('S_name').value;
@@ -23,47 +31,30 @@ const Signup = () => {
   };
 
   return (
-    <>
+    <div>
       <div id='signup'>
-        <div className='signup_title'>username</div>
-        <input
-          id='S_name'
-          className='input_type'
-          Style='background-color:black; color:white'
-          required
-        ></input>
-        <div className='signup_title'>email</div>
-        <input
-          id='S_email'
-          className='input_type'
-          Style='background-color:black; color:white'
-          required
-        ></input>
-        <div className='signup_title'>password</div>
-        <input
-          type='password'
-          id='S_pwd'
-          className='input_type'
-          Style='background-color:black; color:white'
-          required
-        ></input>
-        <div className='signup_title'>birthday</div>
-        <input
-          type='date'
-          id='S_birth'
-          className='input_type'
-          Style='background-color:black; color:white'
-          required
-        ></input>
-        <input
-          type='button'
-          value='signup'
-          className='btn_type'
-          Style='background-color:black'
-          onClick={gosignup}
-        ></input>
+        <div id='signup_l'>
+          <div className='signup_title'>Username</div>
+          <div className='signup_title'>E-mail</div>
+          <div className='signup_title'>Password</div>
+          <div className='signup_title'>Birthday</div>
+        </div>
+        <div id='signup_r'>
+          <TextField id='S_name' label='Username'></TextField>
+          <TextField id='S_email' label='E-mail'></TextField>
+          <TextField type='password' id='S_pwd' label='Password'></TextField>
+          <TextField
+            type='date'
+            id='S_birth'
+            placeholder='YYYY/MM/DD'
+            label='Birthday'
+          ></TextField>
+        </div>
       </div>
-    </>
+      <Button onClick={gosignup} id='signup_submit'>
+        SIGNUP
+      </Button>
+    </div>
   );
 };
 export default Signup;

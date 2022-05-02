@@ -17,6 +17,7 @@ const Searchshow = ({ item }) => {
         onClick={(event) => {
           setShowid(item.rss_id);
         }}
+        Style='text-decoration:none'
       >
         <img
           src={item.rss_image}

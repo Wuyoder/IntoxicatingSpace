@@ -1,36 +1,39 @@
 import Login from './components/login';
 import Signup from './components/signup';
-
 import { useState } from 'react';
-
+import {
+  Button,
+  Card,
+  CardContent,
+  CardMedia,
+  CardActionArea,
+  Typography,
+  TextField,
+} from '@mui/material';
 const LoginSignup = () => {
   const [now, setNow] = useState(true);
   return (
-    <div className='login_container'>
-      <div>
-        <button
+    <Card variant='outlined' id='login_container'>
+      <div id='login_signup_container'>
+        <Button
           id='gologin'
-          className='btn_type'
-          Style='background-color:black'
           onClick={() => {
             setNow(true);
           }}
         >
           Go Login
-        </button>
-        <button
+        </Button>
+        <Button
           id='gosignup'
-          className='btn_type'
-          Style='background-color:black'
           onClick={() => {
             setNow(false);
           }}
         >
           Go Signup
-        </button>
+        </Button>
       </div>
-      {now ? <Login /> : <Signup />}
-    </div>
+      <div>{now ? <Login /> : <Signup />}</div>
+    </Card>
   );
 };
 export default LoginSignup;

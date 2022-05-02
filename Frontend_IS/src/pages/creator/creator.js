@@ -8,7 +8,15 @@ import Updateuser from '../profile/components/updateuser';
 import Updatecreator from './components/updatecreator';
 import Episode from '../creator/components/episode';
 import Newepisode from '../creator/components/newepisode';
-import Button from 'react-bootstrap/Button';
+import {
+  Button,
+  Card,
+  CardContent,
+  CardMedia,
+  CardActionArea,
+  Typography,
+  TextField,
+} from '@mui/material';
 const Creator = () => {
   const [creatorprofile, setCreatorprofile] = useState([]);
   const [creatorepisode, setCreatorepisode] = useState([]);
@@ -34,88 +42,87 @@ const Creator = () => {
   }, [updateuser, updateuser, newepisode, biguser, bigcreator, bigepi]);
 
   return (
-    <div className='creator_container'>
-      <div className='creator_btn_container'>
-        <div>
+    <Card variant='outlined' id='creator_container'>
+      <div className='creator_container'>
+        <div className='creator_btn_container'>
+          <div>
+            <div>
+              <Button
+                onClick={() => {
+                  setUpdateuser(!updateuser);
+                  setBiguser(true);
+                  setBigcreator(false);
+                  setBigepi(false);
+                  setUpdatecreator(false);
+                  setNewepisode(false);
+                }}
+                id='creator_userprofile_btn'
+              >
+                User Profile
+              </Button>
+            </div>
+          </div>
           <div>
             <Button
-              Style='background-color:black'
               onClick={() => {
-                setUpdateuser(!updateuser);
-                setBiguser(true);
-                setBigcreator(false);
+                setUpdatecreator(!updatcreator);
+                setBiguser(false);
+                setBigcreator(true);
                 setBigepi(false);
-                setUpdatecreator(false);
+                setUpdateuser(false);
                 setNewepisode(false);
               }}
-              className='creator_btn'
+              id='creator_creatorpodcast_btn'
             >
-              User
+              Creator &amp; Podcast
+            </Button>
+          </div>
+          <div>
+            <Button
+              onClick={() => {
+                setNewepisode(!newepisode);
+                setBiguser(false);
+                setBigcreator(false);
+                setBigepi(true);
+                setUpdateuser(false);
+                setUpdatecreator(false);
+              }}
+              id='creator_episode_btn'
+            >
+              Episode
             </Button>
           </div>
         </div>
+        <div>{biguser ? updateuser ? <Profile /> : <Updateuser /> : null}</div>
         <div>
-          <Button
-            Style='background-color:black'
-            onClick={() => {
-              setUpdatecreator(!updatcreator);
-              setBiguser(false);
-              setBigcreator(true);
-              setBigepi(false);
-              setUpdateuser(false);
-              setNewepisode(false);
-            }}
-            className='creator_btn'
-          >
-            Creator &amp; Podcast
-          </Button>
-        </div>
-        <div>
-          <Button
-            Style='background-color:black'
-            onClick={() => {
-              setNewepisode(!newepisode);
-              setBiguser(false);
-              setBigcreator(false);
-              setBigepi(true);
-              setUpdateuser(false);
-              setUpdatecreator(false);
-            }}
-            className='creator_btn'
-          >
-            Episode
-          </Button>
-        </div>
-      </div>
-      <div>{biguser ? updateuser ? <Profile /> : <Updateuser /> : null}</div>
-      <div>
-        {bigcreator ? (
-          updatcreator ? (
-            <Creatorinfo creatorprofile={creatorprofile} />
-          ) : (
-            <Updatecreator creatorprofile={creatorprofile} />
-          )
-        ) : null}
-      </div>
-      <div>
-        {/* {creatorepisode.map((item) => {
-          return <Creatorepisode creatorepisode={item} />;
-        })} */}
-      </div>
-      <div>
-        <div>
-          {bigepi ? (
-            newepisode ? (
-              <Episode creatorepisode={creatorepisode} />
+          {bigcreator ? (
+            updatcreator ? (
+              <Creatorinfo creatorprofile={creatorprofile} />
             ) : (
-              <Newepisode
-                creatorprofile={(creatorprofile, setNewepisode, newepisode)}
-              />
+              <Updatecreator creatorprofile={creatorprofile} />
             )
           ) : null}
         </div>
+        <div>
+          {/* {creatorepisode.map((item) => {
+          return <Creatorepisode creatorepisode={item} />;
+        })} */}
+        </div>
+        <div>
+          <div>
+            {bigepi ? (
+              newepisode ? (
+                <Episode creatorepisode={creatorepisode} />
+              ) : (
+                <Newepisode
+                  creatorprofile={(creatorprofile, setNewepisode, newepisode)}
+                />
+              )
+            ) : null}
+          </div>
+        </div>
       </div>
-    </div>
+    </Card>
   );
 };
 export default Creator;

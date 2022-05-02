@@ -1,6 +1,14 @@
 import axios from 'axios';
 import { LOGIN } from '../../../global/constants';
-
+import {
+  Button,
+  Card,
+  CardContent,
+  CardMedia,
+  CardActionArea,
+  Typography,
+  TextField,
+} from '@mui/material';
 const Login = () => {
   const gologin = async () => {
     const email = document.getElementById('L_email').value;
@@ -21,38 +29,30 @@ const Login = () => {
   const enter = (e) => {
     const pwd = document.getElementById('L_pwd').value;
     if (e.key === 'Enter' && pwd !== '') {
-      document.getElementById('login_btn').click();
+      document.getElementById('login_submit').click();
     }
   };
 
   return (
     <>
       <div id='login'>
-        <div className='signup_title'>email</div>
-        <input
-          id='L_email'
-          className='input_type'
-          Style='background-color:black; color:white'
-          required
-        ></input>
-        <div className='signup_title'>password</div>
-        <input
-          id='L_pwd'
-          type='password'
-          className='input_type'
-          Style='background-color:black; color:white'
-          onKeyDown={enter}
-          required
-        ></input>
-        <input
-          type='button'
-          value='login'
-          className='btn_type'
-          id='login_btn'
-          Style='background-color:black'
-          onClick={gologin}
-        ></input>
+        <div id='login_l'>
+          <div className='signup_title'>E-mail</div>
+          <div className='signup_title'>Password</div>
+        </div>
+        <div id='login_r'>
+          <TextField id='L_email' label='E-mail'></TextField>
+          <TextField
+            id='L_pwd'
+            type='password'
+            onKeyDown={enter}
+            label='Password'
+          ></TextField>
+        </div>
       </div>
+      <Button id='login_submit' onClick={gologin}>
+        LOGIN
+      </Button>
     </>
   );
 };

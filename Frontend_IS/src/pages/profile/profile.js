@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { USER_PROFILE, HISTORY_LIST, SUBSHOWS } from '../../global/constants';
 import axios from 'axios';
-import Button from 'react-bootstrap/Button';
+import { Button, Card, TextField } from '@mui/material';
 import Row from 'react-bootstrap/Row';
 import Searchshow from '../search/components/searchshow';
 const Profile = () => {
@@ -32,30 +32,23 @@ const Profile = () => {
     getsubshows();
   }, []);
 
-  const gologout = () => {
-    localStorage.clear('token');
-    alert('SeeYa');
-    window.location.replace('/');
-  };
-
   if (userprofile.error) {
     window.location.replace('/login');
   } else {
     return (
       <>
         <div id='profile_info'>
-          <div className='profile_title'>User Profile</div>
-          <div className='profile_image_container'>
+          <div>
             <img
-              id='user_image'
+              id='userprofile_image'
               alt='user_image'
               src={localStorage.getItem('user_image')}
             ></img>
           </div>
           <div className='profile_container'>
             <div className='profile_sub1'>
-              <div className='profile_row'>name </div>
-              <div className='profile_row'>email </div>
+              <div className='profile_row'>Username </div>
+              <div className='profile_row'>E-mail </div>
             </div>
             <div className='profile_sub2'>
               <div id='user_name' className='profile_text'>
@@ -66,31 +59,28 @@ const Profile = () => {
               </div>
             </div>
           </div>
-          <Button
-            onClick={gologout}
-            Style='background-color:black'
-            className='login_btn'
-          >
-            LOG OUT
-          </Button>
         </div>
         <div>
-          <div>訂閱節目</div>
-          <div className='search_shows'>
-            <Row xs={1} md={6} id='boot_row'>
-              {subshows.map((item) => {
-                return <Searchshow item={item} />;
-              })}
-            </Row>
-          </div>
-          <div>瀏覽記錄</div>
-          <div className='search_shows'>
-            <Row xs={1} md={6} id='boot_row'>
-              {historylist.map((item) => {
-                return <Searchshow item={item} />;
-              })}
-            </Row>
-          </div>
+          <div className='profile_subtitle'>訂閱節目</div>
+          <Card variant='outlined' id='subshows_container'>
+            <div className='search_shows'>
+              <Row xs={1} md={6} id='boot_row'>
+                {subshows.map((item) => {
+                  return <Searchshow item={item} />;
+                })}
+              </Row>
+            </div>
+          </Card>
+          <div className='profile_subtitle'>瀏覽記錄</div>
+          <Card variant='outlined' id='historyshows_container'>
+            <div className='search_shows'>
+              <Row xs={1} md={6} id='boot_row'>
+                {historylist.map((item) => {
+                  return <Searchshow item={item} />;
+                })}
+              </Row>
+            </div>
+          </Card>
         </div>
       </>
     );

@@ -93,17 +93,22 @@ fieldset.MuiOutlinedInput-notchedOutline.css-1d3z3hw-MuiOutlinedInput-notchedOut
 }
 #sidebar_home_btn {
   background-color: #274050 !important;
-  width: 6vw;
+  width: 7vw;
   color: aliceblue;
 }
 #sidebar_creator_btn {
   background-color: #274050 !important;
-  width: 6vw;
+  width: 7vw;
+  color: aliceblue;
+}
+#sidebar_logout_btn {
+  background-color: #274050 !important;
+  width: 7vw;
   color: aliceblue;
 }
 #sidebar_login_btn {
   background-color: #274050 !important;
-  width: 6vw;
+  width: 7vw;
   color: aliceblue;
   margin-top: 0;
 }
@@ -353,7 +358,10 @@ fieldset.MuiOutlinedInput-notchedOutline.css-1d3z3hw-MuiOutlinedInput-notchedOut
   -webkit-line-clamp: 8;
   -webkit-box-orient: vertical;
 }
-
+.msg_msg {
+  min-width: 25vw;
+  max-width: 25vw;
+}
 #chatbox {
   margin: 2vh 0 0 0;
   width: 75vw;
@@ -365,6 +373,7 @@ fieldset.MuiOutlinedInput-notchedOutline.css-1d3z3hw-MuiOutlinedInput-notchedOut
   color: aliceblue;
   min-width: 5vw;
   margin: 0 0 0 0;
+  border: 2px solid #6f96a6;
 }
 #msg_container {
   max-width: 46vw;
@@ -390,6 +399,333 @@ fieldset.MuiOutlinedInput-notchedOutline.css-1d3z3hw-MuiOutlinedInput-notchedOut
   background-color: rgba(83, 87, 95, 0);
   color: aliceblue;
 }
+/* LOGIN ---------------------------------------------------*/
+
+#login_container {
+  margin: 5vw;
+  min-width: 50vw;
+  max-width: 50vw;
+  min-height: 60vh;
+  max-height: 60vh;
+  padding: 2vw;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+}
+#login_signup_container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  width: 30vw;
+  margin: 0 0 1vh 8vw;
+}
+#gologin,
+#gosignup {
+  background-color: #091d2d;
+  color: aliceblue;
+  border: 2px solid #1f2f35;
+}
+
+#signup_submit {
+  background-color: #091d2d;
+  color: aliceblue;
+  border: 2px solid #6f96a6;
+  margin: 5vh 0 0 0;
+  width: 10vw;
+}
+
+#signup {
+  margin: 2vh 0 0 0;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+#signup_l,
+#signup_r {
+  min-height: 35vh;
+  justify-content: space-between;
+  display: flex;
+  flex-direction: column;
+}
+#signup_r {
+  margin: 0 0 0 3vw;
+}
+.signup_title {
+  font-size: 20px;
+  font-family: 'Ubuntu', sans-serif;
+  color: aliceblue;
+}
+#S_name,
+#S_email,
+#S_pwd,
+#S_birth,
+#L_email,
+#L_pwd {
+  color: aliceblue;
+  height: 2vh;
+  padding-left: 2vw;
+}
+
+#login {
+  margin: 2vh 0 0 0;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+#login_l,
+#login_r {
+  min-height: 35vh;
+  justify-content: space-around;
+  display: flex;
+  flex-direction: column;
+}
+#login_r {
+  margin: 0 0 0 3vw;
+}
+#login_submit {
+  background-color: #091d2d;
+  color: aliceblue;
+  border: 2px solid #6f96a6;
+  margin: 2vh 0 0 0;
+  width: 10vw;
+}
+/* CREATOR ---------------------------------------------------*/
+#creator_container {
+  min-width: 84vw;
+  max-width: 84vw;
+  margin: 2vw;
+}
+#creator_userprofile_btn,
+#creator_creatorpodcast_btn,
+#creator_episode_btn {
+  background-color: #091d2d;
+  color: aliceblue;
+  border: 2px solid #1f2f35;
+  min-width: 28vw;
+}
+/* CREATOR USER PROFILE  ---------------------------------------------------*/
+#profile_info {
+  padding: 3vw;
+  width: 60vw;
+  height: 35vh;
+  display: flex;
+  flex-direction: row;
+  justify-content: start;
+}
+.profile_row {
+  height: 5vh;
+  width: 10vw;
+  text-align: center;
+  font-size: 1.5em;
+  font-family: 'Ubuntu', sans-serif;
+  color: #214461;
+}
+.profile_text {
+  height: 5vh;
+  font-size: 2em;
+  font-family: 'Ubuntu', sans-serif;
+  color: aliceblue;
+}
+.profile_sub1 {
+  height: 20vh;
+  justify-content: space-around;
+  display: flex;
+  flex-direction: column;
+  margin-left: 2vw;
+}
+
+.profile_sub2 {
+  height: 20vh;
+  justify-content: space-around;
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  margin-left: 3vw;
+}
+#userprofile_image {
+  max-width: 10vw;
+  min-width: 10vw;
+}
+#subshows_container,
+#historyshows_container {
+  width: 80vw;
+  height: 30vh;
+  margin-left: 2vw;
+  margin-bottom: 3vh;
+  overflow-y: scroll;
+}
+.profile_subtitle {
+  font-size: 1.5em;
+  margin-left: 3vw;
+  margin-bottom: 0.5vh;
+  color: #214461;
+}
+#update_userprofile_image {
+  width: 10vw;
+  height: 10vw;
+  margin-bottom: 2vh;
+}
+.updateuser_container {
+  display: flex;
+  flex-direction: row;
+  width: 70vw;
+  text-align: center;
+  padding: 20px;
+  height: 55vh;
+}
+#updateuser_r {
+  width: 50vw;
+  justify-content: left;
+  text-align: left;
+  margin-left: 3vw;
+}
+#update_userprofile_btn1,
+#update_userprofile_btn2 {
+  background-color: #091d2d;
+  color: aliceblue;
+  border: 2px solid #6f96a6;
+  margin: 2vh 0 0 0;
+  width: 10vw;
+}
+#update_userprofile_btn2 {
+  width: 20vw;
+  margin-left: 2vw;
+  margin-top: 4vh;
+}
+#new_name,
+#new_email,
+#new_pwd {
+  width: 20vw;
+  height: 2vh;
+  padding-left: 2vw;
+  padding-right: 2vw;
+  color: aliceblue;
+}
+.origin_info {
+  margin: 1.5vh 0 1vh 0;
+  color: #214461;
+}
+.profile_title {
+  font-size: 1.5em;
+  margin: 1vh 0 0 6vw;
+  color: #214461;
+}
+#uploadPercent {
+  color: aliceblue;
+}
+#pre_upload {
+  color: #214461;
+}
+/* CREATOR CREATOR PODCAST  ---------------------------------------------------*/
+#show_image {
+  max-width: 10vw;
+  max-height: 10vw;
+  margin-left: 2vw;
+  margin-top: 5vh;
+}
+.cp_container {
+  width: 60vw;
+  padding: 20px;
+  text-align: center;
+  min-height: 70vh;
+  display: flex;
+  flex-direction: row;
+  justify-content: start;
+}
+#cp_r {
+  display: flex;
+  flex-direction: row;
+  text-align: left;
+  height: 50vh;
+  justify-content: space-around;
+  margin-left: 3vw;
+  margin-top: 3vh;
+}
+#cp_r_l {
+  display: flex;
+  flex-direction: column;
+  width: 15vw;
+  height: 40vh;
+  justify-content: space-around;
+}
+#cp_r_r {
+  display: flex;
+  flex-direction: column;
+  width: 15vw;
+  height: 40vh;
+  justify-content: space-around;
+}
+.origin_cp_info {
+  color: #214461;
+}
+#rssfeed {
+  background-color: #222a32;
+  width: 45vw;
+  padding-left: 1vw;
+  border: none;
+  color: #6f96a6;
+}
+.update_creator_container {
+  width: 60vw;
+  height: 50vh;
+  padding: 20px;
+  text-align: center;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-left: 2vw;
+}
+#new_creator_info,
+#newshowimage {
+  background-color: #091d2d;
+  color: aliceblue;
+  border: 2px solid #6f96a6;
+  margin: 5vh 0 0 0;
+  width: 15vw;
+}
+#new_creator_info {
+  width: 20vw;
+}
+#newshowimage {
+  margin-left: 2vw;
+}
+.new_creator_type {
+  color: #214461;
+  font-size: 1em;
+  margin: 1vh 0 1vh 0;
+}
+#upcp_r {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  margin-left: 4vw;
+}
+#new_creator_name,
+#new_creator_email,
+#new_show_name,
+#new_show_des,
+#new_show_category {
+  padding: 0 2vw 0 2vw;
+  width: 30vw;
+  height: 6vh;
+  color: aliceblue;
+}
+#new_show_category {
+  padding-left: 8vw;
+  padding-right: 8vw;
+  width: 34vw;
+  border-radius: 50px;
+  color: #214461;
+}
+#cp_all_container {
+  height: 80vh;
+}
+#cp_upload_image {
+  margin: -10vh -10vw 0 0;
+}
+/* CREATOR EPISODE  ---------------------------------------------------*/
+
 /* FILLER ---------------------------------------------------*/
 
 #filler_container {

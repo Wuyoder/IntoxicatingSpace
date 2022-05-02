@@ -4,15 +4,7 @@ import { AppContext } from '../../../App';
 import axios from 'axios';
 import { CHAT_HISTORY } from '../../../global/constants';
 import Msg from './msg';
-import {
-  Button,
-  Card,
-  CardContent,
-  CardMedia,
-  CardActionArea,
-  Typography,
-  TextField,
-} from '@mui/material';
+import { Button, Card, TextField } from '@mui/material';
 const Chatroom = () => {
   const [ws, setWs] = useState(null);
   const [open, setOpen] = useState([]);

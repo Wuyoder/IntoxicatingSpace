@@ -97,6 +97,11 @@ let activeStyle = {
 };
 
 const Sidebar = ({ member }) => {
+  const gologout = () => {
+    localStorage.clear('token');
+    alert('SeeYa');
+    window.location.replace('/');
+  };
   return (
     <div id='sidebar'>
       <div>
@@ -123,19 +128,23 @@ const Sidebar = ({ member }) => {
       </div>
       <div className='sidebar-container'>
         {!member ? (
-          <Button
-            variant='contained'
-            id='sidebar_creator_btn'
-            className='sidebar_btn'
-          >
-            <NavLink
-              to='/creator'
-              style={({ isActive }) => (isActive ? activeStyle : undefined)}
-              Style='text-decoration: none'
-            >
-              CREATOR
-            </NavLink>
-          </Button>
+          <>
+            <div>
+              <Button
+                variant='contained'
+                id='sidebar_creator_btn'
+                className='sidebar_btn'
+              >
+                <NavLink
+                  to='/creator'
+                  style={({ isActive }) => (isActive ? activeStyle : undefined)}
+                  Style='text-decoration: none'
+                >
+                  CREATOR
+                </NavLink>
+              </Button>
+            </div>
+          </>
         ) : (
           <Button
             variant='contained'
@@ -151,6 +160,23 @@ const Sidebar = ({ member }) => {
             </NavLink>
           </Button>
         )}
+      </div>
+      <div>
+        {!member ? (
+          <>
+            <div>
+              <Button
+                onClick={gologout}
+                variant='contained'
+                id='sidebar_logout_btn'
+              >
+                <NavLink to='/' Style='text-decoration: none'>
+                  LOG OUT
+                </NavLink>
+              </Button>
+            </div>
+          </>
+        ) : null}
       </div>
 
       <div className='sidebar-container'></div>

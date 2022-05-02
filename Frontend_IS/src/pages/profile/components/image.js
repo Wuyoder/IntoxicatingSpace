@@ -1,9 +1,9 @@
 const Image = () => {
   return (
     <img
-      id='user_image'
       alt='user_image'
       src={localStorage.getItem('user_image')}
+      id='update_userprofile_image'
     ></img>
   );
 };
