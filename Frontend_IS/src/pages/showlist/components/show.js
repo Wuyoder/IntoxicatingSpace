@@ -15,8 +15,6 @@ import {
 
 const HotShow = ({ item }) => {
   const goclickshow = async (event) => {
-    //setShowid(item.rss_id);
-    //event.currentTarget.lastChild.innerHTML rss id
     const res = await axios.post(
       USER_HISTORY,
       { type: 'show', show: item.rss_id },

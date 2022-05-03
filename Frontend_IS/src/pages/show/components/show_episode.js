@@ -1,7 +1,7 @@
 import { useEffect, useState, useContext } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
-import { SHOWCHOICE } from '../../../global/constants';
+import { SHOWCHOICE, USER_HISTORY } from '../../../global/constants';
 import { AppContext } from '../../../App';
 import {
   Button,
@@ -36,8 +36,30 @@ const ShowEpisode = () => {
                   12
                 )}-${index}`,
               }}
-              onClick={() => {
-                setEpisodeid(item.guid);
+              onClick={async () => {
+                await axios.post(
+                  USER_HISTORY,
+                  {
+                    type: 'episode',
+                    show: window.location.pathname.slice(12),
+                    episode: item.guid,
+                  },
+                  {
+                    headers: {
+                      Authorization: `Bearer ${localStorage.getItem('token')}`,
+                    },
+                  }
+                );
+
+                if (item.guid.indexOf('https://') > -1) {
+                  setEpisodeid(
+                    item.guid
+                      .split('/')
+                      [item.guid.split('/').length - 1].split('-')[0]
+                  );
+                } else {
+                  setEpisodeid(item.guid);
+                }
                 localStorage.setItem('last', item.enclosure?.url);
               }}
               className='episode_card_link'

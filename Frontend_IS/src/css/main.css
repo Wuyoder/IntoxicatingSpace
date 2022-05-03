@@ -518,7 +518,7 @@ fieldset.MuiOutlinedInput-notchedOutline.css-1d3z3hw-MuiOutlinedInput-notchedOut
   text-align: center;
   font-size: 1.5em;
   font-family: 'Ubuntu', sans-serif;
-  color: #214461;
+  color: #6f96a6;
 }
 .profile_text {
   height: 5vh;
@@ -558,7 +558,7 @@ fieldset.MuiOutlinedInput-notchedOutline.css-1d3z3hw-MuiOutlinedInput-notchedOut
   font-size: 1.5em;
   margin-left: 3vw;
   margin-bottom: 0.5vh;
-  color: #214461;
+  color: #6f96a6;
 }
 #update_userprofile_image {
   width: 10vw;
@@ -603,18 +603,18 @@ fieldset.MuiOutlinedInput-notchedOutline.css-1d3z3hw-MuiOutlinedInput-notchedOut
 }
 .origin_info {
   margin: 1.5vh 0 1vh 0;
-  color: #214461;
+  color: #6f96a6;
 }
 .profile_title {
   font-size: 1.5em;
   margin: 1vh 0 0 6vw;
-  color: #214461;
+  color: #6f96a6;
 }
 #uploadPercent {
   color: aliceblue;
 }
 #pre_upload {
-  color: #214461;
+  color: #6f96a6;
 }
 #upuser_image {
   margin: -12vh 0 0 10vw;
@@ -662,7 +662,7 @@ fieldset.MuiOutlinedInput-notchedOutline.css-1d3z3hw-MuiOutlinedInput-notchedOut
   justify-content: space-around;
 }
 .origin_cp_info {
-  color: #214461;
+  color: #6f96a6;
 }
 #rssfeed {
   background-color: #222a32;
@@ -697,7 +697,7 @@ fieldset.MuiOutlinedInput-notchedOutline.css-1d3z3hw-MuiOutlinedInput-notchedOut
   margin-left: 2vw;
 }
 .new_creator_type {
-  color: #214461;
+  color: #6f96a6;
   font-size: 1em;
   margin: 1vh 0 1vh 0;
 }
@@ -722,7 +722,7 @@ fieldset.MuiOutlinedInput-notchedOutline.css-1d3z3hw-MuiOutlinedInput-notchedOut
   padding-right: 8vw;
   width: 34vw;
   border-radius: 50px;
-  color: #214461;
+  color: #6f96a6;
 }
 #cp_all_container {
   height: 80vh;
@@ -932,4 +932,52 @@ fieldset.MuiOutlinedInput-notchedOutline.css-1d3z3hw-MuiOutlinedInput-notchedOut
   background-color: #222a32;
   color: #274050;
   margin: 0 0 0 1vw;
+}
+/* DEPLOY TEST RESIVE ---------------------------------------------------*/
+.css-1okfn8i {
+  background: linear-gradient(#274050, #274050, #222a32) !important;
+}
+.css-nbfzex {
+  color: aliceblue !important;
+}
+#episode_des {
+  background: linear-gradient(#181e24, #1e242a) !important;
+}
+#episode_num {
+  background: linear-gradient(#20272e, rgb(33, 43, 50)) !important;
+}
+#episode_explicit {
+  background: linear-gradient(#20272e, rgb(33, 43, 50)) !important;
+}
+#newepi_explicit {
+  background: linear-gradient(#20272e, rgb(33, 43, 50)) !important;
+}
+#newepi_episode {
+  background: linear-gradient(#20272e, rgb(33, 43, 50)) !important;
+}
+#new_show_category {
+  background: linear-gradient(#20272e, rgb(33, 43, 50)) !important;
+}
+.css-p0rm37 {
+  color: aliceblue !important;
+  display: none !important;
+}
+#S_birth {
+  color: #6f96a6;
+}
+#nowplay_btn {
+  z-index: 999;
+  max-width: 25vw;
+  min-width: 25vw;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+}
+#now_link {
+  text-decoration: none;
+}
+#now_link:hover {
+  color: #222a32;
 }

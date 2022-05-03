@@ -70,6 +70,7 @@ const Info = () => {
         <div className='chat_info_l'>
           <Card variant='outlined' id='episode_choice'>
             <Typography>{info.title}</Typography>
+
             <div>
               <img
                 id='episode_choice_image'
@@ -85,6 +86,8 @@ const Info = () => {
               <Button
                 onClick={() => {
                   changeplay();
+                  localStorage.setItem('nowplay_title', info.item?.title);
+                  localStorage.setItem('nowplay_url', window.location);
                   localStorage.setItem('episode', localStorage.getItem('last'));
                 }}
                 id='play_btn'
@@ -107,6 +110,7 @@ const Info = () => {
         </div>
         <Card variant='outlined' id='episode_choice_des'>
           <div className='chat_info_r'>
+            <Typography>{info.item?.title}</Typography>
             <div className='show_detail' id='epi_des'>
               {document.getElementById('epi_des')
                 ? (() => {

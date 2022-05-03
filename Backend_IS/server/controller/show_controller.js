@@ -142,14 +142,19 @@ const showsubscribe = async (req, res) => {
     who.id,
     req.body.id,
   ]);
-  const [result] = await db.query(
-    'UPDATE creators_shows SET show_subscriber = show_subscriber+1 WHERE show_id = ? ',
+  const [searchname] = await db.query(
+    'SELECT rss_title FROM rss WHERE rss_id = ?',
     [req.body.id]
   );
-  if (result.affectedRows === 0) {
+  if (searchname[0].rss_title) {
+    const [result] = await db.query(
+      'UPDATE creators_shows SET show_subscriber = show_subscriber+1 WHERE show_name = ? ',
+      [searchname[0].rss_title]
+    );
+    return res.json({ status: 'subscribe IS host show ok' });
+  } else {
     return res.json({ status: 'subscribe outsite host show ok' });
   }
-  res.send({ status: 'subscribe IS host show ok' });
 };
 
 const showunsub = async (req, res) => {
@@ -167,12 +172,21 @@ const showunsub = async (req, res) => {
   if (unsub_check.affectedRows === 0) {
     return res.status(200).json({ error: 'subscribe yet' });
   }
-  await db.query(
-    'UPDATE creators_shows SET show_subscriber = show_subscriber-1 WHERE show_id = ?',
+
+  const [searchname] = await db.query(
+    'SELECT rss_title FROM rss WHERE rss_id = ?',
     [req.body.id]
   );
 
-  res.send({ status: 'unsubcribe OK' });
+  if (searchname[0].rss_title) {
+    const [result] = await db.query(
+      'UPDATE creators_shows SET show_subscriber = show_subscriber-1 WHERE show_name = ? ',
+      [searchname[0].rss_title]
+    );
+    return res.json({ status: 'unsubscribe IS host show ok' });
+  } else {
+    return res.json({ status: 'unsubscribe outsite host show ok' });
+  }
 };
 
 const switcher = async (req, res) => {
@@ -280,10 +294,18 @@ const userhistory = async (req, res) => {
         'INSERT INTO history_episodes (user_id, show_id, episode_id, clicks) VALUES (?, ?, ?, ?)',
         [who.id, req.body.show, req.body.episode, 1]
       );
+      const epiclick = await db.query(
+        'UPDATE episodes SET episode_click = 1 WHERE episode_id = ?',
+        [req.body.episode]
+      );
     } else {
       result = await db.query(
         'UPDATE history_episodes SET clicks = clicks + 1 WHERE user_id = ? && show_id = ? && episode_id = ?',
         [who.id, req.body.show, req.body.episode]
+      );
+      const epiclick = await db.query(
+        'UPDATE episodes SET episode_click = episode_click + 1 WHERE episode_id = ?',
+        [req.body.episode]
       );
     }
   }

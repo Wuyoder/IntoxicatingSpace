@@ -47,7 +47,7 @@ const rssfeed = async (req, res) => {
       <title><![CDATA[${episode_info[i].episode_title}]]></title>
       <description><![CDATA[${episode_info[i].episode_des}]]></description>
       <link>https://intoxicating.space/episode/${rss_id[0].rss_id}-${i}</link>
-      <guid isPermaLink="false">${rss_id[0].rss_id}-${i}</guid>
+      <guid isPermaLink="false">${episode_info[i].episode_id}</guid>
       <dc:creator><![CDATA[${infos.creator_name}]]></dc:creator>
       <pubDate>${timeformat}</pubDate>
       <enclosure url="${episode_info[i].episode_file}" length="${episode_info[i].episode_length}" type="audio/mpeg"/>

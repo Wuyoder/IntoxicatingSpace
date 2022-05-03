@@ -1,4 +1,4 @@
-import { NavLink } from 'react-router-dom';
+import { NavLink, Link } from 'react-router-dom';
 import { COUNTER_LOGINS, SEARCH } from '../global/constants';
 import React, { useEffect, useContext, useState } from 'react';
 import axios from 'axios';
@@ -29,7 +29,7 @@ const Withyou = () => {
 };
 
 const Topbar = () => {
-  const { search, setSearch } = useContext(AppContext);
+  const { search, setSearch, podcastplayer, audio } = useContext(AppContext);
   const gosearch = async () => {
     if (document.getElementById('search_input').value !== '') {
       const res = await axios.post(SEARCH, {
@@ -65,6 +65,20 @@ const Topbar = () => {
           Intoxicating Space <Withyou />
         </p>
       </div>
+      <Link
+        to={`/episode/${localStorage.getItem('nowplay_url').split('/')[4]}`}
+        id='now_link'
+      >
+        <div id='nowplay_btn'>
+          {(() => {
+            if (localStorage.getItem('nowplay_title') !== 'undefined') {
+              return localStorage.getItem('nowplay_title');
+            } else {
+              return null;
+            }
+          })()}
+        </div>
+      </Link>
       <div className='search_container'>
         <div className='search_item'>
           <TextField
