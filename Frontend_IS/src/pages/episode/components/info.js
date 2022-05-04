@@ -86,9 +86,12 @@ const Info = () => {
               <Button
                 onClick={() => {
                   changeplay();
-                  localStorage.setItem('nowplay_title', info.item?.title);
-                  localStorage.setItem('nowplay_url', window.location);
                   localStorage.setItem('episode', localStorage.getItem('last'));
+                  localStorage.setItem('nowplay_title', info.item?.title);
+                  localStorage.setItem(
+                    'nowplay_url',
+                    window.location.pathname.split('/')[2]
+                  );
                 }}
                 id='play_btn'
               >

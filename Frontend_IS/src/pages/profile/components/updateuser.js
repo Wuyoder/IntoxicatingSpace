@@ -51,7 +51,6 @@ const Updateuser = () => {
     e.preventDefault();
     const imageInput = document.querySelector('#imageInput');
     const file = imageInput.files[0];
-    console.log(imageInput.files[0]);
 
     if (imageInput.files[0]) {
       const res = await axios.post(
@@ -78,7 +77,6 @@ const Updateuser = () => {
             console.log(percentCompleted);
           },
         });
-        console.log(s3res);
 
         localStorage.setItem('user_image', res.data.presignedURL.split('?')[0]);
         setImgurl(res.data.presignedURL.split('?')[0]);

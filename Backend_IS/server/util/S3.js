@@ -10,6 +10,7 @@ const { jwtwrap } = require('./jwt');
 const { v4 } = require('uuid');
 
 const s3upload = async (req, res) => {
+  console.log(req.body);
   const who = await jwtwrap(req);
   if (who.error) {
     return res.json(who);
@@ -48,6 +49,7 @@ const s3upload = async (req, res) => {
     presignedURL: uploadURL,
     Key,
   };
+  //console.log('s3', result);
   return res.send(result);
 };
 

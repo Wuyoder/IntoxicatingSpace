@@ -21,7 +21,7 @@ const Creator = () => {
   const [creatorprofile, setCreatorprofile] = useState([]);
   const [creatorepisode, setCreatorepisode] = useState([]);
   const [updateuser, setUpdateuser] = useState(true);
-  const [updatcreator, setUpdatecreator] = useState(true);
+  const [updatcreator, setUpdatecreator] = useState(false);
   const [newepisode, setNewepisode] = useState(true);
   const [biguser, setBiguser] = useState(true);
   const [bigcreator, setBigcreator] = useState(false);

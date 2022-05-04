@@ -6,8 +6,35 @@ import AudioPlayer from 'react-h5-audio-player';
 import 'react-h5-audio-player/lib/styles.css';
 import { AppContext } from '../App';
 import { Button, TextField } from '@mui/material';
-
+import { QRCodeSVG } from 'qrcode.react';
+import { QRCodeCanvas } from 'qrcode.react';
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
 const Withyou = () => {
+  const MySwal = withReactContent(Swal);
+
+  MySwal.fire({
+    title: (
+      <>
+        <h4 className='alert'>Keep Looking.</h4>
+        <h4> Don't settle.</h4>
+      </>
+    ),
+    didOpen: () => {
+      // `MySwal` is a subclass of `Swal` with all the same instance & static methods
+      //MySwal.showLoading();
+    },
+  });
+  // .then(() => {
+  //   return MySwal.fire(
+  //     <>
+  //       <h1 className='alert'>Keep Looking.</h1>
+  //       <br />
+  //       <h1> Don't settle.</h1>
+  //     </>
+  //   );
+  // }
+  //);
   const [counterlogins, setCounterlogins] = useState(0);
 
   useEffect(() => {
@@ -66,7 +93,7 @@ const Topbar = () => {
         </p>
       </div>
       <Link
-        to={`/episode/${localStorage.getItem('nowplay_url').split('/')[4]}`}
+        to={`/episode/${localStorage.getItem('nowplay_url')}`}
         id='now_link'
       >
         <div id='nowplay_btn'>
@@ -112,7 +139,7 @@ let activeStyle = {
 
 const Sidebar = ({ member }) => {
   const gologout = () => {
-    localStorage.clear('token');
+    localStorage.clear();
     alert('SeeYa');
     window.location.replace('/');
   };
@@ -191,6 +218,9 @@ const Sidebar = ({ member }) => {
             </div>
           </>
         ) : null}
+      </div>
+      <div>
+        <QRCodeSVG value={window.location} />
       </div>
 
       <div className='sidebar-container'></div>

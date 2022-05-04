@@ -14,6 +14,7 @@ const {
   historylist,
   sublist,
   subshows,
+  myshowpage,
 } = require('../controller/show_controller');
 const { showkeyword } = require('../controller/search_controller');
 const { counter_logins } = require('../controller/counter_controller');
@@ -39,6 +40,7 @@ router.route('/creatorprofile').put(updatecreator);
 router.route('/counter_logins').get(counter_logins);
 router.route('/rss/:rss').get(rssfeed);
 router.route('/showlist').get(showlist);
+router.route('/myshowpage').get(myshowpage);
 router.route('/ishostshow').get(ishostshow);
 router.route('/showchoice/:id').get(showchoice);
 router.route('/episodechoice/:episode').get(episodechoice);

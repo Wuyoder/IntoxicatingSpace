@@ -37,7 +37,7 @@ const Chatroom = () => {
 
   useEffect(() => {
     if (ws) {
-      console.log('success connect!');
+      // console.log('success connect!');
       initWebSocket();
     }
   }, [ws]);
@@ -48,7 +48,7 @@ const Chatroom = () => {
       // compare podcastplayer to div hash? value?
       if (!open[0]) {
         scrolltarget.scrollTop = 0;
-        console.log('currentTime', podcastplayer);
+        //  console.log('currentTime', podcastplayer);
       } else {
         let i = 0;
         while (open[i]?.chat_episode_time <= podcastplayer) {
@@ -91,8 +91,6 @@ const Chatroom = () => {
   const enter = (e) => {
     let msg = document.getElementById('msg').value;
     if (e.key === 'Enter' && msg !== '') {
-      console.log(e.key);
-      console.log(msg);
       document.getElementById('send_msg').click();
     }
   };

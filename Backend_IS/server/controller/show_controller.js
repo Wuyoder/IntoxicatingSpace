@@ -80,6 +80,18 @@ const showlist = async (req, res) => {
   res.json(data);
 };
 
+const myshowpage = async (req, res) => {
+  const who = await jwtwrap(req);
+  if (who.error) {
+    return res.json(who);
+  }
+  const [rss_id] = await db.query(
+    'SELECT a.rss_id FROM rss AS a RIGHT JOIN creators_shows AS b ON a.rss_title = b.show_name WHERE b.user_id = ?',
+    [who.id]
+  );
+  res.json({ rss_id: rss_id[0].rss_id });
+};
+
 const showchoice = async (req, res) => {
   const id = req.params.id;
   const [show_choice] = await db.query(
@@ -430,4 +442,5 @@ module.exports = {
   historylist,
   sublist,
   subshows,
+  myshowpage,
 };
