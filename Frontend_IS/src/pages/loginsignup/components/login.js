@@ -1,27 +1,37 @@
 import axios from 'axios';
 import { LOGIN } from '../../../global/constants';
-import {
-  Button,
-  Card,
-  CardContent,
-  CardMedia,
-  CardActionArea,
-  Typography,
-  TextField,
-} from '@mui/material';
+import { Button, TextField } from '@mui/material';
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
 const Login = () => {
+  const MySwal = withReactContent(Swal);
   const gologin = async () => {
     const email = document.getElementById('L_email').value;
     const pwd = document.getElementById('L_pwd').value;
     const l_result = await axios.post(LOGIN, { email: email, pwd: pwd });
     if (l_result.data.error) {
-      alert(l_result.data.error);
+      MySwal.fire({
+        title: (
+          <>
+            <h4 className='alert'>{l_result.data.error}</h4>
+          </>
+        ),
+      });
     }
     if (l_result.data.data) {
-      console.log(l_result.data);
       localStorage.setItem('token', l_result.data.data.token);
       localStorage.setItem('user_image', l_result.data.data.user.image);
       localStorage.setItem('creator_image', l_result.data.data.show_image);
+      MySwal.fire({
+        title: (
+          <>
+            <h4 className='alert'>Intoxicating Space.</h4>
+          </>
+        ),
+        didOpen: () => {
+          MySwal.showLoading();
+        },
+      });
       window.location.replace('/');
     }
   };

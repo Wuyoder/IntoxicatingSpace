@@ -8,9 +8,10 @@ const jwt = require('jsonwebtoken');
 const signup = async (req, res) => {
   const { name, email, pwd, birth } = req.body;
   const validation = joi.validate({
-    name: name,
-    email: email,
-    pwd: pwd,
+    Username: name,
+    Email: email,
+    Password: pwd,
+    Birthday: birth,
   });
   image = 'https://intoxicating.s3.ap-northeast-1.amazonaws.com/IS_LOGO.png';
   if (validation.error) {
@@ -36,67 +37,71 @@ const signup = async (req, res) => {
   } else {
     adult = 0;
   }
-  await db.query('START TRANSACTION');
-  const newuser = await db.query(
-    'INSERT INTO users ( user_name, user_email, user_status, user_password, user_provider, user_provider_ID, user_image, user_birth, user_adult, user_role) VALUES (?,?,?,?,?,?,?,?,?,?)',
-    [name, email, 1, hashed_pwd, 'native', 'none', image, birth, adult, 2]
-  );
+  try {
+    await db.query('START TRANSACTION');
+    const newuser = await db.query(
+      'INSERT INTO users ( user_name, user_email, user_status, user_password, user_provider, user_provider_ID, user_image, user_birth, user_adult, user_role) VALUES (?,?,?,?,?,?,?,?,?,?)',
+      [name, email, 1, hashed_pwd, 'native', 'none', image, birth, adult, 2]
+    );
 
-  const [id] = await db.query(
-    'SELECT user_id FROM users WHERE user_email = ?',
-    [email]
-  );
-  const user_id = id[0].user_id;
-  const show_id = uuid.v4();
-  const show_des = 'This is ' + name + "'s Podcast show!";
-  const show_explicit = 0;
-  const show_category_main = 'Leisure';
-  const show_category_sub = 'Hobbies';
-  const newcreator = await db.query(
-    'INSERT INTO creators_shows (user_id, show_id,show_name, show_des, show_image, show_explicit, show_category_main, show_category_sub,  show_subscriber, show_status, show_click, creator_name, creator_email, creator_status) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)',
-    [
-      user_id,
-      show_id,
-      `${name}'s Podcast!`,
-      show_des,
-      image,
-      show_explicit,
-      show_category_main,
-      show_category_sub,
-      0,
-      1,
-      0,
-      name,
-      email,
-      0,
-    ]
-  );
-  await db.query(
-    'INSERT INTO counters (user_id, counter_logins) VALUES (?,?)',
-    [user_id, 1]
-  );
-  await db.query(
-    `INSERT INTO rss (rss_title, rss_url, rss_creator, rss_image, rss_explicit, rss_category_main, rss_category_sub, rss_hot, rss_status) VALUES (?,?,?,?,?,?,?,?,?);`,
+    const [id] = await db.query(
+      'SELECT user_id FROM users WHERE user_email = ?',
+      [email]
+    );
+    const user_id = id[0].user_id;
+    const show_id = uuid.v4();
+    const show_des = 'This is ' + name + "'s Podcast show!";
+    const show_explicit = 0;
+    const show_category_main = 'Leisure';
+    const show_category_sub = 'Hobbies';
+    const newcreator = await db.query(
+      'INSERT INTO creators_shows (user_id, show_id,show_name, show_des, show_image, show_explicit, show_category_main, show_category_sub,  show_subscriber, show_status, show_click, creator_name, creator_email, creator_status) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)',
+      [
+        user_id,
+        show_id,
+        `${name}'s Podcast!`,
+        show_des,
+        image,
+        show_explicit,
+        show_category_main,
+        show_category_sub,
+        0,
+        1,
+        0,
+        name,
+        email,
+        0,
+      ]
+    );
+    await db.query(
+      'INSERT INTO counters (user_id, counter_logins) VALUES (?,?)',
+      [user_id, 1]
+    );
+    await db.query(
+      `INSERT INTO rss (rss_title, rss_url, rss_creator, rss_image, rss_explicit, rss_category_main, rss_category_sub, rss_hot, rss_status) VALUES (?,?,?,?,?,?,?,?,?);`,
 
-    [
-      `${name}'s Podcast!`,
-      `https://intoxicating.space/api/1.0/user/rss/${show_id}`,
-      name,
-      image,
-      show_explicit,
-      show_category_main,
-      show_category_sub,
-      1,
-      0,
-    ]
-  );
-  await db.query('COMMIT');
-  //const upload = await s3upload('123', 'user', 'image/jpeg', 'test.jpg');
+      [
+        `${name}'s Podcast!`,
+        `https://intoxicating.space/api/1.0/user/rss/${show_id}`,
+        name,
+        image,
+        show_explicit,
+        show_category_main,
+        show_category_sub,
+        1,
+        0,
+      ]
+    );
+    await db.query('COMMIT');
+    //const upload = await s3upload('123', 'user', 'image/jpeg', 'test.jpg');
 
-  return res.status(200).json({
-    status:
-      'Your account has been successfully created. Please turn to signin.',
-  });
+    return res.status(200).json({
+      status:
+        'Your account has been successfully created. Please turn to signin.',
+    });
+  } catch (err) {
+    return res.json({ error: err });
+  }
 };
 
 const signin = async (req, res) => {

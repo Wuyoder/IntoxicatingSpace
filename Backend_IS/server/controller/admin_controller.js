@@ -40,7 +40,6 @@ const newrss = async (req, res) => {
     }
     const hot = 1;
     insert += `("${title}","${url}","${creator}","${image}",${explicit},"${category_main}","${category_sub}","${hot}", 1),`;
-    console.log(title);
   }
   const insertAll = insert.slice(0, insert.length - 1);
   mysql.newrss(insertAll);

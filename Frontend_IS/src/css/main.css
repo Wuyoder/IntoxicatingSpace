@@ -554,7 +554,7 @@ fieldset.MuiOutlinedInput-notchedOutline.css-1d3z3hw-MuiOutlinedInput-notchedOut
   justify-content: space-around;
 }
 .css-1v5z4dq-MuiPaper-root-MuiCard-root {
-  background: linear-gradient(#15191e, #222a32);
+  background: linear-gradient(#222931, #29323b);
   border: 2px solid #1c2228 !important;
 }
 .css-1gqyz35-MuiTypography-root {
@@ -898,6 +898,9 @@ fieldset.MuiOutlinedInput-notchedOutline.css-1d3z3hw-MuiOutlinedInput-notchedOut
   min-width: 28vw;
 }
 /* CREATOR USER PROFILE  ---------------------------------------------------*/
+#userimage {
+  margin-top: 2vh;
+}
 #profile_info {
   padding: 3vw;
   width: 60vw;
@@ -1005,9 +1008,10 @@ fieldset.MuiOutlinedInput-notchedOutline.css-1d3z3hw-MuiOutlinedInput-notchedOut
   color: #6f96a6;
 }
 #uploadPercent {
-  color: aliceblue;
+  color: #6f96a6;
 }
 #pre_upload {
+  margin-top: 2vh;
   color: #6f96a6;
 }
 #upuser_image {
@@ -1017,6 +1021,9 @@ fieldset.MuiOutlinedInput-notchedOutline.css-1d3z3hw-MuiOutlinedInput-notchedOut
   margin: 1vh 0 0 -12vw;
 }
 /* CREATOR CREATOR PODCAST  ---------------------------------------------------*/
+#showimage {
+  margin-top: 2vh;
+}
 #show_image {
   max-width: 10vw;
   max-height: 10vw;
@@ -1133,9 +1140,12 @@ fieldset.MuiOutlinedInput-notchedOutline.css-1d3z3hw-MuiOutlinedInput-notchedOut
   border: 2px solid #6f96a6;
   width: 12vw;
   margin-left: -1vw;
+  margin-top: 1vh;
+  margin-bottom: -2vh;
 }
 #QRcode {
   margin-top: 5vh;
+  margin-top: 35vh;
   margin-bottom: 1vh;
 }
 #copyQRcode {
@@ -1148,6 +1158,14 @@ fieldset.MuiOutlinedInput-notchedOutline.css-1d3z3hw-MuiOutlinedInput-notchedOut
   text-decoration: none;
 }
 /* CREATOR EPISODE  ---------------------------------------------------*/
+#nowimage {
+  margin-left: 2vw;
+  margin-top: -16vh;
+}
+#nowfile {
+  margin-left: 2vw;
+  margin-top: 3vh;
+}
 #allepi_container {
   display: flex;
   flex-direction: column;
@@ -1231,6 +1249,8 @@ fieldset.MuiOutlinedInput-notchedOutline.css-1d3z3hw-MuiOutlinedInput-notchedOut
   color: aliceblue;
   padding-left: 2vw;
   padding-right: 2vw;
+  background-color: #274050;
+  border-radius: 20px;
 }
 
 #newepi_explicit,
@@ -1239,10 +1259,12 @@ fieldset.MuiOutlinedInput-notchedOutline.css-1d3z3hw-MuiOutlinedInput-notchedOut
   border-radius: 50px;
   height: 4vh;
   padding-left: 10vw;
+  color: #6f96a6;
 }
 #single_update_btn,
 #single_status_on,
-#single_status_off {
+#single_status_off,
+#single_epi_remove {
   background-color: #091d2d;
   color: aliceblue;
   border: 2px solid #6f96a6;
@@ -1254,6 +1276,10 @@ fieldset.MuiOutlinedInput-notchedOutline.css-1d3z3hw-MuiOutlinedInput-notchedOut
   background-color: #677980;
 }
 
+#single_epi_remove {
+  color: #6e151f;
+  background-color: #555c5f;
+}
 #show_status_on,
 #show_status_off {
   background-color: #091d2d;
@@ -1283,6 +1309,7 @@ fieldset.MuiOutlinedInput-notchedOutline.css-1d3z3hw-MuiOutlinedInput-notchedOut
 #uploadPercent1,
 #uploadPercent2 {
   color: aliceblue;
+  margin-top: 2vh;
 }
 #newepi_btn {
   background-color: #091d2d;
@@ -1306,9 +1333,20 @@ fieldset.MuiOutlinedInput-notchedOutline.css-1d3z3hw-MuiOutlinedInput-notchedOut
 }
 #newepi_title {
   color: aliceblue;
+  background-color: #274050;
+  border-radius: 20px;
   padding-left: 3vw;
   padding-right: 3vw;
 }
+#create_newepi_title {
+  color: aliceblue;
+  height: 5vh;
+  background-color: #274050;
+  border-radius: 20px;
+  padding-left: 3vw;
+  padding-right: 3vw;
+}
+
 #episode_des {
   background-color: #181c22 !important;
   border-radius: 20px;
@@ -1369,8 +1407,17 @@ fieldset.MuiOutlinedInput-notchedOutline.css-1d3z3hw-MuiOutlinedInput-notchedOut
   color: aliceblue;
 }
 .swal2-container.swal2-center > .swal2-popup {
-  background: linear-gradient(#6f96a6, #495663);
+  background-color: #7794a0;
   border: solid 5px aliceblue;
+}
+.swal2-styled.swal2-confirm {
+  background-color: #222a32;
+}
+.swal2-styled.swal2-confirm {
+  background-color: #274050 !important;
+}
+.swal2-styled.swal2-cancel {
+  background-color: #851b1b !important;
 }
 /* DEPLOY TEST RESIVE ---------------------------------------------------*/
 .css-1okfn8i {
@@ -1395,7 +1442,7 @@ fieldset.MuiOutlinedInput-notchedOutline.css-1d3z3hw-MuiOutlinedInput-notchedOut
   background-color: #274050 !important;
 }
 #new_show_category {
-  background-color: #274050 !important;
+  background-color: #1b242d !important;
 }
 .css-p0rm37 {
   color: aliceblue !important;

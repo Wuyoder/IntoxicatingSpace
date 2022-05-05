@@ -15,6 +15,7 @@ const {
   sublist,
   subshows,
   myshowpage,
+  episoderemove,
 } = require('../controller/show_controller');
 const { showkeyword } = require('../controller/search_controller');
 const { counter_logins } = require('../controller/counter_controller');
@@ -48,6 +49,7 @@ router.route('/showsubscribe').post(showsubscribe);
 router.route('/showunsub').post(showunsub);
 router.route('/switcher').post(switcher);
 router.route('/episode').post(episode);
+router.route('/episode').delete(episoderemove);
 router.route('/episode').put(updateepisode);
 router.route('/showkeyword').post(showkeyword);
 router.route('/chatmsg').post(chatmsg);

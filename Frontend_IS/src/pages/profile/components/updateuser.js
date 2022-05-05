@@ -3,11 +3,15 @@ import { useEffect, useState } from 'react';
 import { UPDATE_USER, USER_PROFILE, S3 } from '../../../global/constants';
 import Image from './image';
 import { Button, Card, TextField } from '@mui/material';
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
 const Updateuser = () => {
+  const MySwal = withReactContent(Swal);
   const [userprofile, setUserprofile] = useState({});
   const [username, setUsername] = useState([]);
   const [useremail, setUseremail] = useState([]);
   const [imgurl, setImgurl] = useState('');
+  const [image, setImage] = useState([]);
   useEffect(() => {
     const getuserprofile = async () => {
       const res = await axios.get(USER_PROFILE, {
@@ -39,8 +43,15 @@ const Updateuser = () => {
       localStorage.setItem('token', res.data.token);
       setUsername(res.data.user_name);
       setUseremail(res.data.user_email);
+      MySwal.fire({
+        icon: 'success',
+        title: <h4 id='alert'>User Info Changed.</h4>,
+      });
     } else {
-      alert(res.data.error);
+      MySwal.fire({
+        icon: 'error',
+        title: <h4 id='alert'>{res.data.error}</h4>,
+      });
     }
     document.getElementById('new_name').value = '';
     document.getElementById('new_email').value = '';
@@ -51,6 +62,25 @@ const Updateuser = () => {
     e.preventDefault();
     const imageInput = document.querySelector('#imageInput');
     const file = imageInput.files[0];
+    if (!file) {
+      MySwal.fire({
+        icon: 'error',
+        title: <h4 id='alert'>Please Choose New Image First.</h4>,
+      });
+      return;
+    }
+    MySwal.fire({
+      icon: 'info',
+      title: (
+        <>
+          <h4 id='alert'>Please Wait For Uploading.</h4>
+          <div id='waitpercent'></div>
+        </>
+      ),
+      showConfirmButton: false,
+      allowOutsideClick: false,
+      allowEscapeKey: false,
+    });
 
     if (imageInput.files[0]) {
       const res = await axios.post(
@@ -69,12 +99,11 @@ const Updateuser = () => {
             var percentCompleted = Math.round((e.loaded * 100) / e.total);
             if (percentCompleted < 100) {
               document.getElementById(
-                'uploadPercent'
+                'waitpercent'
               ).innerHTML = `${percentCompleted}%`;
             } else {
-              document.getElementById('uploadPercent').innerHTML = 'completed!';
+              document.getElementById('waitpercent').innerHTML = 'completed!';
             }
-            console.log(percentCompleted);
           },
         });
 
@@ -95,12 +124,25 @@ const Updateuser = () => {
         }
       }
     } else {
-      alert('please choose new image first');
+      MySwal.fire({
+        icon: 'error',
+        title: <h4 id='alert'>Please Choose New Image First.</h4>,
+      });
     }
-    document.getElementById('user_image').src =
+    document.getElementById('update_userprofile_image').src =
       localStorage.getItem('user_image');
+    MySwal.fire({
+      icon: 'success',
+      title: <h4 id='alert'>User Image Changed.</h4>,
+    });
   };
-
+  const nowimage = () => {
+    if (document.getElementById('imageInput').files[0]) {
+      setImage(document.getElementById('imageInput').files[0].name);
+    } else {
+      setImage('');
+    }
+  };
   return (
     <>
       <div className='profile_title'>User Profile Update</div>
@@ -117,6 +159,7 @@ const Updateuser = () => {
                   type='file'
                   accept='image/*'
                   Style='display:none'
+                  onChange={nowimage}
                 />
               </div>
             </form>
@@ -139,9 +182,7 @@ const Updateuser = () => {
                   </Button>
                 </div>
               </div>
-              <div id='uploadPercent'>
-                <div id='pre_upload'>upload progress...</div>
-              </div>
+              <div id='userimage'>{image}</div>
             </div>
           </div>
         </div>

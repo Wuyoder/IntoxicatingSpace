@@ -1,20 +1,12 @@
 import { useEffect, useState, useContext } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { SHOWCHOICE, USER_HISTORY } from '../../../global/constants';
 import { AppContext } from '../../../App';
-import {
-  Button,
-  Card,
-  CardContent,
-  CardMedia,
-  CardActionArea,
-  Typography,
-} from '@mui/material';
+import { Card } from '@mui/material';
 const ShowEpisode = () => {
   const [episode, setEpisode] = useState([]);
-  const { episodeid, setEpisodeid, episodeurl, setEpisodeurl, test } =
-    useContext(AppContext);
+  const { setEpisodeid } = useContext(AppContext);
   useEffect(() => {
     const getEpisode = async () => {
       const res = await axios.get(

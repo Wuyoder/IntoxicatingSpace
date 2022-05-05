@@ -1,6 +1,4 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
-import Container from 'react-bootstrap/Container';
-import Col from 'react-bootstrap/Col';
 import { Link } from 'react-router-dom';
 import React from 'react';
 import { USER_HISTORY } from '../../../global/constants';
@@ -23,6 +21,7 @@ const HotShow = ({ item }) => {
       }
     );
   };
+  console.log();
 
   return (
     <Link

@@ -8,6 +8,7 @@ import {
 } from '../../../global/constants';
 import { Helmet } from 'react-helmet';
 import { Button, Card, CardContent, Typography } from '@mui/material';
+
 const ShowInfo = () => {
   const [info, setInfo] = useState([]);
   const [originsub, setOriginsub] = useState(false);
@@ -152,22 +153,15 @@ const ShowInfo = () => {
         </div>
         <div className='show_info_r'>
           <Card variant='outlined' id='show_info_r'>
-            <div className='show_des' id='des'>
-              {document.getElementById('des')
-                ? (() => {
-                    document.getElementById('des').innerHTML = info.description;
-                  })()
-                : info.description}
-              {description ? (
-                <button onClick={more}>more</button>
-              ) : (
-                <button onClick={less}>less</button>
-              )}
-            </div>
-            <div></div>
+            <div className='show_des' id='des'></div>
           </Card>
         </div>
       </div>
+      {(() => {
+        if (info.description !== undefined) {
+          document.getElementById('des').innerHTML = info.description;
+        }
+      })()}
     </>
   );
 };

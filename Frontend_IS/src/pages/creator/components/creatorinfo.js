@@ -5,7 +5,10 @@ import { QRCodeCanvas } from 'qrcode.react';
 import { Button } from '@mui/material';
 import { Link } from 'react-router-dom';
 import html2canvas from 'html2canvas';
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
 const Creatorinfo = () => {
+  const MySwal = withReactContent(Swal);
   const [cprofile, setCprofile] = useState([]);
   const [showstatus, setShowstatus] = useState(false);
   const [rssid, setRssid] = useState('');
@@ -15,7 +18,6 @@ const Creatorinfo = () => {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
       });
       setCprofile(res.data[0]);
-      console.log('showstatus', res.data[0].show_status);
       if (res.data[0].show_status === 1) {
         setShowstatus(true);
       } else {
@@ -44,6 +46,22 @@ const Creatorinfo = () => {
       }
     );
     setShowstatus(!showstatus);
+    MySwal.fire({
+      icon: 'info',
+      title: (
+        <h4 id='alert'>
+          Your Show Status Switch to :
+          {(() => {
+            console.log(showstatus);
+            if (showstatus) {
+              return ' OFF';
+            } else {
+              return ' ON';
+            }
+          })()}
+        </h4>
+      ),
+    });
   };
 
   return (
@@ -76,7 +94,18 @@ const Creatorinfo = () => {
           <div>
             {cprofile.show_category_main}-{cprofile.show_category_sub}
           </div>
-          <div>
+          <div
+            onClick={() => {
+              navigator.clipboard.writeText(
+                'https://intoxicating.space/api/1.0/user/rss/' +
+                  cprofile.show_id
+              );
+              MySwal.fire({
+                icon: 'success',
+                title: <h4 id='alert'>RSS Feed's URL copied!</h4>,
+              });
+            }}
+          >
             <input
               id='rssfeed'
               value={
@@ -84,13 +113,6 @@ const Creatorinfo = () => {
                 cprofile.show_id
               }
               unselectable='on'
-              onClick={() => {
-                navigator.clipboard.writeText(
-                  'https://intoxicating.space/api/1.0/user/rss/' +
-                    cprofile.show_id
-                );
-                alert("RSS Feed's URL copied!");
-              }}
             ></input>
           </div>
           <div>{cprofile?.show_time_update?.split('T')[0]}</div>
@@ -106,7 +128,16 @@ const Creatorinfo = () => {
               </Button>
             )}
           </div>
-          <div>
+          <div
+            onClick={() => {
+              MySwal.fire({
+                timer: 1500,
+                didOpen: () => {
+                  Swal.showLoading();
+                },
+              });
+            }}
+          >
             <Link to={`/showchoice/${rssid}`} id='linktomypage'>
               <Button id='gomypage'>MY PAGE PAGE</Button>
             </Link>
@@ -131,7 +162,16 @@ const Creatorinfo = () => {
                   ])
                 )
               );
-              alert(`Podcast "${cprofile.show_name}" QRcode copied!`);
+              MySwal.fire({
+                icon: 'success',
+                title: (
+                  <>
+                    <h4 className='alert'>
+                      Podcast "{cprofile.show_name}" QRcode copied!
+                    </h4>
+                  </>
+                ),
+              });
             }}
             id='copyQRcode'
           >

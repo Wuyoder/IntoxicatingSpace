@@ -6,37 +6,10 @@ import AudioPlayer from 'react-h5-audio-player';
 import 'react-h5-audio-player/lib/styles.css';
 import { AppContext } from '../App';
 import { Button, TextField } from '@mui/material';
-import { QRCodeSVG } from 'qrcode.react';
-import { QRCodeCanvas } from 'qrcode.react';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 const Withyou = () => {
-  const MySwal = withReactContent(Swal);
-
-  MySwal.fire({
-    title: (
-      <>
-        <h4 className='alert'>Keep Looking.</h4>
-        <h4> Don't settle.</h4>
-      </>
-    ),
-    didOpen: () => {
-      // `MySwal` is a subclass of `Swal` with all the same instance & static methods
-      //MySwal.showLoading();
-    },
-  });
-  // .then(() => {
-  //   return MySwal.fire(
-  //     <>
-  //       <h1 className='alert'>Keep Looking.</h1>
-  //       <br />
-  //       <h1> Don't settle.</h1>
-  //     </>
-  //   );
-  // }
-  //);
   const [counterlogins, setCounterlogins] = useState(0);
-
   useEffect(() => {
     const getCounter = async () => {
       const res = await axios.get(COUNTER_LOGINS, {
@@ -65,6 +38,7 @@ const Topbar = () => {
       document.getElementById('search_input').value = '';
       if (res.data.error !== 'no keyword') {
         setSearch(res.data);
+        document.getElementById('gotosearch').click();
       } else {
         setSearch({ error: 'no keyword' });
       }
@@ -76,14 +50,6 @@ const Topbar = () => {
       document.getElementById('search_btn').click();
     }
   };
-
-  //  <div>
-  //    <img
-  //      id='main_logo'
-  //      alt='main_logo'
-  //      src='https://intoxicating.s3.ap-northeast-1.amazonaws.com/IS_LOGO.png'
-  //    ></img>
-  //  </div>;
 
   return (
     <div id='topbar'>
@@ -117,16 +83,19 @@ const Topbar = () => {
           ></TextField>
         </div>
         <div className='search_item'>
-          <NavLink to='/search' Style='text-decoration:none'>
-            <Button
-              variant='contained'
-              id='search_btn'
-              onClick={gosearch}
-              className='search_btn'
-            >
-              Search
-            </Button>
-          </NavLink>
+          <Link to='/search' Style='text-decoration:none'>
+            <button id='gotosearch' Style='display:none'>
+              go
+            </button>
+          </Link>
+          <Button
+            variant='contained'
+            id='search_btn'
+            onClick={gosearch}
+            className='search_btn'
+          >
+            Search
+          </Button>
         </div>
       </div>
     </div>
@@ -138,9 +107,19 @@ let activeStyle = {
 };
 
 const Sidebar = ({ member }) => {
+  const MySwal = withReactContent(Swal);
   const gologout = () => {
     localStorage.clear();
-    alert('SeeYa');
+    MySwal.fire({
+      title: (
+        <>
+          <h4 className='alert'>SeeYa</h4>
+        </>
+      ),
+      didOpen: () => {
+        MySwal.showLoading();
+      },
+    });
     window.location.replace('/');
   };
   return (
@@ -218,9 +197,6 @@ const Sidebar = ({ member }) => {
             </div>
           </>
         ) : null}
-      </div>
-      <div>
-        <QRCodeSVG value={window.location} />
       </div>
 
       <div className='sidebar-container'></div>

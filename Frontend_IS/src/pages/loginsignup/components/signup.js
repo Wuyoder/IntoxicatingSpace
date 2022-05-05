@@ -9,7 +9,10 @@ import {
   Typography,
   TextField,
 } from '@mui/material';
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
 const Signup = () => {
+  const MySwal = withReactContent(Swal);
   const gosignup = async () => {
     const name = document.getElementById('S_name').value;
     const email = document.getElementById('S_email').value;
@@ -22,11 +25,26 @@ const Signup = () => {
       birth: birth,
     });
     if (s_result.data.error) {
-      alert(s_result.data.error);
+      MySwal.fire({
+        title: (
+          <>
+            <h4 className='alert'>{s_result.data.error}</h4>
+          </>
+        ),
+      });
     }
     if (s_result.data.status) {
-      console.log(s_result);
-      alert(s_result.data.status);
+      MySwal.fire({
+        title: (
+          <>
+            <h4 className='alert'>Please Sign in.</h4>
+          </>
+        ),
+        didOpen: () => {
+          MySwal.showLoading();
+        },
+      });
+      window.location.replace('/login');
     }
   };
 

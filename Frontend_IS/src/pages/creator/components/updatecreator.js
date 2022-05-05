@@ -8,8 +8,12 @@ import {
 } from '../../../global/constants';
 import { UPDATE_CREATOR } from '../../../global/constants';
 import { Button, Card, MenuItem, Select, TextField } from '@mui/material';
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
 const Updatecreator = ({ creatorprofile }) => {
+  const MySwal = withReactContent(Swal);
   const [cprofile, setCprofile] = useState([]);
+  const [image, setImage] = useState([]);
   useEffect(() => {
     const getcreatorinfo = async () => {
       const res = await axios.get(CREATOR_PROFILE, {
@@ -18,7 +22,7 @@ const Updatecreator = ({ creatorprofile }) => {
       setCprofile(res.data[0]);
     };
     getcreatorinfo();
-  });
+  }, []);
 
   const goupdate = async () => {
     let new_creator_name = document.getElementById('new_creator_name').value;
@@ -40,6 +44,18 @@ const Updatecreator = ({ creatorprofile }) => {
       }
     );
 
+    if (res.data.error) {
+      MySwal.fire({
+        icon: 'error',
+        title: <h4 id='alert'>{res.data.error}</h4>,
+      });
+      return;
+    } else {
+      MySwal.fire({
+        icon: 'success',
+        title: <h4 id='alert'>Creator Info Changed.</h4>,
+      });
+    }
     document.getElementById('new_creator_name').value = '';
     document.getElementById('new_creator_email').value = '';
     document.getElementById('new_show_name').value = '';
@@ -51,6 +67,27 @@ const Updatecreator = ({ creatorprofile }) => {
     e.preventDefault();
     const imageInput = document.getElementById('new_show_image');
     const file = imageInput.files[0];
+    if (!file) {
+      MySwal.fire({
+        icon: 'error',
+        title: <h4 id='alert'>Nothing Changed.</h4>,
+      });
+      return;
+    }
+
+    MySwal.fire({
+      icon: 'info',
+      title: (
+        <>
+          <h4 id='alert'>Please Wait For Uploading.</h4>
+          <div id='waitpercent'></div>
+        </>
+      ),
+      showConfirmButton: false,
+      allowOutsideClick: false,
+      allowEscapeKey: false,
+    });
+
     const res = await axios.post(
       S3,
       { type: 'profile_image' },
@@ -67,12 +104,11 @@ const Updatecreator = ({ creatorprofile }) => {
           var percentCompleted = Math.round((e.loaded * 100) / e.total);
           if (percentCompleted < 100) {
             document.getElementById(
-              'uploadPercent'
+              'waitpercent'
             ).innerHTML = `${percentCompleted}%`;
           } else {
-            document.getElementById('uploadPercent').innerHTML = 'completed!';
+            document.getElementById('waitpercent').innerHTML = 'completed!';
           }
-          console.log(percentCompleted);
         },
       });
       localStorage.setItem(
@@ -80,7 +116,7 @@ const Updatecreator = ({ creatorprofile }) => {
         res.data.presignedURL.split('?')[0]
       );
       if (s3res.status === 200) {
-        await axios.put(
+        const update = await axios.put(
           UPDATE_CREATOR,
           {
             newshowimage: res.data.presignedURL.split('?')[0],
@@ -91,13 +127,27 @@ const Updatecreator = ({ creatorprofile }) => {
             },
           }
         );
-        localStorage.setItem(
-          'creator_image',
-          res.data.presignedURL.split('?')[0]
-        );
-        document.getElementById('show_iamge').src =
-          localStorage.getItem('creator_image');
+
+        if (update.data.status) {
+          localStorage.setItem(
+            'creator_image',
+            res.data.presignedURL.split('?')[0]
+          );
+          document.getElementById('show_image').src =
+            localStorage.getItem('creator_image');
+          MySwal.fire({
+            icon: 'success',
+            title: <h4 id='alert'>{update.data.status}</h4>,
+          });
+        }
       }
+    }
+  };
+  const nowimage = () => {
+    if (document.getElementById('new_show_image').files[0]) {
+      setImage(document.getElementById('new_show_image').files[0].name);
+    } else {
+      setImage('');
     }
   };
 
@@ -131,6 +181,7 @@ const Updatecreator = ({ creatorprofile }) => {
               id='new_show_image'
               type='file'
               accept='image/*'
+              onChange={nowimage}
             ></input>
             <div>
               <Button
@@ -142,9 +193,8 @@ const Updatecreator = ({ creatorprofile }) => {
                 Podcast image
               </Button>
             </div>
-            <div id='uploadPercent'>
-              <div id='pre_upload'>upload progress...</div>
-            </div>
+            <div></div>
+            <div id='showimage'>{image}</div>
           </form>
         </div>
         <div id='upcp_r'>

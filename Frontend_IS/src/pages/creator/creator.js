@@ -8,15 +8,7 @@ import Updateuser from '../profile/components/updateuser';
 import Updatecreator from './components/updatecreator';
 import Episode from '../creator/components/episode';
 import Newepisode from '../creator/components/newepisode';
-import {
-  Button,
-  Card,
-  CardContent,
-  CardMedia,
-  CardActionArea,
-  Typography,
-  TextField,
-} from '@mui/material';
+import { Button, Card } from '@mui/material';
 const Creator = () => {
   const [creatorprofile, setCreatorprofile] = useState([]);
   const [creatorepisode, setCreatorepisode] = useState([]);
@@ -103,11 +95,7 @@ const Creator = () => {
             )
           ) : null}
         </div>
-        <div>
-          {/* {creatorepisode.map((item) => {
-          return <Creatorepisode creatorepisode={item} />;
-        })} */}
-        </div>
+        <div></div>
         <div>
           <div>
             {bigepi ? (

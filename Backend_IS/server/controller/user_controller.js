@@ -44,7 +44,7 @@ const updateuser = async (req, res) => {
   }
   if (req.body.name !== '') {
     validation = Joiput.validate({
-      name: req.body.name,
+      Name: req.body.name,
     });
     if (validation.error) {
       return res.json({ error: validation.error.details[0].message });
@@ -53,7 +53,7 @@ const updateuser = async (req, res) => {
   }
   if (req.body.email !== '') {
     validation = Joiput.validate({
-      email: req.body.email,
+      Email: req.body.email,
     });
     if (validation.error) {
       return res.json({ error: validation.error.details[0].message });
@@ -62,7 +62,7 @@ const updateuser = async (req, res) => {
   }
   if (req.body.pwd !== '') {
     validation = Joiput.validate({
-      pwd: req.body.pwd,
+      Password: req.body.pwd,
     });
     if (validation.error) {
       return res.json({ error: validation.error.details[0].message });
@@ -108,6 +108,7 @@ const updatecreator = async (req, res) => {
   if (who.error) {
     return res.status(200).json({ error: who.error });
   }
+
   const [show_target] = await db.query(
     'SELECT show_id FROM creators_shows WHERE user_id = ?',
     [who.id]
@@ -136,11 +137,11 @@ const updatecreator = async (req, res) => {
     return res.json({ error: 'nothing change' });
   }
   if (
-    req.body.cname === '' &&
-    req.body.cmail === '' &&
-    req.body.sname === '' &&
-    req.body.sdes === '' &&
-    req.body.scategory === ''
+    req.body.cname == '' &&
+    req.body.cmail == '' &&
+    req.body.sname == '' &&
+    req.body.sdes == '' &&
+    req.body.scategory == ''
   ) {
     return res.json({ error: 'nothing change' });
   }
@@ -150,7 +151,7 @@ const updatecreator = async (req, res) => {
   }
   if (req.body.cmail !== '') {
     validation = Joiput.validate({
-      email: req.body.cmail,
+      Email: req.body.cmail,
     });
     if (validation.error) {
       return res.json({ error: validation.error.details[0].message });
@@ -161,25 +162,30 @@ const updatecreator = async (req, res) => {
     change += `show_name = '${req.body.sname}' ,`;
     rsschange += `rss_title = '${req.body.sname}' ,`;
   }
-  const category = req.body.scategory;
-  if (category !== 'choose new category') {
-    const cmain = category.split('_')[0];
-    const csub = category.split('_')[1];
-    change += `show_category_main = '${cmain}', show_category_sub = '${csub}' ,`;
-    rsschange += `rss_category_main = '${cmain}', rss_category_sub = '${csub}' ,`;
-  }
   if (req.body.sdes !== '') {
     change += `show_des = '${req.body.sdes}' ,`;
   }
+
+  if (
+    req.body.scategory !== '' &&
+    req.body.scategory !== 'choose new category'
+  ) {
+    const cmain = req.body.scategory.split('_')[0];
+    const csub = req.body.scategory.split('_')[1];
+    change += `show_category_main = '${cmain}', show_category_sub = '${csub}' ,`;
+    rsschange += `rss_category_main = '${cmain}', rss_category_sub = '${csub}' ,`;
+  }
   allchange = change.slice(0, change.length - 1);
-  allrsschange = rsschange.slice(0, rsschange.length - 1);
   const creatorquery =
     'UPDATE creators_shows SET ' + allchange + 'WHERE user_id = ?;';
-  const rssquery = 'UPDATE rss SET ' + allrsschange + 'WHERE rss_url LIKE ?;';
   const [creatorupdate] = await db.query(creatorquery, [who.id]);
-  const [rssupdate] = await db.query(rssquery, [`%${show_target[0].show_id}%`]);
-  console.log('creatorupdate', creatorupdate);
-  console.log('rssupdate', rssupdate);
+  if (rsschange !== '') {
+    allrsschange = rsschange.slice(0, rsschange.length - 1);
+    const rssquery = 'UPDATE rss SET ' + allrsschange + 'WHERE rss_url LIKE ?;';
+    const [rssupdate] = await db.query(rssquery, [
+      `%${show_target[0].show_id}%`,
+    ]);
+  }
   if (creatorupdate.affectedRows !== 0) {
     const [newcreatorinfo] = await db.query(
       'SELECT * FROM creators_shows WHERE user_id = ?',
@@ -188,7 +194,7 @@ const updatecreator = async (req, res) => {
     res.send(newcreatorinfo[0]);
   }
 };
-
+//TODO:
 const updateepisode = async (req, res) => {
   const who = await jwtwrap(req);
   if (who.error) {
@@ -197,14 +203,24 @@ const updateepisode = async (req, res) => {
   try {
     const infos = req.body;
     if (
-      infos.show_id === '' &&
-      infos.episode_id === '' &&
       infos.title === '' &&
       infos.des === '' &&
       infos.file === '' &&
-      infos.duration === '' &&
+      infos.duration === 0 &&
       infos.length === '' &&
       infos.explicit === '' &&
+      infos.image === '' &&
+      infos.episode === ''
+    ) {
+      return res.json({ error: 'nothing change' });
+    }
+    if (
+      infos.title === '' &&
+      infos.des === '' &&
+      infos.file === '' &&
+      infos.duration === 0 &&
+      infos.length === '' &&
+      infos.explicit === 'explicit status' &&
       infos.image === '' &&
       infos.episode === ''
     ) {

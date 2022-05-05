@@ -3,7 +3,7 @@ const RssParser = require('rss-parser');
 const rssparser = new RssParser();
 const { jwtwrap } = require('../util/jwt');
 const uuid = require('uuid');
-
+const Cache = require('../util/cache');
 const showlist = async (req, res) => {
   const who = await jwtwrap(req);
   if (who.error) {
@@ -91,8 +91,9 @@ const myshowpage = async (req, res) => {
   );
   res.json({ rss_id: rss_id[0].rss_id });
 };
-
+//TODO:要使用CACHE的地方就在這裡
 const showchoice = async (req, res) => {
+  //await Cache.set('test', 'test');
   const id = req.params.id;
   const [show_choice] = await db.query(
     'SELECT rss_url FROM rss WHERE rss_id = ?',
@@ -323,6 +324,18 @@ const userhistory = async (req, res) => {
   }
   res.status(200).json({ status: { type: req.body.type } });
 };
+const episoderemove = async (req, res) => {
+  const who = await jwtwrap(req);
+  if (who.error) {
+    return res.json(who);
+  }
+  const targetepi = req.body.episode_id;
+  const [showclose] = await db.query(
+    'UPDATE episodes SET episode_status = 2 WHERE episode_id = ? ',
+    [targetepi]
+  );
+  res.json({ status: `episode ${req.body.episode_id} already removed.` });
+};
 
 const episode = async (req, res) => {
   const who = await jwtwrap(req);
@@ -378,7 +391,7 @@ const ishostshow = async (req, res) => {
     [who.id]
   );
   const [host_episode] = await db.query(
-    'SELECT * FROM episodes WHERE show_id = ? ORDER BY episode_publish_date DESC',
+    'SELECT * FROM episodes WHERE show_id = ? AND episode_status = 1 OR episode_status = 0 ORDER BY episode_publish_date DESC',
     [show_id[0].show_id]
   );
   if (!host_episode[0]) {
@@ -443,4 +456,5 @@ module.exports = {
   sublist,
   subshows,
   myshowpage,
+  episoderemove,
 };
