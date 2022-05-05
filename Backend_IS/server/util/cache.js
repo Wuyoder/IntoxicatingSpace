@@ -10,18 +10,14 @@ const redisClient = redis.createClient({
 });
 
 redisClient.ready = false;
-
+redisClient.connect();
 redisClient.on('ready', () => {
   redisClient.ready = true;
   console.log('Redis is ready');
 });
 
 redisClient.on('error', (err) => {
-  redisClient.ready = false;
   console.log('redis cluster err', err);
-  if (process.env.NODE_ENV == 'production') {
-    console.log('Error in Redis');
-  }
 });
 
 redisClient.on('end', () => {

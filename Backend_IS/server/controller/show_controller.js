@@ -3,7 +3,7 @@ const RssParser = require('rss-parser');
 const rssparser = new RssParser();
 const { jwtwrap } = require('../util/jwt');
 const uuid = require('uuid');
-const Cache = require('../util/cache');
+const Redis = require('../util/cache');
 const showlist = async (req, res) => {
   const who = await jwtwrap(req);
   if (who.error) {
@@ -91,10 +91,17 @@ const myshowpage = async (req, res) => {
   );
   res.json({ rss_id: rss_id[0].rss_id });
 };
-//TODO:要使用CACHE的地方就在這裡
+
 const showchoice = async (req, res) => {
-  //await Cache.set('test', 'test');
+  var timer = -performance.now();
   const id = req.params.id;
+  const cache = await Redis.get(`${id}`);
+  if (cache !== null) {
+    timer += performance.now();
+    console.log('Cache Time: ' + (timer / 1000).toFixed(5) + ' sec.');
+    return res.send(JSON.parse(cache));
+  }
+
   const [show_choice] = await db.query(
     'SELECT rss_url FROM rss WHERE rss_id = ?',
     [id]
@@ -112,6 +119,10 @@ const showchoice = async (req, res) => {
     err.message = 'wrong rss url';
     return res.json({ error: err.message });
   }
+  Redis.set(`${id}`, JSON.stringify(rssObject));
+  Redis.expire(`${id}`, 86400);
+  timer += performance.now();
+  console.log('No Cache Time: ' + (timer / 1000).toFixed(5) + ' sec.');
   res.send(rssObject);
 };
 
