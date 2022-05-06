@@ -32,9 +32,15 @@ const Topbar = () => {
   const { search, setSearch, podcastplayer, audio } = useContext(AppContext);
   const gosearch = async () => {
     if (document.getElementById('search_input').value !== '') {
-      const res = await axios.post(SEARCH, {
-        keyword: document.getElementById('search_input').value,
-      });
+      const res = await axios.post(
+        SEARCH,
+        {
+          keyword: document.getElementById('search_input').value,
+        },
+        {
+          headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+        }
+      );
       document.getElementById('search_input').value = '';
       if (res.data.error !== 'no keyword') {
         setSearch(res.data);
