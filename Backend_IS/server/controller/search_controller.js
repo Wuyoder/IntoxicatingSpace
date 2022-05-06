@@ -1,6 +1,7 @@
 const db = require('../util/mysql');
 
 const showkeyword = async (req, res) => {
+  //TODO:檢查是否成年
   const data = req.body;
   if (!data.keyword) {
     return res.json({ error: 'no keyword' });

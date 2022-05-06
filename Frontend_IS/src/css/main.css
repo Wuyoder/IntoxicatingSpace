@@ -1158,6 +1158,10 @@ fieldset.MuiOutlinedInput-notchedOutline.css-1d3z3hw-MuiOutlinedInput-notchedOut
   text-decoration: none;
 }
 /* CREATOR EPISODE  ---------------------------------------------------*/
+#noepi_yet {
+  margin: 2vw;
+  font-size: 2em;
+}
 #nowimage {
   margin-left: 2vw;
   margin-top: -16vh;
@@ -1170,6 +1174,7 @@ fieldset.MuiOutlinedInput-notchedOutline.css-1d3z3hw-MuiOutlinedInput-notchedOut
   display: flex;
   flex-direction: column;
   justify-content: center;
+  padding-bottom: 2vh;
 }
 .single_epi_card {
   width: 75vw;

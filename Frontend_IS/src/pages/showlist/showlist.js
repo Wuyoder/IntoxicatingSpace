@@ -12,7 +12,9 @@ const Showlist = () => {
   const [showlist, setShowlist] = useState({});
   useEffect(() => {
     const getShowlist = async () => {
-      const res = await axios.get(SHOWLIST);
+      const res = await axios.get(SHOWLIST, {
+        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+      });
       setShowlist(res.data);
     };
     getShowlist();

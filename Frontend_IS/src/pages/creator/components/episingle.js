@@ -272,7 +272,7 @@ const Episingle = ({ item, i }) => {
       setImgfile('');
     }
   };
-
+  console.log('item', item);
   return (
     <Card variant='outlined' className='single_epi_card'>
       {delepi ? (

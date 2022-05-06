@@ -40,7 +40,7 @@ const updateuser = async (req, res) => {
   let change = '';
   let validation;
   if (req.body.name === '' && req.body.email === '' && req.body.pwd === '') {
-    return res.json({ error: 'nothing change' });
+    return res.json({ error: 'Nohting Changed.' });
   }
   if (req.body.name !== '') {
     validation = Joiput.validate({
@@ -134,7 +134,7 @@ const updatecreator = async (req, res) => {
     req.body.sdes === '' &&
     req.body.scategory === 'choose new category'
   ) {
-    return res.json({ error: 'nothing change' });
+    return res.json({ error: 'Nohting Changed.' });
   }
   if (
     req.body.cname == '' &&
@@ -143,7 +143,7 @@ const updatecreator = async (req, res) => {
     req.body.sdes == '' &&
     req.body.scategory == ''
   ) {
-    return res.json({ error: 'nothing change' });
+    return res.json({ error: 'Nohting Changed.' });
   }
   if (req.body.cname !== '') {
     change += `creator_name = '${req.body.cname}' ,`;
@@ -212,7 +212,7 @@ const updateepisode = async (req, res) => {
       infos.image === '' &&
       infos.episode === ''
     ) {
-      return res.json({ error: 'nothing change' });
+      return res.json({ error: 'Nohting Changed.' });
     }
     if (
       infos.title === '' &&
@@ -224,7 +224,7 @@ const updateepisode = async (req, res) => {
       infos.image === '' &&
       infos.episode === ''
     ) {
-      return res.json({ error: 'nothing change' });
+      return res.json({ error: 'Nohting Changed.' });
     }
     let change = '';
     if (infos.title !== '') {
