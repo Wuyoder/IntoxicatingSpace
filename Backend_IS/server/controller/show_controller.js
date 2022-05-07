@@ -6,53 +6,15 @@ const uuid = require('uuid');
 const Redis = require('../util/cache');
 const showlist = async (req, res) => {
   const who = await jwtwrap(req);
-  //檢查adult身份，先一律按照無登入
-  if (who.error) {
-    //無登入狀態 默認未成年
-    //host episode
-    const [host_newepi] = await db.query(
-      'SELECT show_id FROM episodes ORDER BY episode_publish_date DESC LIMIT 2'
-    );
-    const [host__push1] = await db.query(
-      'SELECT * FROM rss WHERE rss_url LIKE ?',
-      [`%${host_newepi[0].show_id}%`]
-    );
-    const [host__push2] = await db.query(
-      'SELECT * FROM rss WHERE rss_url LIKE ?',
-      [`%${host_newepi[1].show_id}%`]
-    );
-    const [showlist_unsub_newhost] = await db.query(
-      'SELECT * FROM rss WHERE rss_id IN (SELECT rss_id FROM rss WHERE rss_explicit = 0 AND rss_status = 1 AND rss_hot < ((SELECT AVG(rss_hot) FROM rss)+(SELECT MIN(rss_hot) FROM rss))/2 AND rss_id <> ? AND rss_id <> ? ORDER BY rss_hot DESC) ORDER BY RAND() LIMIT 4 ;',
-      [host__push1[0].rss_id, host__push2[0].rss_id]
-    );
-    showlist_unsub_newhost.unshift(host__push1[0]);
-    showlist_unsub_newhost.push(host__push2[0]);
-    //區間
-    //(31*(SELECT AVG(rss_hot) FROM rss)+(SELECT MAX(rss_hot) FROM rss))/32
-    //((SELECT AVG(rss_hot) FROM rss)+(SELECT MIN(rss_hot) FROM rss))/2
-    const [showlist_random_hot] = await db.query(
-      'SELECT * FROM rss WHERE rss_id IN (SELECT rss_id FROM rss WHERE rss_explicit = 0 AND rss_status = 1 AND rss_hot > (31*(SELECT AVG(rss_hot) FROM rss)+(SELECT MAX(rss_hot) FROM rss))/32 AND rss_id <> ? AND rss_id <> ? ORDER BY rss_hot DESC) ORDER BY RAND() LIMIT 6;',
-      [host__push1[0].rss_id, host__push2[0].rss_id]
-    );
-    const [showlist_sub_randomwalk] = await db.query(
-      'SELECT * FROM rss WHERE rss_id IN (SELECT rss_id FROM rss WHERE rss_explicit = 0 AND rss_status = 1 AND rss_hot BETWEEN ((SELECT AVG(rss_hot) FROM rss)+(SELECT MIN(rss_hot) FROM rss))/2 AND (31*(SELECT AVG(rss_hot) FROM rss)+(SELECT MAX(rss_hot) FROM rss))/32  AND rss_id <> ? AND rss_id <> ? ORDER BY rss_hot DESC) ORDER BY RAND() LIMIT 6;',
-      [host__push1[0].rss_id, host__push2[0].rss_id]
-    );
-    const data = {
-      topic1: '熱門推薦',
-      topic2: '隨機漫步',
-      topic3: '探索新鮮',
-      showlist_1: showlist_random_hot,
-      showlist_2: showlist_sub_randomwalk,
-      showlist_3: showlist_unsub_newhost,
-    };
-    return res.json(data);
-  }
   let explicit = '';
-  if (who.adult === 0) {
-    explicit = 'AND rss_explicit = 0';
-  } else {
+  if (who.error) {
     explicit = '';
+  } else {
+    if (who.adult === 0) {
+      explicit = 'rss_explicit = 0 AND ';
+    } else {
+      explicit = '';
+    }
   }
 
   const [host_newepi] = await db.query(
@@ -67,11 +29,10 @@ const showlist = async (req, res) => {
     [`%${host_newepi[1].show_id}%`]
   );
   const [showlist_unsub_newhost] = await db.query(
-    `SELECT * FROM rss WHERE rss_id IN (SELECT rss_id FROM rss WHERE  rss_status = 1 ${explicit}  AND rss_hot < ((SELECT AVG(rss_hot) FROM rss)+(SELECT MIN(rss_hot) FROM rss))/2 AND rss_id <> ? AND rss_id <> ? ORDER BY rss_hot DESC) order by RAND() LIMIT 4 ;`,
+    `SELECT * FROM rss WHERE rss_id IN (SELECT rss_id FROM rss WHERE ${explicit} rss_status = 1 AND rss_hot < ((SELECT AVG(rss_hot) FROM rss)+(SELECT MIN(rss_hot) FROM rss))/2 AND rss_id <> ? AND rss_id <> ? ORDER BY rss_hot DESC) ORDER BY RAND() LIMIT 4 ;`,
     [host__push1[0].rss_id, host__push2[0].rss_id]
   );
-  //  showlist_unsub_newhost.unshift(host__push1[0]);
-  //showlist_unsub_newhost.push(host__push2[0]);
+
   showlist_unsub_newhost.splice(
     Math.floor(Math.random() * 4),
     0,
@@ -82,68 +43,127 @@ const showlist = async (req, res) => {
     0,
     host__push2[0]
   );
-
+  //區間
+  //(31*(SELECT AVG(rss_hot) FROM rss)+(SELECT MAX(rss_hot) FROM rss))/32
+  //((SELECT AVG(rss_hot) FROM rss)+(SELECT MIN(rss_hot) FROM rss))/2
   const [showlist_random_hot] = await db.query(
-    `SELECT * FROM rss WHERE rss_id IN (SELECT rss_id FROM rss WHERE rss_status = 1 ${explicit}  AND rss_hot > (31*(SELECT AVG(rss_hot) FROM rss)+(SELECT MAX(rss_hot) FROM rss))/32 AND rss_id <> ? AND rss_id <> ? ORDER BY rss_hot DESC) order by RAND() LIMIT 6;`,
+    `SELECT * FROM rss WHERE  ${explicit}  rss_id IN (SELECT rss_id FROM rss WHERE rss_explicit = 0 AND rss_status = 1 AND rss_hot > (31*(SELECT AVG(rss_hot) FROM rss)+(SELECT MAX(rss_hot) FROM rss))/32 AND rss_id <> ? AND rss_id <> ? ORDER BY rss_hot DESC) ORDER BY RAND() LIMIT 6;`,
     [host__push1[0].rss_id, host__push2[0].rss_id]
   );
-  let excepthot = '';
-  for (let i = 0; i < 6; i++) {
-    excepthot += ` AND rss_id <> ${showlist_random_hot[i].rss_id} `;
-  }
-
-  const [history_category] = await db.query(
-    'SELECT rss_id FROM subscribes WHERE user_id = ?',
-    [who.id]
+  const [showlist_sub_randomwalk] = await db.query(
+    `SELECT * FROM rss WHERE  ${explicit}  rss_id IN (SELECT rss_id FROM rss WHERE rss_explicit = 0 AND rss_status = 1 AND rss_hot BETWEEN ((SELECT AVG(rss_hot) FROM rss)+(SELECT MIN(rss_hot) FROM rss))/2 AND (31*(SELECT AVG(rss_hot) FROM rss)+(SELECT MAX(rss_hot) FROM rss))/32  AND rss_id <> ? AND rss_id <> ? ORDER BY rss_hot DESC) ORDER BY RAND() LIMIT 6;`,
+    [host__push1[0].rss_id, host__push2[0].rss_id]
   );
-
-  let showlist_by_relate = [];
-  if (history_category.length !== 0) {
-    let category_relate = '';
-    for (let i = 0; i < history_category.length; i++) {
-      category_relate += 'rss_id =' + history_category[i].rss_id + '||';
-    }
-    category_relate = category_relate.slice(0, category_relate.length - 2);
-    const [category] = await db.query(
-      'SELECT DISTINCT rss_category_main FROM rss WHERE ' + category_relate
-    );
-    category_hot = '';
-    for (let i = 0; i < category.length; i++) {
-      category_hot +=
-        `rss_category_main = ` + `'${category[i].rss_category_main}'` + ' ||';
-    }
-    category_hot = category_hot.slice(0, category_hot.length - 2);
-    [showlist_by_relate] = await db.query(
-      'SELECT * FROM rss WHERE ' +
-        category_hot +
-        ` AND rss_hot BETWEEN ((SELECT AVG(rss_hot) FROM rss)+(SELECT MIN(rss_hot) FROM rss))/2 AND (31*(SELECT AVG(rss_hot) FROM rss)+(SELECT MAX(rss_hot) FROM rss))/32  ${explicit}  ORDER BY RAND() DESC LIMIT 6`
-    );
-    if (showlist_by_relate.length < 6) {
-      let except = '';
-      for (let i = 0; i < showlist_by_relate.length; i++) {
-        except += ` AND rss_id <> ${showlist_by_relate[i].rss_id} `;
-      }
-
-      const [add] = await db.query(
-        `SELECT * FROM rss WHERE rss_hot BETWEEN ((SELECT AVG(rss_hot) FROM rss)+(SELECT MIN(rss_hot) FROM rss))/2 AND (31*(SELECT AVG(rss_hot) FROM rss)+(SELECT MAX(rss_hot) FROM rss))/32  ${explicit} ${except} ${excepthot} ORDER BY RAND() DESC LIMIT ?`,
-        [6 - showlist_by_relate.length]
-      );
-      const addnum = 6 - showlist_by_relate.length;
-      for (let i = 0; i < addnum; i++) {
-        showlist_by_relate.push(add[i]);
-      }
-    }
-  }
-
   const data = {
     topic1: '熱門推薦',
-    topic2: '鼓腹而遊',
+    topic2: '隨機漫步',
     topic3: '探索新鮮',
     showlist_1: showlist_random_hot,
-    showlist_2: showlist_by_relate,
+    showlist_2: showlist_sub_randomwalk,
     showlist_3: showlist_unsub_newhost,
   };
-  res.json(data);
+  return res.json(data);
+
+  // const [host_newepi] = await db.query(
+  //   'SELECT show_id FROM episodes ORDER BY episode_publish_date DESC LIMIT 2'
+  // );
+  // const [host__push1] = await db.query(
+  //   'SELECT * FROM rss WHERE rss_url LIKE ?',
+  //   [`%${host_newepi[0].show_id}%`]
+  // );
+  // const [host__push2] = await db.query(
+  //   'SELECT * FROM rss WHERE rss_url LIKE ?',
+  //   [`%${host_newepi[1].show_id}%`]
+  // );
+  // const [showlist_unsub_newhost] = await db.query(
+  //   `SELECT * FROM rss WHERE rss_id IN (SELECT rss_id FROM rss WHERE ${explicit}  rss_status = 1  AND rss_hot < ((SELECT AVG(rss_hot) FROM rss)+(SELECT MIN(rss_hot) FROM rss))/2 AND rss_id <> ? AND rss_id <> ? ORDER BY rss_hot DESC) order by RAND() LIMIT 4 ;`,
+  //   [host__push1[0].rss_id, host__push2[0].rss_id]
+  // );
+  // showlist_unsub_newhost.splice(
+  //   Math.floor(Math.random() * 4),
+  //   0,
+  //   host__push1[0]
+  // );
+  // showlist_unsub_newhost.splice(
+  //   Math.floor(Math.random() * 5),
+  //   0,
+  //   host__push2[0]
+  // );
+
+  // const [showlist_random_hot] = await db.query(
+  //   `SELECT * FROM rss WHERE rss_id IN (SELECT rss_id FROM rss WHERE  ${explicit}  rss_status = 1 AND rss_hot > (31*(SELECT AVG(rss_hot) FROM rss)+(SELECT MAX(rss_hot) FROM rss))/32 AND rss_id <> ? AND rss_id <> ? ORDER BY rss_hot DESC) order by RAND() LIMIT 6;`,
+  //   [host__push1[0].rss_id, host__push2[0].rss_id]
+  // );
+  // let excepthot = '';
+  // for (let i = 0; i < 6; i++) {
+  //   excepthot += ` rss_id <> ${showlist_random_hot[i].rss_id}  AND `;
+  //   excepthot += ` rss_id <>  ${showlist_unsub_newhost[i].rss_id} AND  `;
+  // }
+
+  // const [history_category] = await db.query(
+  //   `SELECT rss_id FROM subscribes WHERE user_id = ? `,
+  //   [who.id]
+  // );
+
+  //要去除前兩個的show_id
+  //先取得hot rss_id
+  //再取得探索新鮮的 rss_id
+  // let showlist_by_relate = [];
+  // let exceptrelate = '';
+  // if (history_category.length !== 0) {
+  //   let category_relate = '';
+  //   for (let i = 0; i < history_category.length; i++) {
+  //     category_relate += 'rss_id =' + history_category[i].rss_id + '||';
+  //   }
+  //   category_relate = category_relate.slice(0, category_relate.length - 2);
+  //   const [category] = await db.query(
+  //     `SELECT DISTINCT rss_category_main FROM rss  WHERE  ` + category_relate
+  //   );
+  //   category_hot = '';
+  //   for (let i = 0; i < category.length; i++) {
+  //     category_hot +=
+  //       `rss_category_main = ` + `'${category[i].rss_category_main}'` + ' ||';
+  //   }
+  //   category_hot = category_hot.slice(0, category_hot.length - 2);
+  //   [showlist_by_relate] = await db.query(
+  //     `SELECT * FROM rss WHERE ` +
+  //       category_hot +
+  //       `AND  ${explicit} ${excepthot}  rss_hot BETWEEN ((SELECT AVG(rss_hot) FROM rss)+(SELECT MIN(rss_hot) FROM rss))/2 AND (31*(SELECT AVG(rss_hot) FROM rss)+(SELECT MAX(rss_hot) FROM rss))/32  ORDER BY RAND() DESC LIMIT 6`
+  //   );
+  //   if (showlist_by_relate.length < 6) {
+  //     for (let i = 0; i < showlist_by_relate.length; i++) {
+  //       exceptrelate += `rss_id <> ${showlist_by_relate[i].rss_id}  AND  `;
+  //     }
+  //   }
+  // } else {
+  //   showlist_by_relate = [];
+  // }
+
+  // const [add] = await db.query(
+  //   `SELECT * FROM rss WHERE ${explicit} ${excepthot}  ${exceptrelate} rss_hot BETWEEN ((SELECT AVG(rss_hot) FROM rss)+(SELECT MIN(rss_hot) FROM rss))/2 AND (31*(SELECT AVG(rss_hot) FROM rss)+(SELECT MAX(rss_hot) FROM rss))/32   ORDER BY RAND() DESC LIMIT ?`,
+  //   [6 - showlist_by_relate.length]
+  // );
+  // const addnum = 6 - showlist_by_relate.length;
+  // for (let i = 0; i < addnum; i++) {
+  //   showlist_by_relate.push(add[i]);
+  // }
+  // console.log('hot show');
+  // for (let i = 0; i < 6; i++) {
+  //   console.log(showlist_random_hot[i].rss_id);
+  // }
+  // console.log('relate show');
+  // for (let i = 0; i < 6; i++) {
+  //   console.log(showlist_by_relate[i].rss_id);
+  // }
+  // const data = {
+  //   topic1: '熱門推薦',
+  //   topic2: '鼓腹而遊',
+  //   topic3: '探索新鮮',
+  //   showlist_1: showlist_random_hot,
+  //   showlist_2: showlist_by_relate,
+  //   showlist_3: showlist_unsub_newhost,
+  // };
+  // res.json(data);
 };
 
 const myshowpage = async (req, res) => {

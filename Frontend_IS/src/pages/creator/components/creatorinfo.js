@@ -52,7 +52,6 @@ const Creatorinfo = () => {
         <h4 id='alert'>
           Your Show Status Switch to :
           {(() => {
-            console.log(showstatus);
             if (showstatus) {
               return ' OFF';
             } else {
@@ -154,7 +153,6 @@ const Creatorinfo = () => {
         <div>
           <Button
             onClick={() => {
-              console.log(document.getElementById('QRcode'));
               html2canvas(document.getElementById('QRcode')).then((canvas) =>
                 canvas.toBlob((blob) =>
                   navigator.clipboard.write([

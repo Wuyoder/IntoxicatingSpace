@@ -1,8 +1,5 @@
-import { v4 } from 'uuid';
-import { useEffect, useState, useContext } from 'react';
-import { useNavigate, Link, NavLink } from 'react-router-dom';
-import Container from 'react-bootstrap/Container';
-import Col from 'react-bootstrap/Col';
+import { useContext } from 'react';
+import { Link } from 'react-router-dom';
 import { AppContext } from '../../../App';
 import axios from 'axios';
 import { USER_HISTORY } from '../../../global/constants';

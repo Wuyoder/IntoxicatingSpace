@@ -272,7 +272,7 @@ const Episingle = ({ item, i }) => {
       setImgfile('');
     }
   };
-  console.log('item', item);
+
   return (
     <Card variant='outlined' className='single_epi_card'>
       {delepi ? (
@@ -293,7 +293,7 @@ const Episingle = ({ item, i }) => {
               </div>
               <div className='single_epi_info'>
                 <div id='single_epi_info_l'>
-                  <div className='single_epi_title'>Title</div>
+                  <div className='single_epi_detail'>Title</div>
                   <div className='single_epi_detail'>Number</div>
                   <div className='single_epi_detail'>Description</div>
                   <div className='single_epi_detail'>Pubdate</div>
@@ -301,7 +301,7 @@ const Episingle = ({ item, i }) => {
                   <div className='single_epi_detail'>Status</div>
                 </div>
                 <div id='single_epi_info_r'>
-                  <div className='single_epi_titles'>{item.episode_title}</div>
+                  <div className='single_epi_details'>{item.episode_title}</div>
                   <div className='single_epi_details'>
                     {item.episode_episode}
                   </div>
