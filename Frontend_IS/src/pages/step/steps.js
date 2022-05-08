@@ -331,7 +331,68 @@ const StepEditCreator = () => {
     </>
   );
 };
-const StepEpi = () => {};
+const StepEpi = () => {
+  const [intro, setIntro] = useState(false);
+  const state = {
+    stepsEnabled: intro,
+    initialStep: 0,
+    skipLabel: 'skip',
+    steps: [
+      {
+        element: '#cp_upload_image',
+        intro: 'Hey, Creator !!  Here is you Podcast information.',
+      },
+      {
+        element: '#newshowimage',
+        intro: 'Switch your Podcast show status.',
+      },
+      {
+        element: '#upcp_r',
+        intro: 'Click to go to you Podcast page.',
+      },
+      {
+        element: '#new_creator_info',
+        intro: "Click to copy your RSS feed's URL.",
+      },
+      {
+        intro: '♡❤♡❤♡❤♡❤♡❤Now it is time to intoxicate.(｡･ω･｡)ﾉ❤♡❤♡❤♡❤♡',
+      },
+    ],
+    hintsEnabled: false,
+    hints: [
+      {
+        element: '.hello',
+        hint: 'Hello hint',
+        hintPosition: 'middle-right',
+      },
+    ],
+  };
+
+  const onExit = () => {
+    setIntro(false);
+  };
+  const guider = () => {
+    setIntro(true);
+    console.log('state.stepsEnabled', state.stepsEnabled);
+  };
+  return (
+    <>
+      <img
+        alt='helper'
+        src={require('../../global/help.png')}
+        id='helper'
+        onClick={guider}
+      ></img>
+      <Steps
+        enabled={state.stepsEnabled}
+        steps={state.steps}
+        initialStep={state.initialStep}
+        onExit={onExit}
+      />
+      <Hints enabled={state.hintsEnabled} hints={state.hints} />
+    </>
+  );
+};
 const StepEditEpi = () => {};
 const Step = {
   StepChatroom,
