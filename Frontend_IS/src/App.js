@@ -7,7 +7,6 @@ import Creator from './pages/creator/creator';
 import LoginSignup from './pages/loginsignup/loginsignup';
 import Search from './pages/search/search';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Home from './pages/test/index';
 import { USER_PROFILE } from './global/constants';
 import axios from 'axios';
 export const AppContext = createContext();
@@ -67,7 +66,6 @@ const App = () => {
               <Route path='/episode/:rss_id/' element={<Episode />}></Route>
               <Route path='/creator' element={<Creator />}></Route>
               <Route path='/login' element={<LoginSignup />}></Route>
-              <Route path='/test' element={<Home />}></Route>
               <Route path='/search' element={<Search />}></Route>
             </Routes>
           </div>

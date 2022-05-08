@@ -5,6 +5,7 @@ import axios from 'axios';
 import { CHAT_HISTORY } from '../../../global/constants';
 import Msg from './msg';
 import { Button, Card, TextField } from '@mui/material';
+import Step from '../../step/steps';
 const Chatroom = () => {
   const [ws, setWs] = useState(null);
   const [open, setOpen] = useState([]);
@@ -94,40 +95,46 @@ const Chatroom = () => {
       document.getElementById('send_msg').click();
     }
   };
+
+  // steps
+
   return (
-    <Card variant='outlined' id='chatbox'>
-      <div>
+    <>
+      <Step.StepChatroom />
+      <Card variant='outlined' id='chatbox'>
         <div>
-          <div id='chatroom'>
-            {open.map((item) => {
-              return <Msg item={item} />;
-            })}
-          </div>
-          <div id='msg_container'>
-            {mem ? (
-              <>
-                <TextField
-                  label='Message'
-                  variant='outlined'
-                  id='msg'
-                  onKeyDown={enter}
-                ></TextField>
-                <Button
-                  id='send_msg'
-                  className='input_type'
-                  value='Send '
-                  onClick={sendMessage}
-                >
-                  Send
-                </Button>
-              </>
-            ) : (
-              <div>Please Signin first to join the talks.</div>
-            )}
+          <div>
+            <div id='chatroom'>
+              {open.map((item) => {
+                return <Msg item={item} />;
+              })}
+            </div>
+            <div id='msg_container'>
+              {mem ? (
+                <>
+                  <TextField
+                    label='Message'
+                    variant='outlined'
+                    id='msg'
+                    onKeyDown={enter}
+                  ></TextField>
+                  <Button
+                    id='send_msg'
+                    className='input_type'
+                    value='Send '
+                    onClick={sendMessage}
+                  >
+                    Send
+                  </Button>
+                </>
+              ) : (
+                <div>Please Signin first to join the talks.</div>
+              )}
+            </div>
           </div>
         </div>
-      </div>
-    </Card>
+      </Card>
+    </>
   );
 };
 export default Chatroom;

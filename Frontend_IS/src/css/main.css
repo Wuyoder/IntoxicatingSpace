@@ -390,6 +390,11 @@ body {
 
 /* version2 */
 /* global ---------------------------------------------------*/
+#helper {
+  position: fixed;
+  left: 1.5vw;
+  bottom: 15vh;
+}
 * {
   color: aliceblue;
 }
@@ -408,6 +413,11 @@ a {
   -webkit-border-radius: 4px;
   border-radius: 4px;
   background: rgb(219, 219, 219);
+}
+
+.introjs-tooltiptext {
+  color: black;
+  font-size: 1.5em;
 }
 /* TOPBAR ---------------------------------------------------*/
 #topbar {

@@ -8,6 +8,7 @@ import { AppContext } from '../App';
 import { Button, TextField } from '@mui/material';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
+
 const Withyou = () => {
   const [counterlogins, setCounterlogins] = useState(0);
   useEffect(() => {
@@ -64,6 +65,7 @@ const Topbar = () => {
           Intoxicating Space <Withyou />
         </p>
       </div>
+      <div></div>
       <Link
         to={`/episode/${localStorage.getItem('nowplay_url')}`}
         id='now_link'

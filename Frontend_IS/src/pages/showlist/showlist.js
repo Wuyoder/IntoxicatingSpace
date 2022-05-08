@@ -7,7 +7,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import '../../css/main.css';
-
+import 'intro.js/introjs.css';
 const Showlist = () => {
   const [showlist, setShowlist] = useState({});
   useEffect(() => {

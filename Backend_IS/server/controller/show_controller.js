@@ -308,8 +308,9 @@ const switcher = async (req, res) => {
     return res.status(200).json({ error: 'type missing' });
   }
   let result;
-  //switch 應該要直接對調結果
+  //TODO:要直接修改DB rss 的show_status
   if (req.body.type === 'show') {
+    console.log('req.body.show_id', req.body.show_id);
     if (!req.body.show_id) {
       return res.status(200).json({ error: 'show id or status missing' });
     }
@@ -323,18 +324,22 @@ const switcher = async (req, res) => {
         'UPDATE creators_shows SET show_status = 0 WHERE show_id = ?',
         [req.body.show_id]
       );
-      await db.query('UPDATE rss SET rss_status = 0 WHERE rss_url LIKE ?', [
-        `%${req.body.show_id}%`,
-      ]);
+      const rss = await db.query(
+        'UPDATE rss SET rss_status = 0 WHERE rss_url LIKE ?',
+        [`%${req.body.show_id}%`]
+      );
+      console.log('rss', rss);
     }
     if (status_before[0].show_status === 0) {
       [result] = await db.query(
         'UPDATE creators_shows SET show_status = 1 WHERE show_id = ?',
         [req.body.show_id]
       );
-      await db.query('UPDATE rss SET rss_status = 1 WHERE rss_url LIKE ?', [
-        `%${req.body.show_id}%`,
-      ]);
+      const rss2 = await db.query(
+        'UPDATE rss SET rss_status = 1 WHERE rss_url LIKE ?',
+        [`%${req.body.show_id}%`]
+      );
+      console.log('rss2', rss2);
       showstatus_after = 1;
     }
     return res.json({

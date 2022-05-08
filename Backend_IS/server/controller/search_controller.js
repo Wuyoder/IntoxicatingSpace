@@ -17,7 +17,7 @@ const showkeyword = async (req, res) => {
   let result = [];
   for (let i = 0; i < words.length; i++) {
     let [search_result] = await db.query(
-      `SELECT * FROM rss WHERE ( rss_title like ? || rss_creator like ? || rss_category_main like ? ) ${explicit} `,
+      `SELECT * FROM rss WHERE ( rss_title like ? || rss_creator like ? || rss_category_main like ? ) ${explicit} AND rss_status = 1 `,
       [`%${words[i]}%`, `%${words[i]}%`, `%${words[i]}%`]
     );
     result.push(search_result);
