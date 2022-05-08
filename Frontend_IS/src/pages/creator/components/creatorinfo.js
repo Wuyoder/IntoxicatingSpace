@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom';
 import html2canvas from 'html2canvas';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
+import Step from '../../step/steps';
 const Creatorinfo = () => {
   const MySwal = withReactContent(Swal);
   const [cprofile, setCprofile] = useState([]);
@@ -64,120 +65,123 @@ const Creatorinfo = () => {
   };
 
   return (
-    <div className='cp_container'>
-      <div>
-        <img
-          id='show_image'
-          alt='show_image'
-          src={localStorage.getItem('creator_image')}
-        ></img>
-      </div>
-      <div id='cp_r'>
-        <div id='cp_r_l'>
-          <div className='origin_cp_info'>Creator Name </div>
-          <div className='origin_cp_info'>Creator E-mail </div>
-          <div className='origin_cp_info'>Podcast Name </div>
-          <div className='origin_cp_info'>Podcast Description </div>
-          <div className='origin_cp_info'>Podcast Category</div>
-          <div className='origin_cp_info'>RSS Feed's URL</div>
-          <div className='origin_cp_info'>Last Update</div>
-          <div className='origin_cp_info'>Subscriber</div>
-          <div className='origin_cp_info'>Status</div>
-          <div className='origin_cp_info'>Myshow Page</div>
+    <>
+      <Step.StepCreator />
+      <div className='cp_container' id='cp_container'>
+        <div>
+          <img
+            id='show_image'
+            alt='show_image'
+            src={localStorage.getItem('creator_image')}
+          ></img>
         </div>
-        <div id='cp_r_r'>
-          <div>{cprofile.creator_name}</div>
-          <div>{cprofile.creator_email}</div>
-          <div>{cprofile.show_name}</div>
-          <div>{cprofile.show_des}</div>
-          <div>
-            {cprofile.show_category_main}-{cprofile.show_category_sub}
+        <div id='cp_r'>
+          <div id='cp_r_l'>
+            <div className='origin_cp_info'>Creator Name </div>
+            <div className='origin_cp_info'>Creator E-mail </div>
+            <div className='origin_cp_info'>Podcast Name </div>
+            <div className='origin_cp_info'>Podcast Description </div>
+            <div className='origin_cp_info'>Podcast Category</div>
+            <div className='origin_cp_info'>RSS Feed's URL</div>
+            <div className='origin_cp_info'>Last Update</div>
+            <div className='origin_cp_info'>Subscriber</div>
+            <div className='origin_cp_info'>Status</div>
+            <div className='origin_cp_info'>Myshow Page</div>
           </div>
-          <div
-            onClick={() => {
-              navigator.clipboard.writeText(
-                'https://intoxicating.space/api/1.0/user/rss/' +
+          <div id='cp_r_r'>
+            <div>{cprofile.creator_name}</div>
+            <div>{cprofile.creator_email}</div>
+            <div>{cprofile.show_name}</div>
+            <div>{cprofile.show_des}</div>
+            <div>
+              {cprofile.show_category_main}-{cprofile.show_category_sub}
+            </div>
+            <div
+              onClick={() => {
+                navigator.clipboard.writeText(
+                  'https://intoxicating.space/api/1.0/user/rss/' +
+                    cprofile.show_id
+                );
+                MySwal.fire({
+                  icon: 'success',
+                  title: <h4 id='alert'>RSS Feed's URL copied!</h4>,
+                });
+              }}
+            >
+              <input
+                id='rssfeed'
+                value={
+                  'https://intoxicating.space/api/1.0/user/rss/' +
                   cprofile.show_id
-              );
-              MySwal.fire({
-                icon: 'success',
-                title: <h4 id='alert'>RSS Feed's URL copied!</h4>,
-              });
-            }}
-          >
-            <input
-              id='rssfeed'
-              value={
-                'https://intoxicating.space/api/1.0/user/rss/' +
-                cprofile.show_id
-              }
-              unselectable='on'
-            ></input>
+                }
+                unselectable='on'
+              ></input>
+            </div>
+            <div>{cprofile?.show_time_update?.split('T')[0]}</div>
+            <div>{cprofile.show_subscriber}</div>
+            <div id='show_status'>
+              {showstatus ? (
+                <Button onClick={goshowswitch} id='show_status_on'>
+                  ON
+                </Button>
+              ) : (
+                <Button onClick={goshowswitch} id='show_status_off'>
+                  OFF
+                </Button>
+              )}
+            </div>
+            <div
+              onClick={() => {
+                MySwal.fire({
+                  timer: 1500,
+                  didOpen: () => {
+                    Swal.showLoading();
+                  },
+                });
+              }}
+            >
+              <Link to={`/showchoice/${rssid}`} id='linktomypage'>
+                <Button id='gomypage'>MY PAGE PAGE</Button>
+              </Link>
+            </div>
           </div>
-          <div>{cprofile?.show_time_update?.split('T')[0]}</div>
-          <div>{cprofile.show_subscriber}</div>
+        </div>
+        <div>
           <div>
-            {showstatus ? (
-              <Button onClick={goshowswitch} id='show_status_on'>
-                ON
-              </Button>
-            ) : (
-              <Button onClick={goshowswitch} id='show_status_off'>
-                OFF
-              </Button>
-            )}
+            <QRCodeCanvas
+              value={`http://intoxicating.space/showchoice/${rssid}`}
+              id='QRcode'
+            />
           </div>
-          <div
-            onClick={() => {
-              MySwal.fire({
-                timer: 1500,
-                didOpen: () => {
-                  Swal.showLoading();
-                },
-              });
-            }}
-          >
-            <Link to={`/showchoice/${rssid}`} id='linktomypage'>
-              <Button id='gomypage'>MY PAGE PAGE</Button>
-            </Link>
+          <div>
+            <Button
+              onClick={() => {
+                html2canvas(document.getElementById('QRcode')).then((canvas) =>
+                  canvas.toBlob((blob) =>
+                    navigator.clipboard.write([
+                      new window.ClipboardItem({ 'image/png': blob }),
+                    ])
+                  )
+                );
+                MySwal.fire({
+                  icon: 'success',
+                  title: (
+                    <>
+                      <h4 className='alert'>
+                        Podcast "{cprofile.show_name}" QRcode copied!
+                      </h4>
+                    </>
+                  ),
+                });
+              }}
+              id='copyQRcode'
+            >
+              QRcode
+            </Button>
           </div>
         </div>
       </div>
-      <div>
-        <div>
-          <QRCodeCanvas
-            value={`http://intoxicating.space/showchoice/${rssid}`}
-            id='QRcode'
-          />
-        </div>
-        <div>
-          <Button
-            onClick={() => {
-              html2canvas(document.getElementById('QRcode')).then((canvas) =>
-                canvas.toBlob((blob) =>
-                  navigator.clipboard.write([
-                    new window.ClipboardItem({ 'image/png': blob }),
-                  ])
-                )
-              );
-              MySwal.fire({
-                icon: 'success',
-                title: (
-                  <>
-                    <h4 className='alert'>
-                      Podcast "{cprofile.show_name}" QRcode copied!
-                    </h4>
-                  </>
-                ),
-              });
-            }}
-            id='copyQRcode'
-          >
-            QRcode
-          </Button>
-        </div>
-      </div>
-    </div>
+    </>
   );
 };
 export default Creatorinfo;

@@ -96,8 +96,6 @@ const Chatroom = () => {
     }
   };
 
-  // steps
-
   return (
     <>
       <Step.StepChatroom />
@@ -128,7 +126,7 @@ const Chatroom = () => {
                   </Button>
                 </>
               ) : (
-                <div>Please Signin first to join the talks.</div>
+                <div>Hi, Please Signin First.</div>
               )}
             </div>
           </div>

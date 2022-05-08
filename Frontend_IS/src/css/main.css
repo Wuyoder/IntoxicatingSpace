@@ -392,9 +392,17 @@ body {
 /* global ---------------------------------------------------*/
 #helper {
   position: fixed;
-  left: 1.5vw;
+  left: 3vw;
   bottom: 15vh;
+  width: 3vw;
+  height: 3vw;
 }
+#helper:hover {
+  background-color: aqua;
+  border-radius: 50%;
+  cursor: help;
+}
+
 * {
   color: aliceblue;
 }
@@ -1120,6 +1128,7 @@ fieldset.MuiOutlinedInput-notchedOutline.css-1d3z3hw-MuiOutlinedInput-notchedOut
   flex-direction: column;
   text-align: left;
   margin-left: 4vw;
+  height: 70vh;
 }
 #new_creator_name,
 #new_creator_email,
@@ -1294,6 +1303,9 @@ fieldset.MuiOutlinedInput-notchedOutline.css-1d3z3hw-MuiOutlinedInput-notchedOut
 #single_epi_remove {
   color: #6e151f;
   background-color: #555c5f;
+}
+#show_status {
+  width: 10vw;
 }
 #show_status_on,
 #show_status_off {

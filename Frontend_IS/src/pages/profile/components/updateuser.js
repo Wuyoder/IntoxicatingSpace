@@ -5,6 +5,7 @@ import Image from './image';
 import { Button, Card, TextField } from '@mui/material';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
+import Step from '../../step/steps';
 const Updateuser = () => {
   const MySwal = withReactContent(Swal);
   const [userprofile, setUserprofile] = useState({});
@@ -145,6 +146,7 @@ const Updateuser = () => {
   };
   return (
     <>
+      <Step.StepEditUserprofile />
       <div className='profile_title'>User Profile Update</div>
       <div className='updateuser_container'>
         <div>
