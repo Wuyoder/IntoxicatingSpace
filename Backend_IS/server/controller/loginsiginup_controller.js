@@ -1,3 +1,4 @@
+require('dotenv').config();
 const db = require('../util/mysql');
 const joi = require('../util/joi');
 const bcrypt = require('bcrypt');
@@ -13,7 +14,7 @@ const signup = async (req, res) => {
     Password: pwd,
     Birthday: birth,
   });
-  image = 'https://intoxicating.s3.ap-northeast-1.amazonaws.com/IS_LOGO.png';
+  image = `${process.env.CDN}/IS_LOGO.png`;
   if (validation.error) {
     return res.status(200).json({ error: validation.error.details[0].message });
   }

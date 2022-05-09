@@ -4,6 +4,7 @@ import { EPISODE, S3 } from '../../../global/constants';
 import { Button, Card, TextField } from '@mui/material';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
+import Step from '../../step/steps';
 const Newepisode = ({ creatorprofile }) => {
   const MySwal = withReactContent(Swal);
   const [duration, setDuration] = useState(0);
@@ -188,87 +189,90 @@ const Newepisode = ({ creatorprofile }) => {
   };
 
   return (
-    <Card variant='outlined' id='newepi_card'>
-      <h3 className='profile_title'>New Episode</h3>
-      <div className='newepi-container'>
-        <div>
-          <form id='newepi_form'>
-            <div className='single_epi_title'>Episode Title</div>
-            <input label='Episode Title' id='create_newepi_title'></input>
-            <div className='single_epi_title'>Episode Description</div>
-            <textarea
-              id='episode_des'
-              Style='background-color:black;resize:none'
-            ></textarea>
-            <div className='single_epi_title'>Episode Number</div>
-            <input type='number' min='1' step='1' id='episode_num'></input>
-            <div className='single_epi_title'>explicit </div>
-            <select id='episode_explicit'>
-              <option value='0'>no</option>
-              <option value='1'>yes</option>
-            </select>
-            <div id='image_btn_container1'>
-              <div className='single_epi_title'>Image File</div>
+    <>
+      <Step.StepNewEpi />
+      <Card variant='outlined' id='newepi_card'>
+        <h3 className='profile_title'>New Episode</h3>
+        <div className='newepi-container'>
+          <div>
+            <form id='newepi_form'>
+              <div className='single_epi_title'>Episode Title</div>
+              <input label='Episode Title' id='create_newepi_title'></input>
+              <div className='single_epi_title'>Episode Description</div>
+              <textarea
+                id='episode_des'
+                Style='background-color:black;resize:none'
+              ></textarea>
+              <div className='single_epi_title'>Episode Number</div>
+              <input type='number' min='1' step='1' id='episode_num'></input>
+              <div className='single_epi_title'>explicit </div>
+              <select id='episode_explicit'>
+                <option value='0'>no</option>
+                <option value='1'>yes</option>
+              </select>
+              <div id='image_btn_container1'>
+                <div className='single_epi_title'>Image File</div>
 
-              <div>
-                <img
-                  onClick={() => {
-                    document.getElementById('episode_image').click();
-                  }}
-                  src={require('../../../global/photo.png')}
-                  alt='upload'
-                  className='upimg'
-                  id='photo_btn'
-                />
+                <div>
+                  <img
+                    onClick={() => {
+                      document.getElementById('episode_image').click();
+                    }}
+                    src={require('../../../global/photo.png')}
+                    alt='upload'
+                    className='upimg'
+                    id='photo_btn'
+                  />
+                </div>
               </div>
-            </div>
 
-            <input
-              id='episode_image'
-              type='file'
-              accept='image/*'
-              Style='display:none'
-              required
-              onChange={nowimage}
-            ></input>
-            <div id='image_btn_container2'>
-              <div className='single_epi_title'>Audio File</div>
-              <div>
-                <img
-                  onClick={() => {
-                    document.getElementById('episode_file').click();
-                  }}
-                  src={require('../../../global/microphone.png')}
-                  alt='upload'
-                  className='upimg'
-                  id='microphone_btn'
-                />
+              <input
+                id='episode_image'
+                type='file'
+                accept='image/*'
+                Style='display:none'
+                required
+                onChange={nowimage}
+              ></input>
+              <div id='image_btn_container2'>
+                <div className='single_epi_title'>Audio File</div>
+                <div>
+                  <img
+                    onClick={() => {
+                      document.getElementById('episode_file').click();
+                    }}
+                    src={require('../../../global/microphone.png')}
+                    alt='upload'
+                    className='upimg'
+                    id='microphone_btn'
+                  />
+                </div>
               </div>
-            </div>
-            <input
-              id='episode_file'
-              type='file'
-              accept='audio/*'
-              required
-              Style='display:none'
-              onChange={getduration}
-            ></input>
-            <div id='nowimage'>{image}</div>
-            <div id='nowfile'>{file}</div>
-            <div>
-              <Button
-                type='submit'
-                onClick={gonewepi}
-                className='btn_type'
-                id='newepi_btn'
-              >
-                upload new episode!
-              </Button>
-            </div>
-          </form>
+              <input
+                id='episode_file'
+                type='file'
+                accept='audio/*'
+                required
+                Style='display:none'
+                onChange={getduration}
+              ></input>
+              <div id='nowimage'>{image}</div>
+              <div id='nowfile'>{file}</div>
+              <div>
+                <Button
+                  type='submit'
+                  onClick={gonewepi}
+                  className='btn_type'
+                  id='newepi_btn'
+                >
+                  upload new episode!
+                </Button>
+              </div>
+            </form>
+          </div>
         </div>
-      </div>
-    </Card>
+      </Card>
+    </>
   );
 };
 export default Newepisode;

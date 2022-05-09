@@ -1,3 +1,4 @@
+require('dotenv').config();
 const db = require('../util/mysql');
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
@@ -30,8 +31,13 @@ const updateuser = async (req, res) => {
     return res.status(200).json({ error: who.error });
   }
   if (req.body.newprofileimage) {
+    const cdnimage = req.body.newprofileimage.replace(
+      `${process.env.S3_ORIGIN}`,
+      `${process.env.CDN}`
+    );
+
     await db.query('UPDATE users SET user_image = ? WHERE user_id = ? ', [
-      req.body.newprofileimage,
+      cdnimage,
       who.id,
     ]);
     return res.json({ status: 'update profile image url OK' });
@@ -118,10 +124,13 @@ const updatecreator = async (req, res) => {
       'UPDATE creators_shows SET show_image = ? WHERE user_id = ? ',
       [req.body.newshowimage, who.id]
     );
-
+    const cdnimage = req.body.newshowimage.replace(
+      `${process.env.S3_ORIGIN}`,
+      `${process.env.CDN}`
+    );
     const [show_RSS] = await db.query(
       'UPDATE rss SET rss_image = ? WHERE rss_url LIKE ?',
-      [req.body.newshowimage, `%${show_target[0].show_id}%`]
+      [cdnimage, `%${show_target[0].show_id}%`]
     );
     return res.json({ status: 'update show image url OK' });
   }
@@ -194,7 +203,7 @@ const updatecreator = async (req, res) => {
     res.send(newcreatorinfo[0]);
   }
 };
-//TODO:
+
 const updateepisode = async (req, res) => {
   const who = await jwtwrap(req);
   if (who.error) {
@@ -234,7 +243,11 @@ const updateepisode = async (req, res) => {
       change += `episode_des = '${infos.des}' ,`;
     }
     if (infos.file !== '') {
-      change += `episode_file = '${infos.file}' ,`;
+      const cdnfile = infos.file.replace(
+        `${process.env.S3_ORIGIN}`,
+        `${process.env.CDN}`
+      );
+      change += `episode_file = '${cdnfile}' ,`;
     }
     if (infos.duration !== '') {
       change += `episode_duration = '${infos.duration}' ,`;
@@ -246,7 +259,11 @@ const updateepisode = async (req, res) => {
       change += `episode_explicit = '${infos.explicit}' ,`;
     }
     if (infos.image !== '') {
-      change += `episode_image = '${infos.image}' ,`;
+      const cdnimage = infos.image.replace(
+        `${process.env.S3_ORIGIN}`,
+        `${process.env.CDN}`
+      );
+      change += `episode_image = '${cdnimage}' ,`;
     }
     if (infos.episode !== '') {
       change += `episode_episode = '${infos.episode}' ,`;

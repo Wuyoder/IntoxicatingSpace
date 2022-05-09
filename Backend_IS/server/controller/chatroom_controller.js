@@ -1,3 +1,4 @@
+require('dotenv').config();
 const db = require('../util/mysql');
 const { jwtwrap } = require('../util/jwt');
 
@@ -7,8 +8,7 @@ const chatmsg = async (req, res) => {
   if (who.error) {
     who.id = 0;
     who.name = 'anonymous';
-    who.image =
-      'https://intoxicating.s3.ap-northeast-1.amazonaws.com/IS_LOGO.png';
+    who.image = `${process.env.CDN}/IS_LOGO.png`;
     who.role = 2;
     membership = 0;
   }

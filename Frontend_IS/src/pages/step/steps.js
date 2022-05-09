@@ -339,20 +339,12 @@ const StepEpi = () => {
     skipLabel: 'skip',
     steps: [
       {
-        element: '#cp_upload_image',
-        intro: 'Hey, Creator !!  Here is you Podcast information.',
+        element: '#single_epi_parts',
+        intro: 'Your Episode information and status',
       },
       {
-        element: '#newshowimage',
-        intro: 'Switch your Podcast show status.',
-      },
-      {
-        element: '#upcp_r',
-        intro: 'Click to go to you Podcast page.',
-      },
-      {
-        element: '#new_creator_info',
-        intro: "Click to copy your RSS feed's URL.",
+        element: '#single_epi_edit',
+        intro: "Click 'Edit' to update episode details.",
       },
       {
         intro: '♡❤♡❤♡❤♡❤♡❤Now it is time to intoxicate.(｡･ω･｡)ﾉ❤♡❤♡❤♡❤♡',
@@ -393,7 +385,118 @@ const StepEpi = () => {
     </>
   );
 };
-const StepEditEpi = () => {};
+const StepNoEpi = () => {
+  const [intro, setIntro] = useState(false);
+  const state = {
+    stepsEnabled: intro,
+    initialStep: 0,
+    skipLabel: 'skip',
+    steps: [
+      {
+        element: '#creator_episode_btn',
+        intro: 'Click here to start your first Podcast show!',
+      },
+      {
+        intro: '♡❤♡❤♡❤♡❤♡❤Now it is time to intoxicate.(｡･ω･｡)ﾉ❤♡❤♡❤♡❤♡',
+      },
+    ],
+    hintsEnabled: false,
+    hints: [
+      {
+        element: '.hello',
+        hint: 'Hello hint',
+        hintPosition: 'middle-right',
+      },
+    ],
+  };
+
+  const onExit = () => {
+    setIntro(false);
+  };
+  const guider = () => {
+    setIntro(true);
+    console.log('state.stepsEnabled', state.stepsEnabled);
+  };
+  return (
+    <>
+      <img
+        alt='helper'
+        src={require('../../global/help.png')}
+        id='helper'
+        onClick={guider}
+      ></img>
+      <Steps
+        enabled={state.stepsEnabled}
+        steps={state.steps}
+        initialStep={state.initialStep}
+        onExit={onExit}
+      />
+      <Hints enabled={state.hintsEnabled} hints={state.hints} />
+    </>
+  );
+};
+const StepNewEpi = () => {
+  const [intro, setIntro] = useState(false);
+  const state = {
+    stepsEnabled: intro,
+    initialStep: 0,
+    skipLabel: 'skip',
+    steps: [
+      {
+        element: '#newepi_form',
+        intro: 'Fill in your creative thoughts about the show.',
+      },
+      {
+        element: '#photo_btn',
+        intro: 'Choose the image (.jpg/.png) belongs to your show.',
+      },
+      {
+        element: '#microphone_btn',
+        intro: "Choose the show's audio file (.mp3).",
+      },
+      {
+        element: '#newepi_btn',
+        intro: 'Publish the amazing show now!',
+      },
+      {
+        intro: '♡❤♡❤♡❤♡❤♡❤Now it is time to intoxicate.(｡･ω･｡)ﾉ❤♡❤♡❤♡❤♡',
+      },
+    ],
+    hintsEnabled: false,
+    hints: [
+      {
+        element: '.hello',
+        hint: 'Hello hint',
+        hintPosition: 'middle-right',
+      },
+    ],
+  };
+
+  const onExit = () => {
+    setIntro(false);
+  };
+  const guider = () => {
+    setIntro(true);
+    console.log('state.stepsEnabled', state.stepsEnabled);
+  };
+  return (
+    <>
+      <img
+        alt='helper'
+        src={require('../../global/help.png')}
+        id='helper'
+        onClick={guider}
+      ></img>
+      <Steps
+        enabled={state.stepsEnabled}
+        steps={state.steps}
+        initialStep={state.initialStep}
+        onExit={onExit}
+      />
+      <Hints enabled={state.hintsEnabled} hints={state.hints} />
+    </>
+  );
+};
 const Step = {
   StepChatroom,
   StepUserprofile,
@@ -401,6 +504,7 @@ const Step = {
   StepCreator,
   StepEditCreator,
   StepEpi,
-  StepEditEpi,
+  StepNoEpi,
+  StepNewEpi,
 };
 export default Step;

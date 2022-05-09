@@ -1,3 +1,4 @@
+require('dotenv').config();
 const db = require('../util/mysql');
 const RssParser = require('rss-parser');
 const rssparser = new RssParser();
@@ -308,7 +309,7 @@ const switcher = async (req, res) => {
     return res.status(200).json({ error: 'type missing' });
   }
   let result;
-  //TODO:要直接修改DB rss 的show_status
+
   if (req.body.type === 'show') {
     console.log('req.body.show_id', req.body.show_id);
     if (!req.body.show_id) {
@@ -454,6 +455,14 @@ const episode = async (req, res) => {
     return res.status(200).json({ error: 'episode number already exist' });
   }
   try {
+    const cdnimage = info.image.replace(
+      `${process.env.S3_ORIGIN}`,
+      `${process.env.CDN}`
+    );
+    const cdnfile = info.file.replace(
+      `${process.env.S3_ORIGIN}`,
+      `${process.env.CDN}`
+    );
     const [result] = await db.query(
       'INSERT INTO episodes (show_id, episode_id, episode_title, episode_des, episode_file, episode_duration, episode_length, episode_explicit, episode_image, episode_season, episode_episode, episode_status) ' +
         'VALUES (?, ? ,?, ?, ?, ?, ?, ?, ?, 1, ?, 1 )',
@@ -462,11 +471,11 @@ const episode = async (req, res) => {
         epi_id,
         info.title,
         info.des,
-        info.file,
+        cdnfile,
         info.duration,
         info.length,
         info.explicit,
-        info.image,
+        cdnimage,
         info.episode,
       ]
     );

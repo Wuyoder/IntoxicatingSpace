@@ -6,18 +6,11 @@ import {
   SWITCHER,
   DELETE_EPI,
 } from '../../../global/constants';
-import {
-  Button,
-  Card,
-  CardContent,
-  CardMedia,
-  CardActionArea,
-  Typography,
-  TextField,
-} from '@mui/material';
+import { Button, Card, TextField } from '@mui/material';
 import { AppContext } from '../../../App';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
+import Step from '../../step/steps';
 const Episingle = ({ item, i }) => {
   const MySwal = withReactContent(Swal);
   const [edit, setEdit] = useState(true);
@@ -283,48 +276,53 @@ const Episingle = ({ item, i }) => {
       <div className='single_epi_container'>
         {delepi ? (
           edit ? (
-            <div id='single_epi_parts'>
-              <div>
-                <img
-                  alt='episode_image'
-                  src={item.episode_image}
-                  Style='height: 150px'
-                ></img>
-              </div>
-              <div className='single_epi_info'>
-                <div id='single_epi_info_l'>
-                  <div className='single_epi_detail'>Title</div>
-                  <div className='single_epi_detail'>Number</div>
-                  <div className='single_epi_detail'>Description</div>
-                  <div className='single_epi_detail'>Pubdate</div>
-                  <div className='single_epi_detail'>Explicit</div>
-                  <div className='single_epi_detail'>Status</div>
+            <>
+              <Step.StepEpi />
+              <div id='single_epi_parts'>
+                <div>
+                  <img
+                    alt='episode_image'
+                    src={item.episode_image}
+                    Style='height: 150px'
+                  ></img>
                 </div>
-                <div id='single_epi_info_r'>
-                  <div className='single_epi_details'>{item.episode_title}</div>
-                  <div className='single_epi_details'>
-                    {item.episode_episode}
+                <div className='single_epi_info'>
+                  <div id='single_epi_info_l'>
+                    <div className='single_epi_detail'>Title</div>
+                    <div className='single_epi_detail'>Number</div>
+                    <div className='single_epi_detail'>Description</div>
+                    <div className='single_epi_detail'>Pubdate</div>
+                    <div className='single_epi_detail'>Explicit</div>
+                    <div className='single_epi_detail'>Status</div>
                   </div>
-                  <div className='single_epi_details'>{item.episode_des}</div>
-                  <div className='single_epi_details'>
-                    {(() => {
-                      let modiday = item.episode_publish_date
-                        .toString()
-                        .slice(0, 10);
-                      let moditime = item.episode_publish_date
-                        .toString()
-                        .split('T')[1]
-                        .split('.')[0];
-                      return ` ${modiday} - ${moditime} `;
-                    })()}
+                  <div id='single_epi_info_r'>
+                    <div className='single_epi_details'>
+                      {item.episode_title}
+                    </div>
+                    <div className='single_epi_details'>
+                      {item.episode_episode}
+                    </div>
+                    <div className='single_epi_details'>{item.episode_des}</div>
+                    <div className='single_epi_details'>
+                      {(() => {
+                        let modiday = item.episode_publish_date
+                          .toString()
+                          .slice(0, 10);
+                        let moditime = item.episode_publish_date
+                          .toString()
+                          .split('T')[1]
+                          .split('.')[0];
+                        return ` ${modiday} - ${moditime} `;
+                      })()}
+                    </div>
+                    <div className='single_epi_details'>
+                      {explicit ? <>no</> : <>yes</>}
+                    </div>
+                    {episitu ? <>ON</> : <>OFF</>}
                   </div>
-                  <div className='single_epi_details'>
-                    {explicit ? <>no</> : <>yes</>}
-                  </div>
-                  {episitu ? <>ON</> : <>OFF</>}
                 </div>
               </div>
-            </div>
+            </>
           ) : (
             <>
               <div id='single_edit_parts'>
@@ -419,7 +417,9 @@ const Episingle = ({ item, i }) => {
             </>
           )
         ) : (
-          <div>Episode Already removed.</div>
+          <>
+            <div>Episode Already removed.</div>
+          </>
         )}
       </div>
     </Card>
