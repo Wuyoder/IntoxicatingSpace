@@ -48,43 +48,46 @@ io.on('connection', (socket) => {
       membership = 1;
       id = who.id;
     }
-    const [new_msg] = await db.query(
-      'INSERT INTO chats (show_id, episode_id, membership ,user_id, chat_msg, chat_msg_type, chat_episode_time ) VALUES (?, ?, ?, ?, ?, ?, ?)',
-      [
-        message.show_id,
-        message.episode_id,
-        membership,
-        id,
-        message.msg,
-        message.type,
-        message.currentTime,
-      ]
-    );
+    if (message.msg.indexOf(' ') === -1) {
+      const [new_msg] = await db.query(
+        'INSERT INTO chats (show_id, episode_id, membership ,user_id, chat_msg, chat_msg_type, chat_episode_time ) VALUES (?, ?, ?, ?, ?, ?, ?)',
+        [
+          message.show_id,
+          message.episode_id,
+          membership,
+          id,
+          message.msg,
+          message.type,
+          message.currentTime,
+        ]
+      );
 
-    const [recorded] = await db.query(
-      'SELECT a.*, b.user_name FROM chats as a  right JOIN users as b ON b.user_id = a.user_id WHERE a.show_id = ? AND a.episode_id = ?  ORDER BY a.chat_episode_time ;',
-      [message.show_id, message.episode_id]
-    );
+      const [recorded] = await db.query(
+        'SELECT a.*, b.user_name FROM chats as a  right JOIN users as b ON b.user_id = a.user_id WHERE a.show_id = ? AND a.episode_id = ?  ORDER BY a.chat_episode_time ;',
+        [message.show_id, message.episode_id]
+      );
 
-    if (!recorded[0]) {
-      return socket.broadcast.emit('getMessage', [
-        {
-          chat_id: 1,
-          show_id: 'show_id',
-          episode_id: 'episode_id',
-          membership: 1,
-          user_id: 1,
-          chat_msg: 'NO MESSSAGE HERE, PLEASE LEAVE YOUR WORDS.',
-          chat_msg_type: 'text',
-          chat_episode_time: 1,
-          time_click: '2046-04-01T00:00:00.000Z',
-          user_name: 'IS',
-        },
-      ]);
+      if (!recorded[0]) {
+        return socket.broadcast.emit('getMessage', [
+          {
+            chat_id: 1,
+            show_id: 'show_id',
+            episode_id: 'episode_id',
+            membership: 1,
+            user_id: 1,
+            chat_msg: 'NO MESSSAGE HERE, PLEASE LEAVE YOUR WORDS.',
+            chat_msg_type: 'text',
+            chat_episode_time: 1,
+            time_click: '2046-04-01T00:00:00.000Z',
+            user_name: 'IS',
+          },
+        ]);
+      }
+      let roomId = `${message.show_id}` + `${message.episode_id.split('/')[0]}`;
+
+      socket.join(roomId);
+      io.to(roomId).emit('getMessage', recorded);
     }
-    let roomId = `${message.show_id}` + `${message.episode_id}`;
-    socket.join(roomId);
-    io.to(roomId).emit('getMessage', recorded);
   });
 });
 

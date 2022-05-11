@@ -283,7 +283,7 @@ const Episingle = ({ item, i }) => {
                   <img
                     alt='episode_image'
                     src={item.episode_image}
-                    Style='height: 150px'
+                    Style='height: 150px; width:150px'
                   ></img>
                 </div>
                 <div className='single_epi_info'>

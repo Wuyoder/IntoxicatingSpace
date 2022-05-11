@@ -16,13 +16,46 @@ const Search = () => {
   }
 
   return (
-    <div className='search_shows'>
-      <Row xs={1} md={6} id='boot_row'>
-        {search.map((item) => {
-          return <Searchshow item={item} />;
-        })}
-      </Row>
-    </div>
+    <>
+      <div className='search_shows'>
+        {search.title[0] ? (
+          <>
+            <div className='sub_search' Style='margin:1vw; font-size:1.5em'>
+              Match Podcast ' Title '
+            </div>
+            <Row xs={1} md={6} id='boot_row'>
+              {search.title.map((item) => {
+                return <Searchshow item={item} />;
+              })}
+            </Row>
+          </>
+        ) : null}
+        {search.creator[0] ? (
+          <>
+            <div className='sub_search' Style='margin:1vw; font-size:1.5em'>
+              Match Podcast ' Creator '
+            </div>
+            <Row xs={1} md={6} id='boot_row'>
+              {search.creator.map((item) => {
+                return <Searchshow item={item} />;
+              })}
+            </Row>
+          </>
+        ) : null}
+        {search.cate[0] ? (
+          <>
+            <div className='sub_search' Style='margin:1vw; font-size:1.5em'>
+              Match Podcast ' Category '
+            </div>
+            <Row xs={1} md={6} id='boot_row'>
+              {search.cate.map((item) => {
+                return <Searchshow item={item} />;
+              })}
+            </Row>
+          </>
+        ) : null}
+      </div>
+    </>
   );
 };
 export default Search;

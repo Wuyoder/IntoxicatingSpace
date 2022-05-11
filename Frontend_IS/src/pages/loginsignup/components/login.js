@@ -54,14 +54,13 @@ const Login = () => {
           <TextField
             id='L_email'
             label='E-mail'
-            placeholder='test@test.com'
+            defaultValue={'test@test.com'}
           ></TextField>
           <TextField
             id='L_pwd'
             type='password'
             onKeyDown={enter}
-            label='Password'
-            placeholder='testtest'
+            defaultValue={'testtest'}
           ></TextField>
         </div>
       </div>

@@ -118,13 +118,6 @@ const Sidebar = ({ member }) => {
     window.location.replace('/');
   };
   const goindex = () => {
-    // MySwal.fire({
-    //   title: (
-    //     <>
-    //       <h4 className='alert'>The eternal flight of myself from myself.</h4>
-    //     </>
-    //   ),
-    // });
     document.getElementById('HOME_BTN').click();
   };
   return (

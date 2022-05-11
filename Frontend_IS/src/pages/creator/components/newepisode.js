@@ -29,6 +29,14 @@ const Newepisode = ({ creatorprofile }) => {
 
   const gonewepi = async (e) => {
     e.preventDefault();
+    if (document.getElementById('episode_image').files[0].size > 9000000) {
+      MySwal.fire({
+        icon: 'error',
+        title: <h4 id='alert'>Please choose valid podcast artwork file.</h4>,
+      });
+      return;
+    }
+
     let epititle = document.getElementById('create_newepi_title');
     let epides = document.getElementById('episode_des');
     let epiexplicit = document.getElementById('episode_explicit');
@@ -182,6 +190,20 @@ const Newepisode = ({ creatorprofile }) => {
   };
   const nowimage = () => {
     if (document.getElementById('episode_image').files[0]) {
+      if (document.getElementById('episode_image').files[0].size > 9000000) {
+        MySwal.fire({
+          icon: 'error',
+          title: (
+            <>
+              <h4 id='alert'>Image File too large</h4>
+              <h6>
+                Podcast artwork must be between 1400 x 1400 and 3000 x 3000
+                pixels, JPG or PNG.
+              </h6>
+            </>
+          ),
+        });
+      }
       setImage(document.getElementById('episode_image').files[0].name);
     } else {
       setImage('');

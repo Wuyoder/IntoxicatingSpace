@@ -91,6 +91,9 @@ const Chatroom = () => {
   };
   const enter = (e) => {
     let msg = document.getElementById('msg').value;
+    // if ((msg = '')) {
+    //   return;
+    // }
     if (e.key === 'Enter' && msg !== '') {
       document.getElementById('send_msg').click();
     }
