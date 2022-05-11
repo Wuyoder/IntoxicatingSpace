@@ -8,18 +8,25 @@ import {
 } from '../../../global/constants';
 import { Helmet } from 'react-helmet';
 import { Button, Card, CardContent, Typography } from '@mui/material';
-
+import Step from '../../step/steps';
 const ShowInfo = () => {
   const [info, setInfo] = useState([]);
   const [originsub, setOriginsub] = useState(false);
   const [mem, setMem] = useState(false);
   const [description, setDescription] = useState(true);
+  const [showon, setShowon] = useState(true);
   useEffect(() => {
     const getInfo = async () => {
       const res1 = await axios.get(
         `${SHOWCHOICE}/${window.location.pathname.slice(12)}`
       );
+      console.log('res', res1);
       setInfo(res1.data);
+      if (res1.data.error) {
+        setShowon(false);
+      } else {
+        setShowon(true);
+      }
       if (localStorage.getItem('token')) {
         setMem(true);
       }
@@ -63,17 +70,10 @@ const ShowInfo = () => {
       }
     );
   };
-  const more = () => {
-    document.getElementById('des').style.display = 'block';
-    setDescription(false);
-  };
-  const less = () => {
-    document.getElementById('des').style.display = '-webkit-box';
-    setDescription(true);
-  };
 
-  return (
+  return showon ? (
     <>
+      <Step.StepShowchoice />
       <Helmet>
         <meta property='og:title' content={info.title} />
         <meta property='og:type' content='website' />
@@ -92,6 +92,7 @@ const ShowInfo = () => {
         />
         <meta name='twitter:image' content={info.itunes?.image} />
       </Helmet>
+
       <div className='show_info_container'>
         <div className='show_info_l'>
           <Card variant='outlined' id='show_info_l'>
@@ -138,17 +139,6 @@ const ShowInfo = () => {
                 )
               ) : null}
             </div>
-            <div id='more_container'>
-              {description ? (
-                <Button onClick={more} id='more_btn'>
-                  more
-                </Button>
-              ) : (
-                <Button onClick={less} id='less_btn'>
-                  less
-                </Button>
-              )}
-            </div>
           </div>
         </div>
         <div className='show_info_r'>
@@ -163,6 +153,10 @@ const ShowInfo = () => {
         }
       })()}
     </>
+  ) : (
+    <div id='offline_show' Style='padding:2vw; font-size:2em'>
+      This Podcast Temporarily Offline.
+    </div>
   );
 };
 export default ShowInfo;

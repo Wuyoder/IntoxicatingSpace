@@ -6,6 +6,7 @@ import Episode from './pages/episode/episode';
 import Creator from './pages/creator/creator';
 import LoginSignup from './pages/loginsignup/loginsignup';
 import Search from './pages/search/search';
+import Notfound from './pages/404/404';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { USER_PROFILE } from './global/constants';
 import axios from 'axios';
@@ -19,6 +20,8 @@ const App = () => {
   const [podcastplayer, setPod] = useState(0);
   const [member, setMember] = useState(true);
   const [audio, setAudio] = useState(0);
+  const [playing, setPlaying] = useState(0);
+
   const appContextValue = {
     showid,
     setShowid,
@@ -34,6 +37,8 @@ const App = () => {
     setMember,
     audio,
     setAudio,
+    playing,
+    setPlaying,
   };
 
   useEffect(() => {
@@ -67,6 +72,7 @@ const App = () => {
               <Route path='/creator' element={<Creator />}></Route>
               <Route path='/login' element={<LoginSignup />}></Route>
               <Route path='/search' element={<Search />}></Route>
+              <Route path='/*' element={<Notfound />}></Route>
             </Routes>
           </div>
           <div id='filler'> &copy; Intoxicating Space</div>

@@ -63,6 +63,8 @@ const Signup = () => {
           <TextField type='password' id='S_pwd' label='Password'></TextField>
           <TextField
             type='date'
+            min='1900-01-01'
+            max='2022-01-01'
             id='S_birth'
             placeholder='YYYY/MM/DD'
             label='Birthday'

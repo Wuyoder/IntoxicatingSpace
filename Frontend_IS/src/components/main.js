@@ -66,20 +66,7 @@ const Topbar = () => {
         </p>
       </div>
       <div></div>
-      <Link
-        to={`/episode/${localStorage.getItem('nowplay_url')}`}
-        id='now_link'
-      >
-        <div id='nowplay_btn'>
-          {(() => {
-            if (localStorage.getItem('nowplay_title') !== 'undefined') {
-              return localStorage.getItem('nowplay_title');
-            } else {
-              return null;
-            }
-          })()}
-        </div>
-      </Link>
+
       <div className='search_container'>
         <div className='search_item'>
           <TextField
@@ -130,6 +117,16 @@ const Sidebar = ({ member }) => {
     });
     window.location.replace('/');
   };
+  const goindex = () => {
+    // MySwal.fire({
+    //   title: (
+    //     <>
+    //       <h4 className='alert'>The eternal flight of myself from myself.</h4>
+    //     </>
+    //   ),
+    // });
+    document.getElementById('HOME_BTN').click();
+  };
   return (
     <div id='sidebar'>
       <div>
@@ -137,71 +134,73 @@ const Sidebar = ({ member }) => {
           id='sidebar_logo'
           alt='logo'
           src={require('../global/LogoBlue.png')}
+          onClick={goindex}
         ></img>
       </div>
       <div className='sidebar-container'>
-        <Button
-          variant='contained'
-          id='sidebar_home_btn'
-          className='sidebar_btn'
+        <NavLink
+          to='/'
+          style={({ isActive }) => (isActive ? activeStyle : undefined)}
+          Style='text-decoration: none'
+          id='HOME_BTN'
         >
-          <NavLink
-            to='/'
-            style={({ isActive }) => (isActive ? activeStyle : undefined)}
-            Style='text-decoration: none'
+          <Button
+            variant='contained'
+            id='sidebar_home_btn'
+            className='sidebar_btn'
           >
             HOME
-          </NavLink>
-        </Button>
+          </Button>
+        </NavLink>
       </div>
       <div className='sidebar-container'>
         {!member ? (
           <>
             <div>
-              <Button
-                variant='contained'
-                id='sidebar_creator_btn'
-                className='sidebar_btn'
+              <NavLink
+                to='/creator'
+                style={({ isActive }) => (isActive ? activeStyle : undefined)}
+                Style='text-decoration: none'
               >
-                <NavLink
-                  to='/creator'
-                  style={({ isActive }) => (isActive ? activeStyle : undefined)}
-                  Style='text-decoration: none'
+                <Button
+                  variant='contained'
+                  id='sidebar_creator_btn'
+                  className='sidebar_btn'
                 >
                   CREATOR
-                </NavLink>
-              </Button>
+                </Button>
+              </NavLink>
             </div>
           </>
         ) : (
-          <Button
-            variant='contained'
-            id='sidebar_login_btn'
-            className='sidebar_btn'
+          <NavLink
+            to='/login'
+            style={({ isActive }) => (isActive ? activeStyle : undefined)}
+            Style='text-decoration: none'
           >
-            <NavLink
-              to='/login'
-              style={({ isActive }) => (isActive ? activeStyle : undefined)}
-              Style='text-decoration: none'
+            <Button
+              variant='contained'
+              id='sidebar_login_btn'
+              className='sidebar_btn'
             >
               LOGIN
-            </NavLink>
-          </Button>
+            </Button>
+          </NavLink>
         )}
       </div>
       <div>
         {!member ? (
           <>
             <div>
-              <Button
-                onClick={gologout}
-                variant='contained'
-                id='sidebar_logout_btn'
-              >
-                <NavLink to='/' Style='text-decoration: none'>
+              <NavLink to='/' Style='text-decoration: none'>
+                <Button
+                  onClick={gologout}
+                  variant='contained'
+                  id='sidebar_logout_btn'
+                >
                   LOG OUT
-                </NavLink>
-              </Button>
+                </Button>
+              </NavLink>
             </div>
           </>
         ) : null}
@@ -216,22 +215,39 @@ const Player = () => {
   const { setAudio, setPod } = useContext(AppContext);
 
   return (
-    <div>
-      <AudioPlayer
-        id='playbar'
-        src={localStorage.getItem('episode')}
-        autoPlay={false}
-        onListen={(e) => {
-          setPod(document.querySelector('audio').currentTime);
-        }}
-        showSkipControls={false}
-        showFilledVolume={true}
-        Style='background-color:black'
-      />
-      {(() => {
-        setAudio(document.querySelector('audio'));
-      })()}
-    </div>
+    <>
+      <div>
+        <AudioPlayer
+          id='playbar'
+          src={localStorage.getItem('episode')}
+          autoPlay={false}
+          onListen={(e) => {
+            setPod(document.querySelector('audio').currentTime);
+          }}
+          showSkipControls={false}
+          showFilledVolume={true}
+          Style='background-color:black'
+        />
+        {(() => {
+          setAudio(document.querySelector('audio'));
+        })()}
+      </div>
+      <Link
+        to={`/episode/${localStorage.getItem('nowplay_url')}`}
+        id='now_link'
+      >
+        <div id='nowplay_btn'>
+          {(() => {
+            if (localStorage.getItem('nowplay_title') !== null) {
+              console.log(localStorage.getItem('nowplay_title'));
+              return localStorage.getItem('nowplay_title');
+            } else {
+              return <div id='no_nowplay'>Choose you love and play ~</div>;
+            }
+          })()}
+        </div>
+      </Link>
+    </>
   );
 };
 

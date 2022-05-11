@@ -19,7 +19,7 @@ const showlist = async (req, res) => {
   }
 
   const [host_newepi] = await db.query(
-    'SELECT show_id FROM episodes ORDER BY episode_publish_date DESC LIMIT 2'
+    'SELECT show_id, max(episode_publish_date) FROM episodes group by show_id ORDER BY max(episode_publish_date) DESC limit 2'
   );
   const [host__push1] = await db.query(
     'SELECT * FROM rss WHERE rss_url LIKE ?',
@@ -193,6 +193,9 @@ const showchoice = async (req, res) => {
     'SELECT rss_url FROM rss WHERE rss_id = ?',
     [id]
   );
+  if (show_choice.length < 1) {
+    return res.json({ status: 'RSS not in database' });
+  }
   await db.query('UPDATE rss SET rss_value = rss_value+1 WHERE rss_id = ?', [
     id,
   ]);
@@ -311,7 +314,6 @@ const switcher = async (req, res) => {
   let result;
 
   if (req.body.type === 'show') {
-    console.log('req.body.show_id', req.body.show_id);
     if (!req.body.show_id) {
       return res.status(200).json({ error: 'show id or status missing' });
     }
@@ -329,7 +331,6 @@ const switcher = async (req, res) => {
         'UPDATE rss SET rss_status = 0 WHERE rss_url LIKE ?',
         [`%${req.body.show_id}%`]
       );
-      console.log('rss', rss);
     }
     if (status_before[0].show_status === 0) {
       [result] = await db.query(
@@ -340,9 +341,13 @@ const switcher = async (req, res) => {
         'UPDATE rss SET rss_status = 1 WHERE rss_url LIKE ?',
         [`%${req.body.show_id}%`]
       );
-      console.log('rss2', rss2);
       showstatus_after = 1;
     }
+    const [delcache] = await db.query(
+      'SELECT rss_id FROM rss WHERE rss_url like ?',
+      [`%${req.body.show_id}%`]
+    );
+    Redis.del(`${delcache[0].rss_id}`);
     return res.json({
       status: { type: req.body.type, status: showstatus_after },
     });
@@ -369,6 +374,12 @@ const switcher = async (req, res) => {
       );
       epistatus_after = 1;
     }
+    const [delcache] = await db.query(
+      'SELECT rss_id FROM rss WHERE rss_url like ?',
+      [`%${req.body.show_id}%`]
+    );
+    Redis.del(`${delcache[0].rss_id}`);
+
     res.json({ status: { type: req.body.type, status: epistatus_after } });
   }
 };
@@ -487,6 +498,11 @@ const episode = async (req, res) => {
   const [allepi] = await db.query('SELECT * FROM episodes WHERE show_id = ?', [
     info.show_id,
   ]);
+  const [delcache] = await db.query(
+    'SELECT rss_id FROM rss WHERE rss_url like ?',
+    [`%${info.show_id}%`]
+  );
+  Redis.del(`${delcache[0].rss_id}`);
 
   res.send(allepi);
 };

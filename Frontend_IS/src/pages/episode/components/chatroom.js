@@ -115,6 +115,9 @@ const Chatroom = () => {
                     variant='outlined'
                     id='msg'
                     onKeyDown={enter}
+                    inputProps={{
+                      maxLength: 30,
+                    }}
                   ></TextField>
                   <Button
                     id='send_msg'

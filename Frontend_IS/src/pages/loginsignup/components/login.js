@@ -51,12 +51,17 @@ const Login = () => {
           <div className='signup_title'>Password</div>
         </div>
         <div id='login_r'>
-          <TextField id='L_email' label='E-mail'></TextField>
+          <TextField
+            id='L_email'
+            label='E-mail'
+            placeholder='test@test.com'
+          ></TextField>
           <TextField
             id='L_pwd'
             type='password'
             onKeyDown={enter}
             label='Password'
+            placeholder='testtest'
           ></TextField>
         </div>
       </div>

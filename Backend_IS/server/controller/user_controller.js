@@ -5,6 +5,7 @@ const saltRounds = 10;
 const jwt = require('jsonwebtoken');
 const { jwtwrap } = require('../util/jwt');
 const Joiput = require('../util/joiput');
+const Redis = require('../util/cache');
 const userprofile = async (req, res) => {
   const who = await jwtwrap(req);
   if (who.error) {
@@ -53,7 +54,7 @@ const updateuser = async (req, res) => {
       Name: req.body.name,
     });
     if (validation.error) {
-      return res.json({ error: validation.error.details[0].message });
+      return res.json({ error: 'Username length must be between 3~30.' });
     }
     change += `user_name = '${req.body.name}' ,`;
   }
@@ -62,7 +63,7 @@ const updateuser = async (req, res) => {
       Email: req.body.email,
     });
     if (validation.error) {
-      return res.json({ error: validation.error.details[0].message });
+      return res.json({ error: 'E-mail format does not match.' });
     }
     change += `user_email = '${req.body.email}' ,`;
   }
@@ -71,7 +72,7 @@ const updateuser = async (req, res) => {
       Password: req.body.pwd,
     });
     if (validation.error) {
-      return res.json({ error: validation.error.details[0].message });
+      return res.json({ error: 'Password length must be between 8~30.' });
     }
     const hashed_pwd = await bcrypt.hash(req.body.pwd, saltRounds);
     change += `user_password = '${hashed_pwd}' ,`;
@@ -200,6 +201,12 @@ const updatecreator = async (req, res) => {
       'SELECT * FROM creators_shows WHERE user_id = ?',
       [who.id]
     );
+
+    const [delcache] = await db.query(
+      'SELECT rss_id FROM rss WHERE rss_url like ?',
+      [`%${show_target[0].show_id}%`]
+    );
+    Redis.del(`${delcache[0].rss_id}`);
     res.send(newcreatorinfo[0]);
   }
 };
@@ -283,6 +290,11 @@ const updateepisode = async (req, res) => {
         'SELECT * FROM episodes WHERE show_id = ? AND episode_id = ?;',
         [infos.show_id, infos.episode_id]
       );
+      const [delcache] = await db.query(
+        'SELECT rss_id FROM rss WHERE rss_url like ?',
+        [`%${infos.show_id}%`]
+      );
+      Redis.del(`${delcache[0].rss_id}`);
       res.send(newepiinfo[0]);
     }
   } catch (err) {

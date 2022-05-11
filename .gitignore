@@ -7,7 +7,7 @@ Frontend_IS/build
 Frontend_IS/node_modules
 Frontend_IS/db.json
 Frontend_IS/.env
-
+Frontend_IS/.env.production
 
 # dependencies
 /node_modules

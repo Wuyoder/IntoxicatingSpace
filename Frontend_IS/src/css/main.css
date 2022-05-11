@@ -498,7 +498,31 @@ fieldset.MuiOutlinedInput-notchedOutline.css-1d3z3hw-MuiOutlinedInput-notchedOut
   margin-top: 2vh;
   margin-bottom: 2vh;
 }
-
+#sidebar_logo:hover {
+  cursor: grab;
+  animation: shake 800ms ease-in-out;
+}
+@keyframes shake {
+  10%,
+  90% {
+    transform: translate3d(-1px, 0, -1px);
+  }
+  20%,
+  80% {
+    transform: translate3d(+2px, 0, +2px);
+  }
+  30%,
+  70% {
+    transform: translate3d(-3px, 0, -3px);
+  }
+  40%,
+  60% {
+    transform: translate3d(+3px, 0, +3px);
+  }
+  50% {
+    transform: translate3d(-2px, 0, -2px);
+  }
+}
 .css-sghohy-MuiButtonBase-root-MuiButton-root {
   background-color: #274050;
   color: aliceblue;
@@ -625,17 +649,14 @@ fieldset.MuiOutlinedInput-notchedOutline.css-1d3z3hw-MuiOutlinedInput-notchedOut
   margin: 1vh;
 }
 #sub_btn,
-#unsub_btn,
-#more_btn,
-#less_btn {
-  min-width: 5vw;
-  max-width: 5vw;
-  background-color: #222a32;
+#unsub_btn {
+  min-width: 16vw;
+  max-width: 16vw;
+  background-color: #34414e;
   color: aliceblue;
   border: 2px solid rgba(70, 65, 65, 0.595);
 }
-#unsub_btn,
-#less_btn {
+#unsub_btn {
   color: #677980;
 }
 #show_info_r {
@@ -657,8 +678,7 @@ fieldset.MuiOutlinedInput-notchedOutline.css-1d3z3hw-MuiOutlinedInput-notchedOut
   padding: 1vh;
   overflow: hidden;
   text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-line-clamp: 8;
+  display: block;
   -webkit-box-orient: vertical;
 }
 .show_epi_container {
@@ -721,19 +741,15 @@ fieldset.MuiOutlinedInput-notchedOutline.css-1d3z3hw-MuiOutlinedInput-notchedOut
   flex-direction: row;
   justify-content: space-around;
 }
-#play_btn,
-#more_des_btn,
-#less_des_btn {
+#play_btn {
   margin: 2vh 0 0 0;
-  max-width: 5vw;
-  min-width: 5vw;
-  background-color: #222a32;
+  max-width: 15vw;
+  min-width: 15vw;
+  background-color: #34414e;
   color: aliceblue;
   border: 2px solid rgba(70, 65, 65, 0.595);
 }
-#less_des_btn {
-  color: #677980;
-}
+
 #episode_choice {
   padding: 1vh 0 1vh 0;
   min-width: 15vw;
@@ -750,13 +766,11 @@ fieldset.MuiOutlinedInput-notchedOutline.css-1d3z3hw-MuiOutlinedInput-notchedOut
 }
 #episode_choice_des {
   margin: 0 0 0 1vw;
-}
-#episode_choice_des {
   margin-top: 0;
   min-width: 65vw;
   max-width: 65vw;
-  min-height: 35vh;
-  max-height: 35vh;
+  min-height: 37vh;
+  max-height: 37vh;
   overflow-y: scroll;
   scroll-behavior: smooth;
   padding: 1vw 1vw 1vw 1vw;
@@ -766,8 +780,7 @@ fieldset.MuiOutlinedInput-notchedOutline.css-1d3z3hw-MuiOutlinedInput-notchedOut
   padding: 1vh;
   overflow: hidden;
   text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-line-clamp: 8;
+  display: block;
   -webkit-box-orient: vertical;
 }
 .msg_msg {
@@ -788,7 +801,7 @@ fieldset.MuiOutlinedInput-notchedOutline.css-1d3z3hw-MuiOutlinedInput-notchedOut
   border: 2px solid #6f96a6;
 }
 #msg_container {
-  max-width: 46vw;
+  max-width: 30vw;
   margin: 2vh 0 0 0;
   display: flex;
   flex-direction: row;
@@ -797,9 +810,9 @@ fieldset.MuiOutlinedInput-notchedOutline.css-1d3z3hw-MuiOutlinedInput-notchedOut
 #msg {
   color: aliceblue;
   min-height: 5vh;
-  width: 35vw;
+  width: 16vw;
   margin-top: 1vh;
-  padding: 0 2vw 0 2vw;
+  padding: 0 3vw 0 3vw;
 }
 #chatroom {
   width: 70vw;
@@ -1446,6 +1459,8 @@ fieldset.MuiOutlinedInput-notchedOutline.css-1d3z3hw-MuiOutlinedInput-notchedOut
 .swal2-styled.swal2-cancel {
   background-color: #851b1b !important;
 }
+/* Notfound  ---------------------------------------------------*/
+
 /* DEPLOY TEST RESIVE ---------------------------------------------------*/
 .css-1okfn8i {
   background: linear-gradient(#274050, #274050, #222a32) !important;
@@ -1476,11 +1491,9 @@ fieldset.MuiOutlinedInput-notchedOutline.css-1d3z3hw-MuiOutlinedInput-notchedOut
   color: aliceblue !important;
   display: none !important;
 }
-#S_birth {
-  color: #6f96a6;
-}
+
 #nowplay_btn {
-  z-index: 999;
+  z-index: 2;
   max-width: 25vw;
   min-width: 25vw;
   overflow: hidden;
@@ -1488,11 +1501,17 @@ fieldset.MuiOutlinedInput-notchedOutline.css-1d3z3hw-MuiOutlinedInput-notchedOut
   display: -webkit-box;
   -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;
+  position: fixed;
+  bottom: 2vh;
+  left: 14vw;
 }
 #now_link {
   text-decoration: none;
 }
 #now_link:hover {
   color: #222a32;
+}
+#no_nowplay {
+  color: #646668;
 }
 /* version3 */

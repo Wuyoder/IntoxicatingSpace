@@ -7,6 +7,7 @@ const uuid = require('uuid');
 const jwt = require('jsonwebtoken');
 
 const signup = async (req, res) => {
+  console.log(req.body);
   const { name, email, pwd, birth } = req.body;
   const validation = joi.validate({
     Username: name,
@@ -16,8 +17,40 @@ const signup = async (req, res) => {
   });
   image = `${process.env.CDN}/IS_LOGO.png`;
   if (validation.error) {
+    if (validation.error.details[0].message.search('Password') !== -1) {
+      return res
+        .status(200)
+        .json({ error: 'Password length must be between 8~30.' });
+    }
+    if (validation.error.details[0].message.search('Email') !== -1) {
+      return res.status(200).json({ error: 'E-mail format does not match.' });
+    }
+    if (validation.error.details[0].message.search('Username') !== -1) {
+      return res
+        .status(200)
+        .json({ error: 'Username length must be between 3~30.' });
+    }
+    if (validation.error.details[0].message.search('Birthday') !== -1) {
+      return res.status(200).json({ error: 'Birthday format does not match.' });
+    }
     return res.status(200).json({ error: validation.error.details[0].message });
   }
+  const today = new Date(new Date().setFullYear(new Date().getFullYear()));
+  const year = req.body.birth.split('-')[0];
+  const month = req.body.birth.split('-')[1];
+  const day = req.body.birth.split('-')[2];
+  const birthdate = new Date(year, month - 1, day);
+  if (today - birthdate < 0) {
+    return res.status(200).json({
+      error: 'Are you a Future man? Please fill in correct information.',
+    });
+  }
+  if (today - birthdate > 4733568500433) {
+    return res.status(200).json({
+      error: 'Honesty is the best policy. Please fill in correct information.',
+    });
+  }
+
   const email_check = await db.query(
     `SELECT user_id FROM users WHERE user_email =?`,
     [email]

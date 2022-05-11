@@ -24,10 +24,14 @@ const Creator = () => {
       const res1 = await axios.get(CREATOR_PROFILE, {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
       });
+      if (!res1.data[0].user_id) {
+        window.location.replace('/');
+      }
       setCreatorprofile(res1.data[0]);
       const res2 = await axios.get(ISHOST_SHOW, {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
       });
+
       setCreatorepisode(res2.data);
     };
     getcreatorinfo();

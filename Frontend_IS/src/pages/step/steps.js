@@ -1,6 +1,69 @@
 import { Steps, Hints } from 'intro.js-react';
 import { useState } from 'react';
+const StepShowchoice = () => {
+  const [intro, setIntro] = useState(false);
+  const state = {
+    stepsEnabled: intro,
+    initialStep: 0,
+    skipLabel: 'skip',
+    steps: [
+      {
+        element: '.show_info_container',
 
+        intro: 'Podcast information',
+      },
+      {
+        element: '#sub_container',
+        intro: 'Click to sub/unsub this podcast.',
+      },
+      {
+        element: '.show_epi_container',
+        intro: 'All episodes in this podcast.',
+      },
+
+      {
+        element: '.episode_card_container',
+        intro: "Choose your favorite and click to 'Play'.",
+      },
+      {
+        intro: 'Now it is time to intoxicate.(｡･ω･｡)ﾉ❤❤❤',
+      },
+    ],
+    hintsEnabled: false,
+    hints: [
+      {
+        element: '.hello',
+        hint: 'Hello hint',
+        hintPosition: 'middle-right',
+      },
+    ],
+  };
+
+  const onExit = () => {
+    setIntro(false);
+  };
+  const guider = () => {
+    setIntro(true);
+    console.log('state.stepsEnabled', state.stepsEnabled);
+  };
+  return (
+    <>
+      <img
+        alt='helper'
+        src={require('../../global/help.png')}
+        id='helper'
+        onClick={guider}
+      ></img>
+      <Steps
+        enabled={state.stepsEnabled}
+        steps={state.steps}
+        initialStep={state.initialStep}
+        onExit={onExit}
+      />
+      <Hints enabled={state.hintsEnabled} hints={state.hints} />
+    </>
+  );
+};
 const StepChatroom = () => {
   const [intro, setIntro] = useState(false);
   const state = {
@@ -18,16 +81,15 @@ const StepChatroom = () => {
         intro: 'Description of the show.',
       },
       {
-        element: '#more_des_btn',
-        intro: 'Show more description.',
-      },
-
-      {
         element: '#chatroom',
         intro: 'Please sign in to share your thoughts.',
       },
       {
-        intro: '♡❤♡❤♡❤♡❤♡❤Now it is time to intoxicate.(｡･ω･｡)ﾉ❤♡❤♡❤♡❤♡',
+        element: '.msg_time',
+        intro: 'Click to locate the progress.',
+      },
+      {
+        intro: 'Now it is time to intoxicate.(｡･ω･｡)ﾉ❤❤❤',
       },
     ],
     hintsEnabled: false,
@@ -91,7 +153,7 @@ const StepUserprofile = () => {
         intro: 'Click here to update your profile.',
       },
       {
-        intro: '♡❤♡❤♡❤♡❤♡❤Now it is time to intoxicate.(｡･ω･｡)ﾉ❤♡❤♡❤♡❤♡',
+        intro: 'Now it is time to intoxicate.(｡･ω･｡)ﾉ❤❤❤',
       },
     ],
     hintsEnabled: false,
@@ -161,7 +223,7 @@ const StepEditUserprofile = () => {
         intro: 'Update new profile details.',
       },
       {
-        intro: '♡❤♡❤♡❤♡❤♡❤Now it is time to intoxicate.(｡･ω･｡)ﾉ❤♡❤♡❤♡❤♡',
+        intro: 'Now it is time to intoxicate.(｡･ω･｡)ﾉ❤❤❤',
       },
     ],
     hintsEnabled: false,
@@ -216,7 +278,11 @@ const StepCreator = () => {
       },
       {
         element: '#gomypage',
-        intro: 'Click to go to you Podcast page.',
+        intro: 'Click to go to your Podcast page.',
+      },
+      {
+        element: '#creator_episode_btn',
+        intro: 'You need to create at least one episode to activate your page.',
       },
       {
         element: '#rssfeed',
@@ -231,7 +297,7 @@ const StepCreator = () => {
         intro: 'Click here to update your Podcast details.',
       },
       {
-        intro: '♡❤♡❤♡❤♡❤♡❤Now it is time to intoxicate.(｡･ω･｡)ﾉ❤♡❤♡❤♡❤♡',
+        intro: 'Now it is time to intoxicate.(｡･ω･｡)ﾉ❤❤❤',
       },
     ],
     hintsEnabled: false,
@@ -293,7 +359,7 @@ const StepEditCreator = () => {
         intro: "Click to copy your RSS feed's URL.",
       },
       {
-        intro: '♡❤♡❤♡❤♡❤♡❤Now it is time to intoxicate.(｡･ω･｡)ﾉ❤♡❤♡❤♡❤♡',
+        intro: 'Now it is time to intoxicate.(｡･ω･｡)ﾉ❤❤❤',
       },
     ],
     hintsEnabled: false,
@@ -347,7 +413,7 @@ const StepEpi = () => {
         intro: "Click 'Edit' to update episode details.",
       },
       {
-        intro: '♡❤♡❤♡❤♡❤♡❤Now it is time to intoxicate.(｡･ω･｡)ﾉ❤♡❤♡❤♡❤♡',
+        intro: 'Now it is time to intoxicate.(｡･ω･｡)ﾉ❤❤❤',
       },
     ],
     hintsEnabled: false,
@@ -397,7 +463,7 @@ const StepNoEpi = () => {
         intro: 'Click here to start your first Podcast show!',
       },
       {
-        intro: '♡❤♡❤♡❤♡❤♡❤Now it is time to intoxicate.(｡･ω･｡)ﾉ❤♡❤♡❤♡❤♡',
+        intro: 'Now it is time to intoxicate.(｡･ω･｡)ﾉ❤❤❤',
       },
     ],
     hintsEnabled: false,
@@ -459,7 +525,7 @@ const StepNewEpi = () => {
         intro: 'Publish the amazing show now!',
       },
       {
-        intro: '♡❤♡❤♡❤♡❤♡❤Now it is time to intoxicate.(｡･ω･｡)ﾉ❤♡❤♡❤♡❤♡',
+        intro: 'Now it is time to intoxicate.(｡･ω･｡)ﾉ❤❤❤',
       },
     ],
     hintsEnabled: false,
@@ -506,5 +572,6 @@ const Step = {
   StepEpi,
   StepNoEpi,
   StepNewEpi,
+  StepShowchoice,
 };
 export default Step;

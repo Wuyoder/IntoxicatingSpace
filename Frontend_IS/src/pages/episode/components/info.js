@@ -1,19 +1,11 @@
 import { EPISODECHOICE } from '../../../global/constants';
 import { useState, useEffect, useContext } from 'react';
-import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { AppContext } from '../../../App';
 import { Helmet } from 'react-helmet';
-import {
-  Button,
-  Card,
-  CardContent,
-  CardMedia,
-  CardActionArea,
-  Typography,
-} from '@mui/material';
+import { Button, Card, Typography } from '@mui/material';
 const Info = () => {
-  const { setEpisodeurl } = useContext(AppContext);
+  const { setEpisodeurl, audio } = useContext(AppContext);
   const [description, setDescription] = useState(true);
   const [info, setInfo] = useState({});
   useEffect(() => {
@@ -25,6 +17,11 @@ const Info = () => {
           window.location.pathname.slice(9).split('-')[1]
         }`
       );
+      if (!res.data.item) {
+        window.location.replace(
+          `/showchoice/${window.location.pathname.slice(9).split('-')[0]}`
+        );
+      }
       setInfo(res.data);
     };
     getInfo();
@@ -36,14 +33,14 @@ const Info = () => {
     play();
   };
 
-  const more = () => {
-    document.getElementById('epi_des').style.display = 'block';
-    setDescription(false);
-  };
-  const less = () => {
-    document.getElementById('epi_des').style.display = '-webkit-box';
-    setDescription(true);
-  };
+  // const more = () => {
+  //   document.getElementById('epi_des').style.display = 'block';
+  //   setDescription(false);
+  // };
+  // const less = () => {
+  //   document.getElementById('epi_des').style.display = '-webkit-box';
+  //   setDescription(true);
+  // };
 
   return (
     <>
@@ -92,36 +89,26 @@ const Info = () => {
                     'nowplay_url',
                     window.location.pathname.split('/')[2]
                   );
+                  audio.play();
                 }}
                 id='play_btn'
               >
                 PLAY
               </Button>
             </div>
-            <div>
-              {description ? (
-                <Button onClick={more} id='more_des_btn'>
-                  more
-                </Button>
-              ) : (
-                <Button onClick={less} id='less_des_btn'>
-                  less
-                </Button>
-              )}
-            </div>
+            <div></div>
           </div>
         </div>
         <Card variant='outlined' id='episode_choice_des'>
           <div className='chat_info_r'>
             <Typography>{info.item?.title}</Typography>
-            <div className='show_detail' id='epi_des'>
-              {document.getElementById('epi_des')
-                ? (() => {
-                    document.getElementById('epi_des').innerHTML =
-                      info.item?.content;
-                  })()
-                : info.item?.content}
-            </div>
+            <div className='show_detail' id='epi_des'></div>
+            {(() => {
+              if (info.item !== undefined) {
+                document.getElementById('epi_des').innerHTML =
+                  info.item.content;
+              }
+            })()}
           </div>
         </Card>
       </div>
