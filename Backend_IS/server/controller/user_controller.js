@@ -133,6 +133,12 @@ const updatecreator = async (req, res) => {
       'UPDATE rss SET rss_image = ? WHERE rss_url LIKE ?',
       [cdnimage, `%${show_target[0].show_id}%`]
     );
+    const [delcache] = await db.query(
+      'SELECT rss_id FROM rss WHERE rss_url like ?',
+      [`%${show_target[0].show_id}%`]
+    );
+    Redis.del(`${delcache[0].rss_id}`);
+
     return res.json({ status: 'update show image url OK' });
   }
   let change = '';

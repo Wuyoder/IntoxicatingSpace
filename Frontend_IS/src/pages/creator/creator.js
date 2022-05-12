@@ -31,7 +31,6 @@ const Creator = () => {
       const res2 = await axios.get(ISHOST_SHOW, {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
       });
-
       setCreatorepisode(res2.data);
     };
     getcreatorinfo();

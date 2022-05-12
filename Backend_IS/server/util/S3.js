@@ -21,19 +21,19 @@ const s3upload = async (req, res) => {
     return res.status(400).json({ error: 'type missing' });
   }
   if (info.type === 'profile_image') {
-    Key = `profile/${who.id}/${v4()}.jpg`;
+    Key = `profile/user_image/${who.id}/${v4()}.jpg`;
     type = 'image/jpeg';
   }
   if (info.type === 'show_image') {
-    Key = `podcast/${who.id}/show_image/${v4().replace('-', '')}.jpg`;
+    Key = `images/podcast/main/${who.id}/${v4().replace('-', '')}.jpg`;
     type = 'image/jpeg';
   }
   if (info.type === 'episode_image') {
-    Key = `podcast/${who.id}/${info.episode_num}/episode_image/${v4()}.jpg`;
+    Key = `images/podcast/episode/${who.id}/${info.episode_num}/${v4()}.jpg`;
     type = 'image/jpeg';
   }
   if (info.type === 'episode_file') {
-    Key = `podcast/${who.id}/${info.episode_num}/episode_file/${v4()}.mp3`;
+    Key = `audio/podcast/${who.id}/${info.episode_num}/${v4()}.mp3`;
     type = 'audio/mpeg';
   }
   const s3Params = {

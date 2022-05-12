@@ -232,7 +232,6 @@ const Player = () => {
         <div id='nowplay_btn'>
           {(() => {
             if (localStorage.getItem('nowplay_title') !== null) {
-              console.log(localStorage.getItem('nowplay_title'));
               return localStorage.getItem('nowplay_title');
             } else {
               return <div id='no_nowplay'>Choose you love and play ~</div>;

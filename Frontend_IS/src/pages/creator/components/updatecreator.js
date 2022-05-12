@@ -15,12 +15,26 @@ const Updatecreator = ({ creatorprofile }) => {
   const MySwal = withReactContent(Swal);
   const [cprofile, setCprofile] = useState([]);
   const [image, setImage] = useState([]);
+  const [cname, setCname] = useState([]);
+  const [cemail, setCemail] = useState([]);
+  const [sname, setSname] = useState([]);
+  const [sdes, setSdes] = useState([]);
+  const [smain, setSmain] = useState([]);
+  const [ssub, setSsub] = useState([]);
+
   useEffect(() => {
     const getcreatorinfo = async () => {
       const res = await axios.get(CREATOR_PROFILE, {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
       });
       setCprofile(res.data[0]);
+      console.log(cprofile);
+      setCname(res.data[0].creator_name);
+      setCemail(res.data[0].creator_email);
+      setSname(res.data[0].show_name);
+      setSdes(res.data[0].show_des);
+      setSmain(res.data[0].show_category_main);
+      setSsub(res.data[0].show_category_sub);
     };
     getcreatorinfo();
   }, []);
@@ -57,6 +71,16 @@ const Updatecreator = ({ creatorprofile }) => {
         title: <h4 id='alert'>Creator Info Changed.</h4>,
       });
     }
+    //TODO:要把res.data列出來
+    console.log('newprofile', res.data);
+
+    setCname(res.data.creator_name);
+    setCemail(res.data.creator_email);
+    setSname(res.data.show_name);
+    setSdes(res.data.show_des);
+    setSmain(res.data.show_category_main);
+    setSsub(res.data.show_category_sub);
+
     document.getElementById('new_creator_name').value = '';
     document.getElementById('new_creator_email').value = '';
     document.getElementById('new_show_name').value = '';
@@ -222,7 +246,7 @@ const Updatecreator = ({ creatorprofile }) => {
           </div>
           <div id='upcp_r'>
             <p className='new_creator_type'>
-              origin creator name : " {cprofile.creator_name} "
+              origin creator name : " {cname} "
             </p>
             <TextField
               className='input_type'
@@ -230,7 +254,7 @@ const Updatecreator = ({ creatorprofile }) => {
               label='New Creator Name'
             ></TextField>
             <p className='new_creator_type'>
-              origin creator email : " {cprofile.creator_email} "
+              origin creator email : " {cemail} "
             </p>
             <TextField
               className='input_type'
@@ -238,7 +262,7 @@ const Updatecreator = ({ creatorprofile }) => {
               label='New Creator E-mail'
             ></TextField>
             <p className='new_creator_type'>
-              origin Podcast name : " {cprofile.show_name} "
+              origin Podcast name : " {sname} "
             </p>
             <TextField
               className='input_type'
@@ -246,7 +270,7 @@ const Updatecreator = ({ creatorprofile }) => {
               label='New Podcast Name'
             ></TextField>
             <p className='new_creator_type'>
-              origin show description : " {cprofile.show_des} "
+              origin show description : " {sdes} "
             </p>
             <TextField
               className='input_type'
@@ -254,8 +278,7 @@ const Updatecreator = ({ creatorprofile }) => {
               label='New Podcast Description'
             ></TextField>
             <p className='new_creator_type'>
-              origin show category : " {cprofile.show_category_main} -{' '}
-              {cprofile.show_category_sub} "
+              origin show category : " {smain} - {ssub} "
             </p>
             <select id='new_show_category' Style='background-color:#222a32'>
               <optgroup>

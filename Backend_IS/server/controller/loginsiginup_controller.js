@@ -123,7 +123,7 @@ const signup = async (req, res) => {
         show_category_main,
         show_category_sub,
         1,
-        0,
+        1,
       ]
     );
     await db.query('COMMIT');
