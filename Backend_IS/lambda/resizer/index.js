@@ -6,8 +6,8 @@ const sharp = require('sharp');
 //const jimp = require('jimp');
 const s3 = new aws.S3({
   region: 'ap-northeast-1',
-  accessKeyId: 'AKIARGU3HXGXEHUY5DWG',
-  secretAccessKey: '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',
+  accessKeyId: process.env.ACCESS_KEY_ID,
+  secretAccessKey: process.env.SECRET_ACCESS_KEY,
   signatureVersion: 'v4',
 });
 
