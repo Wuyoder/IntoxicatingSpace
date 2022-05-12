@@ -468,7 +468,7 @@ const episode = async (req, res) => {
   try {
     const cdnimage = info.image.replace(
       `${process.env.S3_ORIGIN}`,
-      `${process.env.CDN}`
+      `${process.env.CDN}/resize`
     );
     const cdnfile = info.file.replace(
       `${process.env.S3_ORIGIN}`,

@@ -34,7 +34,7 @@ const updateuser = async (req, res) => {
   if (req.body.newprofileimage) {
     const cdnimage = req.body.newprofileimage.replace(
       `${process.env.S3_ORIGIN}`,
-      `${process.env.CDN}`
+      `${process.env.CDN}/resize`
     );
 
     await db.query('UPDATE users SET user_image = ? WHERE user_id = ? ', [
@@ -127,7 +127,7 @@ const updatecreator = async (req, res) => {
     );
     const cdnimage = req.body.newshowimage.replace(
       `${process.env.S3_ORIGIN}`,
-      `${process.env.CDN}`
+      `${process.env.CDN}/resize`
     );
     const [show_RSS] = await db.query(
       'UPDATE rss SET rss_image = ? WHERE rss_url LIKE ?',
@@ -274,7 +274,7 @@ const updateepisode = async (req, res) => {
     if (infos.image !== '') {
       const cdnimage = infos.image.replace(
         `${process.env.S3_ORIGIN}`,
-        `${process.env.CDN}`
+        `${process.env.CDN}/resize`
       );
       change += `episode_image = '${cdnimage}' ,`;
     }
