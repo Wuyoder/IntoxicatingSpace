@@ -41,7 +41,7 @@ const s3upload = async (req, res) => {
     Key: Key,
     Expires: 200,
     ContentType: type,
-    //ACL: 'public-read',
+    ACL: 'public-read',
   };
   const uploadURL = await s3.getSignedUrlPromise('putObject', s3Params);
   const result = {
