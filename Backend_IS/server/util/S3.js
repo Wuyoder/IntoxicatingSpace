@@ -21,7 +21,7 @@ const s3upload = async (req, res) => {
     return res.status(400).json({ error: 'type missing' });
   }
   if (info.type === 'profile_image') {
-    Key = `profile/user_image/${who.id}/${v4()}.jpg`;
+    Key = `images/user_image/${who.id}/${v4()}.jpg`;
     type = 'image/jpeg';
   }
   if (info.type === 'show_image') {
