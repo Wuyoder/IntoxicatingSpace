@@ -248,6 +248,7 @@ const updateepisode = async (req, res) => {
     ) {
       return res.json({ error: 'Nohting Changed.' });
     }
+
     let change = '';
     if (infos.title !== '') {
       change += `episode_title = '${infos.title}' ,`;
@@ -278,10 +279,10 @@ const updateepisode = async (req, res) => {
       );
       change += `episode_image = '${cdnimage}' ,`;
     }
+
     if (infos.episode !== '') {
       change += `episode_episode = '${infos.episode}' ,`;
     }
-
     allchange = change.slice(0, change.length - 1);
     const epiquery =
       'UPDATE episodes SET ' +
