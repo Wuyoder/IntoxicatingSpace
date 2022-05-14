@@ -21,7 +21,6 @@ const HotShow = ({ item }) => {
       }
     );
   };
-  console.log();
 
   return (
     <Link

@@ -40,12 +40,17 @@ const Profile = () => {
       <>
         <Step.StepUserprofile />
         <div id='profile_info'>
-          <div>
-            <img
-              id='userprofile_image'
-              alt='user_image'
-              src={localStorage.getItem('user_image')}
-            ></img>
+          <div
+            id='userprofile_image'
+            style={{
+              background: `url(${localStorage.getItem(
+                'user_image'
+              )}) 50% 0 no-repeat `,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+            }}
+          >
+            <div></div>
           </div>
           <div className='profile_container'>
             <div className='profile_sub1'>

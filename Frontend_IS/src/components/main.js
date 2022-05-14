@@ -22,7 +22,7 @@ const Withyou = () => {
   }, []);
 
   if (counterlogins > 0) {
-    return <>with you {counterlogins} days and nights.</>;
+    return <>with you {counterlogins} times.</>;
   }
   if (!counterlogins) {
     return <></>;
@@ -224,6 +224,9 @@ const Player = () => {
         {(() => {
           setAudio(document.querySelector('audio'));
         })()}
+      </div>
+      <div Style='position:fixed; bottom:10vh; left:87vw; color:#6f96a6; font-size:o.5em'>
+        &copy; Intoxicating Space
       </div>
       <Link
         to={`/episode/${localStorage.getItem('nowplay_url')}`}

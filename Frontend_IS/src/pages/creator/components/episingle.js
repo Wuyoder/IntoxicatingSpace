@@ -280,11 +280,16 @@ const Episingle = ({ item, i }) => {
               <Step.StepEpi />
               <div id='single_epi_parts'>
                 <div>
-                  <img
+                  <div
                     alt='episode_image'
-                    src={item.episode_image}
-                    Style='height: 150px; width:150px'
-                  ></img>
+                    style={{
+                      background: `url(${item.episode_image}) 50% 0 no-repeat `,
+                      backgroundSize: 'cover',
+                      backgroundPosition: 'center',
+                      height: '150px',
+                      width: '150px',
+                    }}
+                  ></div>
                 </div>
                 <div className='single_epi_info'>
                   <div id='single_epi_info_l'>

@@ -1,46 +1,21 @@
-import { EPISODECHOICE } from '../../../global/constants';
-import { useState, useEffect, useContext } from 'react';
-import axios from 'axios';
+import { useContext } from 'react';
 import { AppContext } from '../../../App';
 import { Helmet } from 'react-helmet';
 import { Button, Card, Typography } from '@mui/material';
-const Info = () => {
+
+const Info = ({ info }) => {
   const { setEpisodeurl, audio } = useContext(AppContext);
-  const [description, setDescription] = useState(true);
-  const [info, setInfo] = useState({});
-  useEffect(() => {
-    //console.log(window.location.pathname.slice(9).split('-')[0]); TODO: show_id
-    //console.log(window.location.pathname.slice(9).split('-')[1]); TODO: episode_id
-    const getInfo = async () => {
-      const res = await axios.get(
-        `${EPISODECHOICE}/${window.location.pathname.slice(9).split('-')[0]}-${
-          window.location.pathname.slice(9).split('-')[1]
-        }`
-      );
-      if (!res.data.item) {
-        window.location.replace(
-          `/showchoice/${window.location.pathname.slice(9).split('-')[0]}`
-        );
-      }
-      setInfo(res.data);
-    };
-    getInfo();
-  }, []);
+
   const changeplay = () => {
     const play = () => {
       setEpisodeurl(localStorage.getItem('last'));
     };
     play();
+    const audioTarget = document.querySelector('.rhap_main');
+    audioTarget.style.display = 'block';
+    const nowPlay = document.getElementById('nowplay_btn');
+    nowPlay.style.display = 'block';
   };
-
-  // const more = () => {
-  //   document.getElementById('epi_des').style.display = 'block';
-  //   setDescription(false);
-  // };
-  // const less = () => {
-  //   document.getElementById('epi_des').style.display = '-webkit-box';
-  //   setDescription(true);
-  // };
 
   return (
     <>
@@ -67,7 +42,6 @@ const Info = () => {
         <div className='chat_info_l'>
           <Card variant='outlined' id='episode_choice'>
             <Typography>{info.title}</Typography>
-
             <div>
               <img
                 id='episode_choice_image'
@@ -103,15 +77,16 @@ const Info = () => {
           <div className='chat_info_r'>
             <Typography>{info.item?.title}</Typography>
             <div className='show_detail' id='epi_des'></div>
-            {(() => {
-              if (info.item !== undefined) {
-                document.getElementById('epi_des').innerHTML =
-                  info.item.content;
-              }
-            })()}
+            {/* {(() => {
+                  if (info.item !== undefined) {
+                    document.getElementById('epi_des').innerHTML =
+                      info.item.content;
+                  }
+                })()} */}
           </div>
         </Card>
       </div>
+      {}
     </>
   );
 };

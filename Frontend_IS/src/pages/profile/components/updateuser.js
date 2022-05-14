@@ -1,12 +1,11 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { UPDATE_USER, USER_PROFILE, S3 } from '../../../global/constants';
-import Image from './image';
 import { Button, Card, TextField } from '@mui/material';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 import Step from '../../step/steps';
-const Updateuser = () => {
+const Updateuser = (setUpdateuser) => {
   const MySwal = withReactContent(Swal);
   const [userprofile, setUserprofile] = useState({});
   const [username, setUsername] = useState([]);
@@ -124,6 +123,7 @@ const Updateuser = () => {
           );
         }
       }
+      window.location.reload();
     } else {
       MySwal.fire({
         icon: 'error',
@@ -151,7 +151,16 @@ const Updateuser = () => {
       <div className='updateuser_container'>
         <div>
           <div className='profile_image_container'>
-            <Image imgurl={imgurl} />
+            <div
+              id='update_userprofile_image'
+              style={{
+                background: `url(${localStorage.getItem(
+                  'user_image'
+                )}) 50% 0 no-repeat `,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+              }}
+            ></div>
           </div>
           <div>
             <form>

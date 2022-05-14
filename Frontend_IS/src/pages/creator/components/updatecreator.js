@@ -146,6 +146,7 @@ const Updatecreator = ({ creatorprofile }) => {
         'creator_image',
         res.data.presignedURL.split('?')[0]
       );
+      window.location.reload();
       if (s3res.status === 200) {
         const update = await axios.put(
           UPDATE_CREATOR,
@@ -206,12 +207,16 @@ const Updatecreator = ({ creatorprofile }) => {
         <div className='update_creator_container'>
           <div>
             <div>
-              <img
+              <div
                 id='show_image'
-                alt='show_iamge'
-                src={localStorage.getItem('creator_image')}
-                Style='height: 150px'
-              ></img>
+                style={{
+                  background: `url(${localStorage.getItem(
+                    'creator_image'
+                  )}) 50% 0 no-repeat `,
+                  backgroundPosition: 'center',
+                  backgroundSize: 'cover',
+                }}
+              ></div>
             </div>
             <form>
               <img

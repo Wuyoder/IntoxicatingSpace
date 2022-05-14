@@ -69,11 +69,16 @@ const Creatorinfo = () => {
       <Step.StepCreator />
       <div className='cp_container' id='cp_container'>
         <div>
-          <img
+          <div
             id='show_image'
-            alt='show_image'
-            src={localStorage.getItem('creator_image')}
-          ></img>
+            style={{
+              background: `url(${localStorage.getItem(
+                'creator_image'
+              )}) 50% 0 no-repeat `,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+            }}
+          ></div>
         </div>
         <div id='cp_r'>
           <div id='cp_r_l'>

@@ -971,8 +971,10 @@ fieldset.MuiOutlinedInput-notchedOutline.css-1d3z3hw-MuiOutlinedInput-notchedOut
   margin-left: 3vw;
 }
 #userprofile_image {
-  max-width: 10vw;
-  min-width: 10vw;
+  max-width: 12vw;
+  min-width: 12vw;
+  max-height: 12vw;
+  min-height: 12vw;
 }
 #subshows_container,
 #historyshows_container {
@@ -989,8 +991,10 @@ fieldset.MuiOutlinedInput-notchedOutline.css-1d3z3hw-MuiOutlinedInput-notchedOut
   color: #6f96a6;
 }
 #update_userprofile_image {
-  width: 10vw;
-  height: 10vw;
+  max-width: 12vw;
+  max-height: 12vw;
+  min-width: 12vw;
+  min-height: 12vw;
   margin-bottom: 2vh;
 }
 .updateuser_container {
@@ -1056,8 +1060,12 @@ fieldset.MuiOutlinedInput-notchedOutline.css-1d3z3hw-MuiOutlinedInput-notchedOut
   margin-top: 2vh;
 }
 #show_image {
-  max-width: 10vw;
-  max-height: 10vw;
+  max-width: 12vw;
+  max-height: 12vw;
+  min-height: 12vw;
+  min-width: 12vw;
+  width: auto;
+  height: auto;
   margin-left: 2vw;
   margin-top: 5vh;
 }
@@ -1504,6 +1512,7 @@ fieldset.MuiOutlinedInput-notchedOutline.css-1d3z3hw-MuiOutlinedInput-notchedOut
   position: fixed;
   bottom: 2vh;
   left: 14vw;
+  display: none;
 }
 #now_link {
   text-decoration: none;
@@ -1515,3 +1524,7 @@ fieldset.MuiOutlinedInput-notchedOutline.css-1d3z3hw-MuiOutlinedInput-notchedOut
   color: #646668;
 }
 /* version3 */
+/* package inside */
+.rhap_main {
+  display: none;
+}

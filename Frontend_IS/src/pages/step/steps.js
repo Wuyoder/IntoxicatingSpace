@@ -14,7 +14,7 @@ const StepShowchoice = () => {
       },
       {
         element: '#sub_container',
-        intro: 'Click to sub/unsub this podcast.',
+        intro: 'Sign in first, and click to sub/unsub this podcast.',
       },
       {
         element: '.show_epi_container',

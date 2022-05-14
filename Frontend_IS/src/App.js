@@ -75,7 +75,7 @@ const App = () => {
               <Route path='/*' element={<Notfound />}></Route>
             </Routes>
           </div>
-          <div id='filler'> &copy; Intoxicating Space</div>
+          <div id='filler'></div>
         </div>
         <Main.Player />
       </AppContext.Provider>

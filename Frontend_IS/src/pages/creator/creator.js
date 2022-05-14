@@ -88,7 +88,15 @@ const Creator = () => {
             </Button>
           </div>
         </div>
-        <div>{biguser ? updateuser ? <Profile /> : <Updateuser /> : null}</div>
+        <div>
+          {biguser ? (
+            updateuser ? (
+              <Profile />
+            ) : (
+              <Updateuser setUpdateuser={setUpdateuser} />
+            )
+          ) : null}
+        </div>
         <div>
           {bigcreator ? (
             updatcreator ? (

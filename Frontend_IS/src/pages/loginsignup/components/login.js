@@ -59,6 +59,7 @@ const Login = () => {
           <TextField
             id='L_pwd'
             type='password'
+            label='Password'
             onKeyDown={enter}
             defaultValue={'testtest'}
           ></TextField>
