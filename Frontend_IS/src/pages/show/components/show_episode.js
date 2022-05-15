@@ -11,9 +11,8 @@ const ShowEpisode = () => {
   useEffect(() => {
     const getEpisode = async () => {
       const res = await axios.get(
-        `${SHOWCHOICE}/${window.location.pathname.slice(12)}`
+        `${SHOWCHOICE}/${window.location.pathname.split('/')[2]}`
       );
-      //TODO:如果沒有單集資料，應該要顯示頁面，但沒有單集
       if (res.data.error) {
         setNoepi(false);
       } else {
@@ -36,16 +35,16 @@ const ShowEpisode = () => {
               >
                 <Link
                   to={{
-                    pathname: `/episode/${window.location.pathname.slice(
-                      12
-                    )}-${index}`,
+                    pathname: `/episode/${
+                      window.location.pathname.split('/')[2]
+                    }-${index}`,
                   }}
                   onClick={async () => {
                     await axios.post(
                       USER_HISTORY,
                       {
                         type: 'episode',
-                        show: window.location.pathname.slice(12),
+                        show: window.location.pathname.split('/')[2],
                         episode: item.guid,
                       },
                       {

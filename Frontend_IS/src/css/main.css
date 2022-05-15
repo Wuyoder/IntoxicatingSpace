@@ -401,6 +401,7 @@ body {
   background-color: aqua;
   border-radius: 50%;
   cursor: help;
+  animation: shake 800ms ease-in-out;
 }
 
 * {

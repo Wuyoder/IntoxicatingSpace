@@ -13,14 +13,16 @@ const Episode = () => {
       const res = await axios
         .get(
           `${EPISODECHOICE}/${
-            window.location.pathname.slice(9).split('-')[0]
-          }-${window.location.pathname.slice(9).split('-')[1]}`
+            window.location.pathname.split('/')[2].split('-')[0]
+          }-${window.location.pathname.split('/')[2].split('-')[1]}`
         )
         .then((res) => {
           setInfo(res.data);
           if (!res.data.item) {
             window.location.replace(
-              `/showchoice/${window.location.pathname.slice(9).split('-')[0]}`
+              `/showchoice/${
+                window.location.pathname.split('/')[2].split('-')[0]
+              }`
             );
           }
           setLoad(false);

@@ -10,7 +10,7 @@ import { Helmet } from 'react-helmet';
 import { Button, Card, CardContent, Typography } from '@mui/material';
 import Step from '../../step/steps';
 import Loading from '../../loading/loading';
-
+import ShowDes from './show_des';
 const ShowInfo = () => {
   const [info, setInfo] = useState([]);
   const [originsub, setOriginsub] = useState(false);
@@ -19,19 +19,20 @@ const ShowInfo = () => {
   const [load, setLoad] = useState(true);
   useEffect(() => {
     const getInfo = async () => {
-      const res1 = await axios.get(
-        `${SHOWCHOICE}/${window.location.pathname.slice(12)}`
-      );
-
-      setInfo(res1.data);
-      if (res1.data.error) {
-        setShowon(false);
-      } else {
-        setShowon(true);
-      }
-      if (localStorage.getItem('token')) {
-        setMem(true);
-      }
+      const res1 = await axios
+        .get(`${SHOWCHOICE}/${window.location.pathname.split('/')[2]}`)
+        .then((res) => {
+          setInfo(res.data);
+          if (res.data.error) {
+            setShowon(false);
+            Window.location.replace('/');
+          } else {
+            setShowon(true);
+          }
+          if (localStorage.getItem('token')) {
+            setMem(true);
+          }
+        });
     };
     const getsub = async () => {
       const res2 = await axios
@@ -40,25 +41,27 @@ const ShowInfo = () => {
         })
         .then((res) => {
           setLoad(false);
+          const show = window.location.pathname.split('/')[2];
+          if (!res.data.error) {
+            if (res.data.indexOf(Number(show)) < 0) {
+              setOriginsub(false);
+            }
+          } else {
+            setOriginsub(true);
+          }
         });
-
-      const show = window.location.pathname.slice(12);
-      if (res2.data.indexOf(Number(show)) < 0) {
-        setOriginsub(false);
-      } else {
-        setOriginsub(true);
-      }
     };
-
     getInfo();
     getsub();
   }, []);
+
+  useEffect(() => {}, [info]);
 
   const subclick = async () => {
     setOriginsub(true);
     const subres = await axios.post(
       SUB,
-      { id: window.location.pathname.slice(12) },
+      { id: window.location.pathname.split('/')[2] },
       {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -70,7 +73,7 @@ const ShowInfo = () => {
     setOriginsub(false);
     const unsubres = await axios.post(
       UNSUB,
-      { id: window.location.pathname.slice(12) },
+      { id: window.location.pathname.split('/')[2] },
       {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -155,15 +158,12 @@ const ShowInfo = () => {
           </div>
           <div className='show_info_r'>
             <Card variant='outlined' id='show_info_r'>
-              <div className='show_des' id='des'></div>
+              <div className='show_des' id='des'>
+                <ShowDes info={info} />
+              </div>
             </Card>
           </div>
         </div>
-        {(() => {
-          if (info.description !== undefined) {
-            document.getElementById('des').innerHTML = info.description;
-          }
-        })()}
       </>
     )
   ) : (

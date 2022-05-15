@@ -54,7 +54,7 @@ const App = () => {
       }
     };
     getmember();
-  });
+  }, []);
   return (
     <BrowserRouter>
       <AppContext.Provider value={appContextValue}>

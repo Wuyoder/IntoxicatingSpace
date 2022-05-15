@@ -16,7 +16,9 @@ const Info = ({ info }) => {
     const nowPlay = document.getElementById('nowplay_btn');
     nowPlay.style.display = 'block';
   };
-
+  const destext = () => {
+    return { __html: info.item.content };
+  };
   return (
     <>
       <Helmet>
@@ -76,13 +78,11 @@ const Info = ({ info }) => {
         <Card variant='outlined' id='episode_choice_des'>
           <div className='chat_info_r'>
             <Typography>{info.item?.title}</Typography>
-            <div className='show_detail' id='epi_des'></div>
-            {/* {(() => {
-                  if (info.item !== undefined) {
-                    document.getElementById('epi_des').innerHTML =
-                      info.item.content;
-                  }
-                })()} */}
+            <div
+              className='show_detail'
+              id='epi_des'
+              dangerouslySetInnerHTML={destext()}
+            ></div>
           </div>
         </Card>
       </div>
