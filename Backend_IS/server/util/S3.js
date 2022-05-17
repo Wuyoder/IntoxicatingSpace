@@ -9,7 +9,7 @@ const s3 = new aws.S3({
 const { jwtwrap } = require('./jwt');
 const { v4 } = require('uuid');
 
-const s3upload = async (req, res) => {
+const s3Upload = async (req, res) => {
   const who = await jwtwrap(req);
   if (who.error) {
     return res.json(who);
@@ -52,4 +52,4 @@ const s3upload = async (req, res) => {
   return res.send(result);
 };
 
-module.exports = { s3upload };
+module.exports = { s3Upload };

@@ -1,4 +1,4 @@
-const db = require('../util/mysql');
+const db = require('../util/db');
 
 const newrss = async (insertrss) => {
   try {

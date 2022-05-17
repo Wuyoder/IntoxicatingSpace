@@ -1,5 +1,5 @@
 require('dotenv').config();
-const db = require('../util/mysql');
+const db = require('../util/db');
 const { jwtwrap } = require('../util/jwt');
 
 const chatmsg = async (req, res) => {

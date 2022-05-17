@@ -2,29 +2,16 @@ require('dotenv').config();
 const cors = require('cors');
 const express = require('express');
 const app = express();
-const port = 3001;
+const port = process.env.PORT;
 const bodyParser = require('body-parser');
 app.use(express.static('public'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
-const axios = require('axios');
-
-app.get('/test', async (req, res) => {
-  let data;
-  const result = await axios
-    .get('https://intoxicating.space/api/1.0/user/showlist')
-    .then((response) => {
-      data = response.data;
-    });
-  res.send(data);
-});
 
 //TODO:error handler, try&catch
 app.use('/api/1.0/admin', [require('./server/routes/admin_route')]);
-
 app.use('/api/1.0/user', [require('./server/routes/user_route')]);
-
 // TODO:SOCKET.IO
 
 //將啟動的 Server 送給 socket.io 處理
@@ -38,7 +25,7 @@ const io = new Server(server, {
 });
 
 const { jwtsk } = require('./server/util/jwt');
-const db = require('./server/util/mysql');
+const db = require('./server/util/db');
 io.on('connection', (socket) => {
   socket.on('getMessage', async (message) => {
     const who = await jwtsk(message.token);

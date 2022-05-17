@@ -1,4 +1,4 @@
-const db = require('../util/mysql');
+const db = require('../util/db');
 const { jwtwrap } = require('../util/jwt');
 const showkeyword = async (req, res) => {
   //檢查是否成年

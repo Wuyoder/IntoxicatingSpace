@@ -1,4 +1,4 @@
-const db = require('../util/mysql');
+const db = require('../util/db');
 const jwt = require('jsonwebtoken');
 const { jwtwrap } = require('../util/jwt');
 

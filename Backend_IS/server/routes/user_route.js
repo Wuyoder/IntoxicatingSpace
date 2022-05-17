@@ -26,12 +26,12 @@ const {
   updatecreator,
   updateepisode,
 } = require('../controller/user_controller');
-const { s3upload } = require('../util/S3');
+const { s3Upload } = require('../util/s3');
 // test chatroom for socket
 const { chatmsg, chathistory } = require('../controller/chatroom_controller');
 router.route('/signup').post(signup);
 router.route('/signin').post(signin);
-router.route('/s3upload').post(s3upload);
+router.route('/s3').post(s3Upload);
 router.route('/userprofile').get(userprofile);
 router.route('/userprofile').put(updateuser);
 router.route('/userhistory').post(userhistory);

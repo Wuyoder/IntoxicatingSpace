@@ -1,4 +1,4 @@
-const db = require('../util/mysql');
+const db = require('../util/db');
 const xml = require('xml');
 const rssfeed = async (req, res) => {
   //目標確定show uuid

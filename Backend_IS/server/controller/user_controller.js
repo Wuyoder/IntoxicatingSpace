@@ -1,5 +1,5 @@
 require('dotenv').config();
-const db = require('../util/mysql');
+const db = require('../util/db');
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
 const jwt = require('jsonwebtoken');
