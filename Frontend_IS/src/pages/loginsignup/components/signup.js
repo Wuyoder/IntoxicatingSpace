@@ -1,16 +1,8 @@
-import axios from 'axios';
 import { SIGNUP, LOGIN } from '../../../global/constants';
-import {
-  Button,
-  Card,
-  CardContent,
-  CardMedia,
-  CardActionArea,
-  Typography,
-  TextField,
-} from '@mui/material';
+import { Button, TextField } from '@mui/material';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
+import ajax from '../../../util/ajax';
 const Signup = () => {
   const MySwal = withReactContent(Swal);
   const gosignup = async () => {
@@ -18,7 +10,7 @@ const Signup = () => {
     const email = document.getElementById('S_email').value;
     const pwd = document.getElementById('S_pwd').value;
     const birth = document.getElementById('S_birth').value;
-    const s_result = await axios.post(SIGNUP, {
+    const s_result = await ajax('post', SIGNUP, {
       name: name,
       email: email,
       pwd: pwd,

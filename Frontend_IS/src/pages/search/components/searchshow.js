@@ -1,19 +1,16 @@
 import { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { AppContext } from '../../../App';
-import axios from 'axios';
 import { USER_HISTORY } from '../../../global/constants';
+import ajax from '../../../util/ajax';
 const Searchshow = ({ item }) => {
-  const { showid, setShowid, setSearch } = useContext(AppContext);
+  const { setShowid } = useContext(AppContext);
   const goclickshow = async (event) => {
     setShowid(item.rss_id);
-    const res = await axios.post(
-      USER_HISTORY,
-      { type: 'show', show: item.rss_id },
-      {
-        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
-      }
-    );
+    const res = await ajax('post', USER_HISTORY, {
+      type: 'show',
+      show: item.rss_id,
+    });
   };
   return (
     <div key={`search-${item.rss_id}`}>

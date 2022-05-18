@@ -1,6 +1,4 @@
 import Creatorinfo from './components/creatorinfo';
-import Creatorepisode from './components/creatorepisode';
-import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { CREATOR_PROFILE, ISHOST_SHOW } from '../../global/constants';
 import Profile from '../profile/profile';
@@ -9,6 +7,7 @@ import Updatecreator from './components/updatecreator';
 import Episode from '../creator/components/episode';
 import Newepisode from '../creator/components/newepisode';
 import { Button, Card } from '@mui/material';
+import ajax from '../../util/ajax';
 const Creator = () => {
   const [creatorprofile, setCreatorprofile] = useState([]);
   const [creatorepisode, setCreatorepisode] = useState([]);
@@ -21,16 +20,14 @@ const Creator = () => {
 
   useEffect(() => {
     const getcreatorinfo = async () => {
-      const res1 = await axios.get(CREATOR_PROFILE, {
-        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
-      });
+      const res1 = ajax('get', CREATOR_PROFILE);
+
       if (!res1.data[0].user_id) {
         window.location.replace('/');
       }
       setCreatorprofile(res1.data[0]);
-      const res2 = await axios.get(ISHOST_SHOW, {
-        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
-      });
+      const res2 = await ajax('get', ISHOST_SHOW);
+
       setCreatorepisode(res2.data);
     };
     getcreatorinfo();

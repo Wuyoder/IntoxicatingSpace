@@ -1,22 +1,21 @@
-import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { UPDATE_USER, USER_PROFILE, S3 } from '../../../global/constants';
-import { Button, Card, TextField } from '@mui/material';
+import { Button, TextField } from '@mui/material';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 import Step from '../../step/steps';
-const Updateuser = (setUpdateuser) => {
+import ajax from '../../../util/ajax';
+
+const Updateuser = () => {
   const MySwal = withReactContent(Swal);
-  const [userprofile, setUserprofile] = useState({});
+  const [setUserprofile] = useState({});
   const [username, setUsername] = useState([]);
   const [useremail, setUseremail] = useState([]);
-  const [imgurl, setImgurl] = useState('');
+  const [setImgurl] = useState('');
   const [image, setImage] = useState([]);
   useEffect(() => {
     const getuserprofile = async () => {
-      const res = await axios.get(USER_PROFILE, {
-        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
-      });
+      const res = await ajax('get', USER_PROFILE);
       setUserprofile(res.data);
       setUsername(res.data.name);
       setUseremail(res.data.email);
@@ -28,17 +27,11 @@ const Updateuser = (setUpdateuser) => {
     let new_name = document.getElementById('new_name').value;
     let new_email = document.getElementById('new_email').value;
     let new_pwd = document.getElementById('new_pwd').value;
-    const res = await axios.put(
-      UPDATE_USER,
-      {
-        name: new_name,
-        email: new_email,
-        pwd: new_pwd,
-      },
-      {
-        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
-      }
-    );
+    const res = await ajax('putdb', UPDATE_USER, {
+      name: new_name,
+      email: new_email,
+      pwd: new_pwd,
+    });
     if (res.data.token) {
       localStorage.setItem('token', res.data.token);
       setUsername(res.data.user_name);
@@ -83,44 +76,16 @@ const Updateuser = (setUpdateuser) => {
     });
 
     if (imageInput.files[0]) {
-      const res = await axios.post(
-        S3,
-        { type: 'profile_image' },
-        {
-          headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
-        }
-      );
+      const res = await ajax('post', S3, { type: 'profile_image' });
       if (res.data.presignedURL) {
-        const s3res = await axios.put(res.data.presignedURL, file, {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-          onUploadProgress: (e) => {
-            var percentCompleted = Math.round((e.loaded * 100) / e.total);
-            if (percentCompleted < 100) {
-              document.getElementById(
-                'waitpercent'
-              ).innerHTML = `${percentCompleted}%`;
-            } else {
-              document.getElementById('waitpercent').innerHTML = 'completed!';
-            }
-          },
-        });
+        const s3res = await ajax('puts3', res.data.presignedURL, file);
 
         localStorage.setItem('user_image', res.data.presignedURL.split('?')[0]);
         setImgurl(res.data.presignedURL.split('?')[0]);
         if (s3res.status === 200) {
-          await axios.put(
-            UPDATE_USER,
-            {
-              newprofileimage: res.data.presignedURL.split('?')[0],
-            },
-            {
-              headers: {
-                Authorization: `Bearer ${localStorage.getItem('token')}`,
-              },
-            }
-          );
+          await ajax('putdb', UPDATE_USER, {
+            newprofileimage: res.data.presignedURL.split('?')[0],
+          });
         }
       }
       window.location.reload();

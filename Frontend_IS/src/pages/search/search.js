@@ -1,10 +1,9 @@
-import { useContext, useEffect } from 'react';
+import { useContext } from 'react';
 import { AppContext } from '../../App';
 import Searchshow from './components/searchshow';
-import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 const Search = () => {
-  const { search, setSearch } = useContext(AppContext);
+  const { search } = useContext(AppContext);
 
   if (search.error) {
     return (

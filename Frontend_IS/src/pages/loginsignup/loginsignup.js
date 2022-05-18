@@ -1,15 +1,7 @@
 import Login from './components/login';
 import Signup from './components/signup';
 import { useState } from 'react';
-import {
-  Button,
-  Card,
-  CardContent,
-  CardMedia,
-  CardActionArea,
-  Typography,
-  TextField,
-} from '@mui/material';
+import { Button, Card } from '@mui/material';
 const LoginSignup = () => {
   const [now, setNow] = useState(true);
   return (

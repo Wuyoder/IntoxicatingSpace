@@ -1,11 +1,11 @@
 import socketio from 'socket.io-client';
 import { useState, useEffect, useContext } from 'react';
 import { AppContext } from '../../../App';
-import axios from 'axios';
 import { CHAT_HISTORY } from '../../../global/constants';
 import Msg from './msg';
 import { Button, Card, TextField } from '@mui/material';
 import Step from '../../step/steps';
+import ajax from '../../../util/ajax';
 const Chatroom = () => {
   const [ws, setWs] = useState(null);
   const [open, setOpen] = useState([]);
@@ -20,9 +20,7 @@ const Chatroom = () => {
   }, []);
   useEffect(() => {
     const openhistory = async () => {
-      const leavemsg = await axios.post(CHAT_HISTORY, {
-        //console.log(window.location.pathname.slice(9).split('-')[0]);
-        //console.log(window.location.pathname.slice(9).split('-')[1]);
+      const leavemsg = await ajax('postMsg', CHAT_HISTORY, {
         show_id: window.location.pathname.slice(9).split('-')[0],
         episode_id: episodeid,
       });

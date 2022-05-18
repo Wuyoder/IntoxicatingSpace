@@ -8,14 +8,13 @@ import { AppContext } from '../App';
 import { Button, TextField } from '@mui/material';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
+import ajax from '../util/ajax';
 
 const Withyou = () => {
   const [counterlogins, setCounterlogins] = useState(0);
   useEffect(() => {
     const getCounter = async () => {
-      const res = await axios.get(COUNTER_LOGINS, {
-        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
-      });
+      const res = await ajax('get', COUNTER_LOGINS);
       setCounterlogins(res.data.status);
     };
     getCounter();
@@ -30,18 +29,12 @@ const Withyou = () => {
 };
 
 const Topbar = () => {
-  const { search, setSearch, podcastplayer, audio } = useContext(AppContext);
+  const { setSearch } = useContext(AppContext);
   const gosearch = async () => {
     if (document.getElementById('search_input').value !== '') {
-      const res = await axios.post(
-        SEARCH,
-        {
-          keyword: document.getElementById('search_input').value,
-        },
-        {
-          headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
-        }
-      );
+      const res = await ajax('post', SEARCH, {
+        keyword: document.getElementById('search_input').value,
+      });
       document.getElementById('search_input').value = '';
       if (res.data.error !== 'no keyword') {
         setSearch(res.data);

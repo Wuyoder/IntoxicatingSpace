@@ -1,5 +1,4 @@
-import { useEffect, useState, useContext } from 'react';
-import axios from 'axios';
+import { useEffect, useState } from 'react';
 import {
   SHOWCHOICE,
   USER_SUBLIST,
@@ -11,6 +10,7 @@ import { Button, Card, CardContent, Typography } from '@mui/material';
 import Step from '../../step/steps';
 import Loading from '../../loading/loading';
 import ShowDes from './show_des';
+import ajax from '../../../util/ajax';
 const ShowInfo = () => {
   const [info, setInfo] = useState([]);
   const [originsub, setOriginsub] = useState(false);
@@ -19,37 +19,34 @@ const ShowInfo = () => {
   const [load, setLoad] = useState(true);
   useEffect(() => {
     const getInfo = async () => {
-      const res1 = await axios
-        .get(`${SHOWCHOICE}/${window.location.pathname.split('/')[2]}`)
-        .then((res) => {
-          setInfo(res.data);
-          if (res.data.error) {
-            setShowon(false);
-            Window.location.replace('/');
-          } else {
-            setShowon(true);
-          }
-          if (localStorage.getItem('token')) {
-            setMem(true);
-          }
-        });
+      const res1 = await ajax(
+        'get',
+        `${SHOWCHOICE}/${window.location.pathname.split('/')[2]}`
+      ).then((res) => {
+        setInfo(res.data);
+        if (res.data.error) {
+          setShowon(false);
+          Window.location.replace('/');
+        } else {
+          setShowon(true);
+        }
+        if (localStorage.getItem('token')) {
+          setMem(true);
+        }
+      });
     };
     const getsub = async () => {
-      const res2 = await axios
-        .get(USER_SUBLIST, {
-          headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
-        })
-        .then((res) => {
-          setLoad(false);
-          const show = window.location.pathname.split('/')[2];
-          if (!res.data.error) {
-            if (res.data.indexOf(Number(show)) < 0) {
-              setOriginsub(false);
-            }
-          } else {
-            setOriginsub(true);
+      const res2 = ajax('get', USER_SUBLIST).then((res) => {
+        setLoad(false);
+        const show = window.location.pathname.split('/')[2];
+        if (!res.data.error) {
+          if (res.data.indexOf(Number(show)) < 0) {
+            setOriginsub(false);
           }
-        });
+        } else {
+          setOriginsub(true);
+        }
+      });
     };
     getInfo();
     getsub();
@@ -59,27 +56,15 @@ const ShowInfo = () => {
 
   const subclick = async () => {
     setOriginsub(true);
-    const subres = await axios.post(
-      SUB,
-      { id: window.location.pathname.split('/')[2] },
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-      }
-    );
+    const subres = await ajax('post', SUB, {
+      id: window.location.pathname.split('/')[2],
+    });
   };
   const unsubclick = async () => {
     setOriginsub(false);
-    const unsubres = await axios.post(
-      UNSUB,
-      { id: window.location.pathname.split('/')[2] },
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-      }
-    );
+    const unsubres = await ajax('post', UNSUB, {
+      id: window.location.pathname.split('/')[2],
+    });
   };
 
   return showon ? (

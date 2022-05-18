@@ -9,7 +9,7 @@ import Search from './pages/search/search';
 import Notfound from './pages/404/404';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { USER_PROFILE } from './global/constants';
-import axios from 'axios';
+import ajax from './util/ajax';
 export const AppContext = createContext();
 
 const App = () => {
@@ -43,9 +43,7 @@ const App = () => {
 
   useEffect(() => {
     const getmember = async () => {
-      const res = await axios.get(USER_PROFILE, {
-        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
-      });
+      const res = await ajax('get', USER_PROFILE);
       if (res.data.error) {
         setMember(true);
       }

@@ -1,5 +1,4 @@
-import { useEffect, useState, useContext } from 'react';
-import axios from 'axios';
+import { useEffect, useState } from 'react';
 import {
   S3,
   UPDATE_EPI,
@@ -7,10 +6,10 @@ import {
   DELETE_EPI,
 } from '../../../global/constants';
 import { Button, Card, TextField } from '@mui/material';
-import { AppContext } from '../../../App';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 import Step from '../../step/steps';
+import ajax from '../../../util/ajax';
 const Episingle = ({ item, i }) => {
   const MySwal = withReactContent(Swal);
   const [edit, setEdit] = useState(true);
@@ -82,31 +81,18 @@ const Episingle = ({ item, i }) => {
           allowEscapeKey: false,
         });
         length = file.files[0].size;
-        const res1 = await axios.post(
-          S3,
-          { type: 'episode_file', episode_num: item.episode_id },
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem('token')}`,
-            },
-          }
-        );
-        fileurl = res1.data.presignedURL.split('?')[0];
-        const s3res1 = await axios.put(res1.data.presignedURL, file.files[0], {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-          onUploadProgress: (e) => {
-            var percentCompleted = Math.round((e.loaded * 100) / e.total);
-            if (percentCompleted < 100) {
-              document.getElementById(
-                'waitpercent'
-              ).innerHTML = `${percentCompleted}%`;
-            } else {
-              document.getElementById('waitpercent').innerHTML = 'completed!';
-            }
-          },
+
+        const res1 = await ajax('post', S3, {
+          type: 'episode_file',
+          episode_num: item.episode_id,
         });
+
+        fileurl = res1.data.presignedURL.split('?')[0];
+        const s3res1 = await ajax(
+          'puts3',
+          res1.data.presignedURL,
+          file.files[0]
+        );
       }
 
       if (image.files[0]) {
@@ -122,33 +108,17 @@ const Episingle = ({ item, i }) => {
           allowOutsideClick: false,
           allowEscapeKey: false,
         });
-        const res2 = await axios.post(
-          S3,
-          { type: 'episode_image', episode_num: item.episode_id },
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem('token')}`,
-            },
-          }
-        );
-
+        const res2 = await ajax('post', S3, {
+          type: 'episode_image',
+          episode_num: item.episode_id,
+        });
         imageurl = res2.data.presignedURL.split('?')[0];
         item.episode_image = imageurl;
-        const s3res2 = await axios.put(res2.data.presignedURL, image.files[0], {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-          onUploadProgress: (e) => {
-            var percentCompleted = Math.round((e.loaded * 100) / e.total);
-            if (percentCompleted < 100) {
-              document.getElementById(
-                'waitpercent'
-              ).innerHTML = `${percentCompleted}%`;
-            } else {
-              document.getElementById('waitpercent').innerHTML = 'completed!';
-            }
-          },
-        });
+        const s3res2 = await ajax(
+          'puts3',
+          res2.data.presignedURL,
+          image.files[0]
+        );
       }
       const updateepi = {
         show_id: item.show_id,
@@ -162,11 +132,7 @@ const Episingle = ({ item, i }) => {
         explicit: explicit.value,
         episode: episode.value,
       };
-      const updateres = await axios.put(UPDATE_EPI, updateepi, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-      });
+      const updateres = await ajax('putdb', UPDATE_EPI, updateepi);
       setDuration(0);
       item.episode_title = updateres.data.episode_episode;
       item.episode_episode = updateres.data.episode_title;
@@ -195,19 +161,11 @@ const Episingle = ({ item, i }) => {
   };
 
   const goswitch = async () => {
-    const res = await axios.post(
-      SWITCHER,
-      {
-        type: 'episode',
-        show_id: item.show_id,
-        episode_id: item.episode_id,
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-      }
-    );
+    const res = await ajax('post', SWITCHER, {
+      type: 'episode',
+      show_id: item.show_id,
+      episode_id: item.episode_id,
+    });
     setEpisitu(!episitu);
   };
   const goremove = async () => {
@@ -221,11 +179,8 @@ const Episingle = ({ item, i }) => {
       confirmButtonText: 'Yes, delete it!',
     }).then(async (result) => {
       if (result.isConfirmed) {
-        const res = await axios.delete(DELETE_EPI, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-          },
-          data: { episode_id: item.episode_id },
+        const res = await ajax('delete', DELETE_EPI, {
+          episode_id: item.episode_id,
         });
         if (res.data.status) {
           setDelepi(false);

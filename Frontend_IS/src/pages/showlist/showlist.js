@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { SHOWLIST } from '../../global/constants';
-import axios from 'axios';
 import Show from './components/show';
 import Category from './components/category';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -8,13 +7,12 @@ import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import '../../css/main.css';
 import 'intro.js/introjs.css';
+import ajax from '../../util/ajax';
 const Showlist = () => {
   const [showlist, setShowlist] = useState({});
   useEffect(() => {
     const getShowlist = async () => {
-      const res = await axios.get(SHOWLIST, {
-        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
-      });
+      const res = await ajax('get', SHOWLIST);
       setShowlist(res.data);
     };
     getShowlist();

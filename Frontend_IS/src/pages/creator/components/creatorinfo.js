@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import axios from 'axios';
 import { CREATOR_PROFILE, SWITCHER, MYPAGE } from '../../../global/constants';
 import { QRCodeCanvas } from 'qrcode.react';
 import { Button } from '@mui/material';
@@ -8,6 +7,8 @@ import html2canvas from 'html2canvas';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 import Step from '../../step/steps';
+import ajax from '../../../util/ajax';
+
 const Creatorinfo = () => {
   const MySwal = withReactContent(Swal);
   const [cprofile, setCprofile] = useState([]);
@@ -15,37 +16,25 @@ const Creatorinfo = () => {
   const [rssid, setRssid] = useState('');
   useEffect(() => {
     const getcreatorinfo = async () => {
-      const res = await axios.get(CREATOR_PROFILE, {
-        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
-      });
+      const res = await ajax('get', CREATOR_PROFILE);
       setCprofile(res.data[0]);
       if (res.data[0].show_status === 1) {
         setShowstatus(true);
       } else {
         setShowstatus(false);
       }
-
-      const rss = await axios.get(MYPAGE, {
-        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
-      });
+      const rss = await ajax('get', MYPAGE);
       setRssid(rss.data.rss_id);
     };
     getcreatorinfo();
   }, []);
 
   const goshowswitch = async () => {
-    const res = await axios.post(
-      SWITCHER,
-      {
-        type: 'show',
-        show_id: cprofile.show_id,
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-      }
-    );
+    await ajax('post', SWITCHER, {
+      type: 'show',
+      show_id: cprofile.show_id,
+    });
+
     setShowstatus(!showstatus);
     MySwal.fire({
       icon: 'info',
@@ -104,7 +93,7 @@ const Creatorinfo = () => {
             <div
               onClick={() => {
                 navigator.clipboard.writeText(
-                  'https://intoxicating.space/api/1.0/user/rss/' +
+                  'https://api.intoxicating.space/api/1.0/user/rss/' +
                     cprofile.show_id
                 );
                 MySwal.fire({
@@ -116,7 +105,7 @@ const Creatorinfo = () => {
               <input
                 id='rssfeed'
                 value={
-                  'https://intoxicating.space/api/1.0/user/rss/' +
+                  'https://api.intoxicating.space/api/1.0/user/rss/' +
                   cprofile.show_id
                 }
                 unselectable='on'
@@ -154,7 +143,7 @@ const Creatorinfo = () => {
         <div>
           <div>
             <QRCodeCanvas
-              value={`http://intoxicating.space/showchoice/${rssid}`}
+              value={`https://intoxicating.space/showchoice/${rssid}`}
               id='QRcode'
             />
           </div>

@@ -1,9 +1,8 @@
 import { useContext } from 'react';
 import { AppContext } from '../../../App';
 const Msg = ({ item }) => {
-  const { getcurrent, podcastplayer, setPod, audio, setAudio } =
-    useContext(AppContext);
-  //拆分功能塊
+  const { audio } = useContext(AppContext);
+
   const gothattime = () => {
     audio.currentTime = item.chat_episode_time;
     audio.play();
@@ -35,7 +34,6 @@ const Msg = ({ item }) => {
               .split('T')[1]
               .split('.')[0];
             return `( ${modiday} )`;
-            return `( ${modiday} - ${moditime} )`;
           })()}
         </div>
       </div>

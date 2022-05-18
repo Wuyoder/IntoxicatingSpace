@@ -1,16 +1,11 @@
-import axios from 'axios';
 import { useEffect, useState } from 'react';
-import {
-  UPDATE_USER,
-  USER_PROFILE,
-  S3,
-  CREATOR_PROFILE,
-} from '../../../global/constants';
+import { S3, CREATOR_PROFILE } from '../../../global/constants';
 import { UPDATE_CREATOR } from '../../../global/constants';
-import { Button, Card, MenuItem, Select, TextField } from '@mui/material';
+import { Button, TextField } from '@mui/material';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 import Step from '../../step/steps';
+import ajax from '../../../util/ajax';
 const Updatecreator = ({ creatorprofile }) => {
   const MySwal = withReactContent(Swal);
   const [cprofile, setCprofile] = useState([]);
@@ -24,9 +19,7 @@ const Updatecreator = ({ creatorprofile }) => {
 
   useEffect(() => {
     const getcreatorinfo = async () => {
-      const res = await axios.get(CREATOR_PROFILE, {
-        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
-      });
+      const res = await ajax('get', CREATOR_PROFILE);
       setCprofile(res.data[0]);
       console.log(cprofile);
       setCname(res.data[0].creator_name);
@@ -45,20 +38,13 @@ const Updatecreator = ({ creatorprofile }) => {
     let new_show_name = document.getElementById('new_show_name').value;
     let new_show_category = document.getElementById('new_show_category').value;
     let new_show_des = document.getElementById('new_show_des').value;
-    const res = await axios.put(
-      UPDATE_CREATOR,
-      {
-        cname: new_creator_name,
-        cmail: new_creator_email,
-        sname: new_show_name,
-        scategory: new_show_category,
-        sdes: new_show_des,
-      },
-      {
-        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
-      }
-    );
-
+    const res = await ajax('put', UPDATE_CREATOR, {
+      cname: new_creator_name,
+      cmail: new_creator_email,
+      sname: new_show_name,
+      scategory: new_show_category,
+      sdes: new_show_des,
+    });
     if (res.data.error) {
       MySwal.fire({
         icon: 'error',
@@ -118,48 +104,19 @@ const Updatecreator = ({ creatorprofile }) => {
       allowOutsideClick: false,
       allowEscapeKey: false,
     });
+    const res = await ajax('post', S3, { type: 'profile_image' });
 
-    const res = await axios.post(
-      S3,
-      { type: 'profile_image' },
-      {
-        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
-      }
-    );
     if (res.data.presignedURL) {
-      const s3res = await axios.put(res.data.presignedURL, file, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-        onUploadProgress: (e) => {
-          var percentCompleted = Math.round((e.loaded * 100) / e.total);
-          if (percentCompleted < 100) {
-            document.getElementById(
-              'waitpercent'
-            ).innerHTML = `${percentCompleted}%`;
-          } else {
-            document.getElementById('waitpercent').innerHTML = 'completed!';
-          }
-        },
-      });
+      const s3res = await ajax('puts3', res.data.presignedURL, file);
       localStorage.setItem(
         'creator_image',
         res.data.presignedURL.split('?')[0]
       );
       window.location.reload();
       if (s3res.status === 200) {
-        const update = await axios.put(
-          UPDATE_CREATOR,
-          {
-            newshowimage: res.data.presignedURL.split('?')[0],
-          },
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem('token')}`,
-            },
-          }
-        );
-
+        const update = await ajax('putdb', UPDATE_CREATOR, {
+          newshowimage: res.data.presignedURL.split('?')[0],
+        });
         if (update.data.status) {
           localStorage.setItem(
             'creator_image',

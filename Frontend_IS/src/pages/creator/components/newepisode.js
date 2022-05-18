@@ -1,10 +1,11 @@
-import axios from 'axios';
-import { useState, useEffect, useContext } from 'react';
+import { useState } from 'react';
 import { EPISODE, S3 } from '../../../global/constants';
-import { Button, Card, TextField } from '@mui/material';
+import { Button, Card } from '@mui/material';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 import Step from '../../step/steps';
+import ajax from '../../../util/ajax';
+
 const Newepisode = ({ creatorprofile }) => {
   const MySwal = withReactContent(Swal);
   const [duration, setDuration] = useState(0);
@@ -78,108 +79,55 @@ const Newepisode = ({ creatorprofile }) => {
             allowOutsideClick: false,
             allowEscapeKey: false,
           });
-
-          //
-          //for image
-          const res1 = await axios.post(
-            S3,
-            { type: 'episode_image', episode_num: epinum.value },
-            {
-              headers: {
-                Authorization: `Bearer ${localStorage.getItem('token')}`,
-              },
-            }
-          );
-          const s3res1 = await axios.put(
+          const res1 = await ajax('post', S3, {
+            type: 'episode_image',
+            episode_num: epinum.value,
+          });
+          const s3res1 = await ajax(
+            'puts3',
             res1.data.presignedURL,
-            epiimage.files[0],
-            {
-              headers: {
-                'Content-Type': 'multipart/form-data',
-              },
-              onUploadProgress: (e) => {
-                var percentCompleted = Math.round((e.loaded * 100) / e.total);
-                if (percentCompleted < 100) {
-                  document.getElementById(
-                    'waitpercent'
-                  ).innerHTML = `${percentCompleted}%`;
-                } else {
-                  document.getElementById('waitpercent').innerHTML =
-                    'image upload completed!';
-                }
-              },
-            }
+            epiimage.files[0]
           );
-
           ///for file
-          const res2 = await axios.post(
-            S3,
-            { type: 'episode_file', episode_num: epinum.value },
-            {
-              headers: {
-                Authorization: `Bearer ${localStorage.getItem('token')}`,
-              },
-            }
-          );
-          const s3res2 = await axios.put(
+          const res2 = await ajax('post', S3, {
+            type: 'episode_file',
+            episode_num: epinum.value,
+          });
+
+          const s3res2 = await ajax(
+            'puts3',
             res2.data.presignedURL,
-            epifile.files[0],
-            {
-              headers: {
-                'Content-Type': 'multipart/form-data',
-              },
-              onUploadProgress: (e) => {
-                var percentCompleted = Math.round((e.loaded * 100) / e.total);
-                if (percentCompleted < 100) {
-                  document.getElementById(
-                    'waitpercent'
-                  ).innerHTML = `${percentCompleted}%`;
-                } else {
-                  document.getElementById('waitpercent').innerHTML =
-                    'audio upload completed!';
-                }
-              },
-            }
+            epifile.files[0]
           );
 
           const imageurl = res1.data.presignedURL.split('?')[0];
           const fileurl = res2.data.presignedURL.split('?')[0];
 
-          const newepi = await axios
-            .post(
-              EPISODE,
-              {
-                show_id: creatorprofile.show_id,
-                title: epititle.value,
-                des: epides.value,
-                file: fileurl,
-                duration: duration,
-                length: epifile.files[0].size,
-                explicit: epiexplicit.value,
-                image: imageurl,
-                episode: epinum.value,
-              },
-              {
-                headers: {
-                  Authorization: `Bearer ${localStorage.getItem('token')}`,
-                },
-              }
-            )
-            .then((response) => {
-              console.log('response', response);
-              console.log(response.data.error);
-              if (!response.data.error) {
-                MySwal.fire({
-                  icon: 'success',
-                  title: <h4 id='alert'>New Episode Published.</h4>,
-                });
-              } else {
-                MySwal.fire({
-                  icon: 'error',
-                  title: <h4 id='alert'>{response.data.error}</h4>,
-                });
-              }
-            });
+          const newepi = await ajax('post', EPISODE, {
+            show_id: creatorprofile.show_id,
+            title: epititle.value,
+            des: epides.value,
+            file: fileurl,
+            duration: duration,
+            length: epifile.files[0].size,
+            explicit: epiexplicit.value,
+            image: imageurl,
+            episode: epinum.value,
+          }).then((response) => {
+            console.log('response', response);
+            console.log(response.data.error);
+            if (!response.data.error) {
+              MySwal.fire({
+                icon: 'success',
+                title: <h4 id='alert'>New Episode Published.</h4>,
+              });
+            } else {
+              MySwal.fire({
+                icon: 'error',
+                title: <h4 id='alert'>{response.data.error}</h4>,
+              });
+            }
+          });
 
           document.getElementById('create_newepi_title').value = '';
           document.getElementById('episode_des').value = '';

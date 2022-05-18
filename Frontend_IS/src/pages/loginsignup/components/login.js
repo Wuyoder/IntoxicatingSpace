@@ -1,14 +1,14 @@
-import axios from 'axios';
 import { LOGIN } from '../../../global/constants';
 import { Button, TextField } from '@mui/material';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
+import ajax from '../../../util/ajax';
 const Login = () => {
   const MySwal = withReactContent(Swal);
   const gologin = async () => {
     const email = document.getElementById('L_email').value;
     const pwd = document.getElementById('L_pwd').value;
-    const l_result = await axios.post(LOGIN, { email: email, pwd: pwd });
+    const l_result = await ajax('post', LOGIN, { email: email, pwd: pwd });
     if (l_result.data.error) {
       MySwal.fire({
         title: (

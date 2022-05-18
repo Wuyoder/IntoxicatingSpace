@@ -1,31 +1,26 @@
 import { useState, useEffect } from 'react';
 import { USER_PROFILE, HISTORY_LIST, SUBSHOWS } from '../../global/constants';
-import axios from 'axios';
-import { Button, Card, TextField } from '@mui/material';
+import { Card } from '@mui/material';
 import Row from 'react-bootstrap/Row';
 import Searchshow from '../search/components/searchshow';
 import Step from '../step/steps';
+import ajax from '../../util/ajax';
 const Profile = () => {
   const [userprofile, setUserprofile] = useState({});
   const [historylist, setHistorylist] = useState([]);
   const [subshows, setSubshows] = useState([]);
   useEffect(() => {
     const getuserprofile = async () => {
-      const res1 = await axios.get(USER_PROFILE, {
-        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
-      });
+      const res1 = await ajax('get', USER_PROFILE);
       setUserprofile(res1.data);
     };
     const gethistorylist = async () => {
-      const res2 = await axios.get(HISTORY_LIST, {
-        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
-      });
+      const res2 = await ajax('get', HISTORY_LIST);
+
       setHistorylist(res2.data);
     };
     const getsubshows = async () => {
-      const res3 = await axios.get(SUBSHOWS, {
-        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
-      });
+      const res3 = await ajax('get', SUBSHOWS);
       setSubshows(res3.data);
     };
     gethistorylist();

@@ -2,7 +2,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { Link } from 'react-router-dom';
 import React from 'react';
 import { USER_HISTORY } from '../../../global/constants';
-import axios from 'axios';
+import ajax from '../../../util/ajax';
 import {
   Card,
   CardContent,
@@ -13,13 +13,10 @@ import {
 
 const HotShow = ({ item }) => {
   const goclickshow = async (event) => {
-    const res = await axios.post(
-      USER_HISTORY,
-      { type: 'show', show: item.rss_id },
-      {
-        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
-      }
-    );
+    const res = await ajax('post', USER_HISTORY, {
+      type: 'show',
+      show: item.rss_id,
+    });
   };
 
   return (

@@ -1,16 +1,17 @@
 import { useEffect, useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
 import { SHOWCHOICE, USER_HISTORY } from '../../../global/constants';
 import { AppContext } from '../../../App';
 import { Card } from '@mui/material';
+import ajax from '../../../util/ajax';
 const ShowEpisode = () => {
   const [episode, setEpisode] = useState([]);
   const { setEpisodeid } = useContext(AppContext);
   const [noepi, setNoepi] = useState(false);
   useEffect(() => {
     const getEpisode = async () => {
-      const res = await axios.get(
+      const res = await ajax(
+        'get',
         `${SHOWCHOICE}/${window.location.pathname.split('/')[2]}`
       );
       if (res.data.error) {
@@ -40,22 +41,11 @@ const ShowEpisode = () => {
                     }-${index}`,
                   }}
                   onClick={async () => {
-                    await axios.post(
-                      USER_HISTORY,
-                      {
-                        type: 'episode',
-                        show: window.location.pathname.split('/')[2],
-                        episode: item.guid,
-                      },
-                      {
-                        headers: {
-                          Authorization: `Bearer ${localStorage.getItem(
-                            'token'
-                          )}`,
-                        },
-                      }
-                    );
-
+                    await ajax('post', USER_HISTORY, {
+                      type: 'episode',
+                      show: window.location.pathname.split('/')[2],
+                      episode: item.guid,
+                    });
                     if (item.guid.indexOf('https://') > -1) {
                       setEpisodeid(
                         item.guid
