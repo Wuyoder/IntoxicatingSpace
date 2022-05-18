@@ -10,6 +10,7 @@ function checkQueryResult(result) {
     };
   }
 }
+// insert table columns : table: 'name', obj key-value pair
 const insert = async (table, obj) => {
   try {
     let columns = [];
@@ -29,7 +30,6 @@ const insert = async (table, obj) => {
       values.join(',') +
       ' )';
     const [result] = await db.query(query, variables);
-    console.log('result before function');
     return checkQueryResult(result);
   } catch (err) {
     return {
@@ -39,6 +39,7 @@ const insert = async (table, obj) => {
     };
   }
 };
+//update table columns table: 'name', obj key-value pair, only one where condition
 const update = async (table, obj, where) => {
   try {
     let columns = [];
@@ -70,7 +71,7 @@ const update = async (table, obj, where) => {
       queryWhere.join(',');
     variables.push(...whereVariables);
     const [result] = await db.query(query, variables);
-    return checkQueryResult(result);
+    return result;
   } catch (err) {
     return {
       code: 500,
@@ -79,10 +80,40 @@ const update = async (table, obj, where) => {
     };
   }
 };
+//update table columns table: 'name', column: array[], only one where condition
 const select = async (table, column, where) => {
-  let columns = [];
-  let values = [];
-  let variables = [];
+  try {
+    let whereColumns = [];
+    let whereVariables = [];
+    for (target in where) {
+      whereColumns.push(target);
+      whereVariables.push(where[`${target}`]);
+    }
+    let queryWhere = [];
+    for (target in whereColumns) {
+      queryWhere.push(whereColumns[`${target}`] + ' = ? ');
+    }
+    const query =
+      'SELECT ' + column.join(',') + ' FROM ' + table + ' WHERE ' + queryWhere;
+    const [result] = await db.query(query, whereVariables.join(','));
+    return result;
+  } catch (err) {
+    return { code: 500, status: 'db failed.', error: 'db error' };
+  }
 };
-const cru = { insert, update, select };
+const startTrans = async () => {
+  try {
+    await db.query('START TRANSACTION');
+  } catch (err) {
+    return { error: 'db error' };
+  }
+};
+const commitTrans = async () => {
+  try {
+    await db.query('COMMIT');
+  } catch (err) {
+    return { error: 'db error' };
+  }
+};
+const cru = { insert, update, select, startTrans, commitTrans };
 module.exports = cru;

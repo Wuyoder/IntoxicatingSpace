@@ -1,13 +1,9 @@
-const db = require('../util/db');
-const xml = require('xml');
+const cru = require('../model/cru_model');
+const { rssEpi } = require('../model/rss_model');
+
 const rssfeed = async (req, res) => {
-  //目標確定show uuid
   const id = req.params.rss;
-  //取得show data
-  const [show_info] = await db.query(
-    'SELECT * FROM creators_shows WHERE show_id = ?',
-    [id]
-  );
+  const show_info = await cru.select('creators_shows', ['*'], { show_id: id });
   if (!show_info[0]) {
     return res.status(200).json({ error: 'wrong rss url' });
   }
@@ -15,17 +11,15 @@ const rssfeed = async (req, res) => {
   if (infos.show_status === 0) {
     return res.status(200).json({ error: 'This show is offline' });
   }
-  //取得所有單集episode data , for loop
-  const [episode_info] = await db.query(
-    'SELECT * FROM episodes WHERE show_id = ? && episode_status = 1 ORDER BY episode_publish_date DESC',
-    [id]
-  );
+  const episode_info = await rssEpi(id);
+
   if (!episode_info[0]) {
     return res.status(200).json({ error: 'This show (episode) is offline' });
   }
-  const [rss_id] = await db.query('SELECT * FROM rss WHERE rss_title = ?', [
-    show_info[0].show_name,
-  ]);
+  const rss_id = await cru.select('rss', ['*'], {
+    rss_title: show_info[0].show_name,
+  });
+
   let items = '';
   let explicit;
   for (let i = 0; i < episode_info.length; i++) {

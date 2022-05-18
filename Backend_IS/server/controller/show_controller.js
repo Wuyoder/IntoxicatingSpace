@@ -1,10 +1,12 @@
 require('dotenv').config();
-const db = require('../util/db');
 const RssParser = require('rss-parser');
 const rssparser = new RssParser();
 const { jwtwrap } = require('../util/jwt');
 const uuid = require('uuid');
 const Redis = require('../util/cache');
+const showModel = require('../model/show_model');
+const cru = require('../model/cru_model');
+
 const showlist = async (req, res) => {
   const who = await jwtwrap(req);
   let explicit = '';
@@ -17,49 +19,33 @@ const showlist = async (req, res) => {
       explicit = '';
     }
   }
-
-  const [host_newepi] = await db.query(
-    'SELECT show_id, max(episode_publish_date) FROM episodes group by show_id ORDER BY max(episode_publish_date) DESC limit 2'
+  const hostNewepi = await showModel.newEpi();
+  const hostPush1 = await showModel.rssLike(`%${hostNewepi[0].show_id}%`);
+  const hostPush2 = await showModel.rssLike(`%${hostNewepi[1].show_id}%`);
+  const showlistNewhost = await showModel.listNewHost(
+    hostPush1[0].rss_id,
+    hostPush2[0].rss_id,
+    explicit
   );
-  const [host__push1] = await db.query(
-    'SELECT * FROM rss WHERE rss_url LIKE ?',
-    [`%${host_newepi[0].show_id}%`]
+  showlistNewhost.splice(Math.floor(Math.random() * 4), 0, hostPush1[0]);
+  showlistNewhost.splice(Math.floor(Math.random() * 5), 0, hostPush2[0]);
+  const showlistTop = await showModel.listTop(
+    hostPush1[0].rss_id,
+    hostPush2[0].rss_id,
+    explicit
   );
-  const [host__push2] = await db.query(
-    'SELECT * FROM rss WHERE rss_url LIKE ?',
-    [`%${host_newepi[1].show_id}%`]
-  );
-  const [showlist_unsub_newhost] = await db.query(
-    `SELECT * FROM rss WHERE rss_id IN (SELECT rss_id FROM rss WHERE ${explicit} rss_status = 1 AND rss_hot < ((SELECT AVG(rss_hot) FROM rss)+(SELECT MIN(rss_hot) FROM rss))/2 AND rss_id <> ? AND rss_id <> ? ORDER BY rss_hot DESC) ORDER BY RAND() LIMIT 4 ;`,
-    [host__push1[0].rss_id, host__push2[0].rss_id]
-  );
-
-  showlist_unsub_newhost.splice(
-    Math.floor(Math.random() * 4),
-    0,
-    host__push1[0]
-  );
-  showlist_unsub_newhost.splice(
-    Math.floor(Math.random() * 5),
-    0,
-    host__push2[0]
-  );
-
-  const [showlist_random_hot] = await db.query(
-    `SELECT * FROM rss WHERE  ${explicit}  rss_id IN (SELECT rss_id FROM rss WHERE rss_explicit = 0 AND rss_status = 1 AND rss_hot > (31*(SELECT AVG(rss_hot) FROM rss)+(SELECT MAX(rss_hot) FROM rss))/32 AND rss_id <> ? AND rss_id <> ? ORDER BY rss_hot DESC) ORDER BY RAND() LIMIT 6;`,
-    [host__push1[0].rss_id, host__push2[0].rss_id]
-  );
-  const [showlist_sub_randomwalk] = await db.query(
-    `SELECT * FROM rss WHERE  ${explicit}  rss_id IN (SELECT rss_id FROM rss WHERE rss_explicit = 0 AND rss_status = 1 AND rss_hot BETWEEN ((SELECT AVG(rss_hot) FROM rss)+(SELECT MIN(rss_hot) FROM rss))/2 AND (31*(SELECT AVG(rss_hot) FROM rss)+(SELECT MAX(rss_hot) FROM rss))/32  AND rss_id <> ? AND rss_id <> ? ORDER BY rss_hot DESC) ORDER BY RAND() LIMIT 6;`,
-    [host__push1[0].rss_id, host__push2[0].rss_id]
+  const showlistMiddle = await showModel.listMiddle(
+    hostPush1[0].rss_id,
+    hostPush2[0].rss_id,
+    explicit
   );
   const data = {
     topic1: '熱門推薦',
     topic2: '隨機漫步',
     topic3: '探索新鮮',
-    showlist_1: showlist_random_hot,
-    showlist_2: showlist_sub_randomwalk,
-    showlist_3: showlist_unsub_newhost,
+    showlist_1: showlistTop,
+    showlist_2: showlistMiddle,
+    showlist_3: showlistNewhost,
   };
   return res.json(data);
 };
@@ -69,10 +55,7 @@ const myshowpage = async (req, res) => {
   if (who.error) {
     return res.json(who);
   }
-  const [rss_id] = await db.query(
-    'SELECT a.rss_id FROM rss AS a RIGHT JOIN creators_shows AS b ON a.rss_title = b.show_name WHERE b.user_id = ?',
-    [who.id]
-  );
+  const rss_id = await showModel.rssId(who.id);
   res.json({ rss_id: rss_id[0].rss_id });
 };
 
@@ -85,20 +68,15 @@ const showchoice = async (req, res) => {
     console.log('Cache Time: ' + (timer / 1000).toFixed(5) + ' sec.');
     return res.send(JSON.parse(cache));
   }
-
-  const [show_choice] = await db.query(
-    'SELECT rss_url FROM rss WHERE rss_id = ?',
-    [id]
-  );
-  if (show_choice.length < 1) {
+  const showChoice = await cru.select('rss', ['rss_url', 'rss_hot'], {
+    rss_id: id,
+  });
+  if (showChoice.length < 1) {
     return res.json({ status: 'RSS not in database' });
   }
-  await db.query('UPDATE rss SET rss_value = rss_value+1 WHERE rss_id = ?', [
-    id,
-  ]);
-  await db.query('UPDATE rss SET rss_hot = rss_hot+1 WHERE rss_id = ?', [id]);
-
-  const url = show_choice[0].rss_url;
+  const hotPlus = showChoice[0].rss_hot + 1;
+  await cru.update('rss', { rss_hot: hotPlus }, { rss_id: id });
+  const url = showChoice[0].rss_url;
   try {
     rssObject = await rssparser.parseURL(url);
   } catch (err) {
@@ -118,9 +96,7 @@ const episodechoice = async (req, res) => {
   const split = show_episode.split('-');
   const show = split[0];
   const episode = split[1];
-  const [url] = await db.query('SELECT rss_url FROM rss WHERE rss_id = ?', [
-    show,
-  ]);
+  const url = await cru.select('rss', ['rss_url'], { rss_id: show });
   if (!url[0]) {
     return res.json({ error: 'wrong show info.' });
   }
@@ -142,25 +118,23 @@ const showsubscribe = async (req, res) => {
   if (!req.body.id) {
     return res.status(200).json({ error: 'show id missing' });
   }
-  const [sub_check] = await db.query(
-    'SELECT user_id FROM subscribes WHERE user_id = ? && rss_id = ?',
-    [who.id, req.body.id]
-  );
-  if (sub_check[0]?.user_id) {
+  const subCheck = await showModel.subCheck(who.id, req.body.id);
+  if (subCheck[0]?.user_id) {
     return res.json({ status: 'already subscribed.' });
   }
-  await db.query('INSERT INTO subscribes (user_id, rss_id) VALUES (?,?)', [
-    who.id,
-    req.body.id,
-  ]);
-  const [searchname] = await db.query(
-    'SELECT rss_title FROM rss WHERE rss_id = ?',
-    [req.body.id]
-  );
-  if (searchname[0].rss_title) {
-    const [result] = await db.query(
-      'UPDATE creators_shows SET show_subscriber = show_subscriber+1 WHERE show_name = ? ',
-      [searchname[0].rss_title]
+  await cru.insert('subscribes', { user_id: who.id, rss_id: req.body.id });
+  const searchName = await cru.select('creators_shows', ['show_name'], {
+    show_id: req.body.id,
+  });
+  if (searchName.length > 0) {
+    const subValue = await cru.select('creators_shows', ['show_subscriber'], {
+      show_name: searchName[0].rss_title,
+    });
+    const subPlus = subValue[0].show_subscriber + 1;
+    await cru.update(
+      'creators_shows',
+      { show_subscriber: subPlus },
+      { show_name: searchName[0].rss_title }
     );
     return res.json({ status: 'subscribe IS host show ok' });
   } else {
@@ -176,23 +150,23 @@ const showunsub = async (req, res) => {
   if (!req.body.id) {
     return res.status(200).json({ error: 'show id missing' });
   }
-  const [unsub_check] = await db.query(
-    'DELETE FROM intoxicating.subscribes WHERE user_id = ? && rss_id = ?;',
-    [who.id, req.body.id]
-  );
-  if (unsub_check.affectedRows === 0) {
+  const unsubCheck = await showModel.subDel(who.id, req.body.id);
+  if (unsubCheck.affectedRows === 0) {
     return res.status(200).json({ error: 'subscribe yet' });
   }
+  const searchName = await cru.select('creators_shows', ['show_name'], {
+    show_id: req.body.id,
+  });
 
-  const [searchname] = await db.query(
-    'SELECT rss_title FROM rss WHERE rss_id = ?',
-    [req.body.id]
-  );
-
-  if (searchname[0].rss_title) {
-    const [result] = await db.query(
-      'UPDATE creators_shows SET show_subscriber = show_subscriber-1 WHERE show_name = ? ',
-      [searchname[0].rss_title]
+  if (searchName.length > 0) {
+    const subValue = await cru.select('creators_shows', ['show_subscriber'], {
+      show_name: searchName[0].rss_title,
+    });
+    const subMinus = subValue[0].show_subscriber - 1;
+    await cru.update(
+      'creators_shows',
+      { show_subscriber: subMinus },
+      { show_name: searchName[0].rss_title }
     );
     return res.json({ status: 'unsubscribe IS host show ok' });
   } else {
@@ -208,45 +182,38 @@ const switcher = async (req, res) => {
   if (!req.body.type) {
     return res.status(200).json({ error: 'type missing' });
   }
-  let result;
 
   if (req.body.type === 'show') {
     if (!req.body.show_id) {
       return res.status(200).json({ error: 'show id or status missing' });
     }
-    let showstatus_after = 0;
-    const [status_before] = await db.query(
-      'SELECT show_status FROM creators_shows WHERE show_id = ?',
-      [req.body.show_id]
+    let showStatusAfter = 0;
+    const showStatusBefore = await cru.select(
+      'creators_shows',
+      ['show_status'],
+      { show_id: req.body.show_id }
     );
-    if (status_before[0].show_status === 1) {
-      [result] = await db.query(
-        'UPDATE creators_shows SET show_status = 0 WHERE show_id = ?',
-        [req.body.show_id]
+    if (showStatusBefore[0].show_status === 1) {
+      await cru.update(
+        'creators_shows',
+        { show_status: 0 },
+        { show_id: req.body.show_id }
       );
-      const rss = await db.query(
-        'UPDATE rss SET rss_status = 0 WHERE rss_url LIKE ?',
-        [`%${req.body.show_id}%`]
-      );
+      await showModel.rssStatus(req.body.show_id, 0);
     }
-    if (status_before[0].show_status === 0) {
-      [result] = await db.query(
-        'UPDATE creators_shows SET show_status = 1 WHERE show_id = ?',
-        [req.body.show_id]
+    if (showStatusBefore[0].show_status === 0) {
+      await cru.update(
+        'creators_shows',
+        { show_status: 1 },
+        { show_id: req.body.show_id }
       );
-      const rss2 = await db.query(
-        'UPDATE rss SET rss_status = 1 WHERE rss_url LIKE ?',
-        [`%${req.body.show_id}%`]
-      );
-      showstatus_after = 1;
+      await showModel.rssStatus(req.body.show_id, 1);
+      showStatusAfter = 1;
     }
-    const [delcache] = await db.query(
-      'SELECT rss_id FROM rss WHERE rss_url like ?',
-      [`%${req.body.show_id}%`]
-    );
-    Redis.del(`${delcache[0].rss_id}`);
+    const delCache = await showModel.delId(req.body.show_id);
+    Redis.del(`${delCache[0].rss_id}`);
     return res.json({
-      status: { type: req.body.type, status: showstatus_after },
+      status: { type: req.body.type, status: showStatusAfter },
     });
   }
   if (req.body.type === 'episode') {
@@ -254,29 +221,27 @@ const switcher = async (req, res) => {
       return res.status(200).json({ error: 'episode id or status missing' });
     }
     let epistatus_after = 0;
-    const [status_before] = await db.query(
-      'SELECT episode_status FROM episodes WHERE show_id = ? AND episode_id = ?',
-      [req.body.show_id, req.body.episode_id]
-    );
-    if (status_before[0].episode_status === 1) {
-      [result] = await db.query(
-        'UPDATE episodes SET episode_status = 0 WHERE show_id = ? AND episode_id = ?',
-        [req.body.show_id, req.body.episode_id]
+    const epiStatusBefore = await cru.select('episodes', ['episode_status'], {
+      episode_id: req.body.episode_id,
+    });
+    if (epiStatusBefore[0].episode_status === 1) {
+      await cru.update(
+        'episodes',
+        { episode_status: 0 },
+        { episode_id: req.body.episode_id }
       );
     }
-    if (status_before[0].episode_status === 0) {
-      [result] = await db.query(
-        'UPDATE episodes SET episode_status = 1 WHERE show_id = ? AND episode_id = ?',
-        [req.body.show_id, req.body.episode_id]
+    if (epiStatusBefore[0].episode_status === 0) {
+      await cru.update(
+        'episodes',
+        { episode_status: 1 },
+        { episode_id: req.body.episode_id }
       );
+
       epistatus_after = 1;
     }
-    const [delcache] = await db.query(
-      'SELECT rss_id FROM rss WHERE rss_url like ?',
-      [`%${req.body.show_id}%`]
-    );
-    Redis.del(`${delcache[0].rss_id}`);
-
+    const delCache = await showModel.delId(req.body.show_id);
+    Redis.del(`${delCache[0].rss_id}`);
     res.json({ status: { type: req.body.type, status: epistatus_after } });
   }
 };
@@ -289,48 +254,43 @@ const userhistory = async (req, res) => {
   if (!req.body.type) {
     return res.status(200).json({ error: 'type missing' });
   }
-  let result;
   if (req.body.type === 'show') {
-    const [show_initial_check] = await db.query(
-      'SELECT * FROM history_shows WHERE user_id = ? && show_id = ?',
-      [who.id, req.body.show]
+    const showInitialCheck = await showModel.initialCheck(
+      who.id,
+      req.body.show,
+      'show_id'
     );
-    if (!show_initial_check[0]) {
-      result = await db.query(
-        'INSERT INTO history_shows (user_id, show_id, clicks) VALUES (?, ?, ?)',
-        [who.id, req.body.show, 1]
-      );
+    if (!showInitialCheck[0]) {
+      await cru.insert('history_shows', {
+        user_id: who.id,
+        show_id: req.body.show,
+        clicks: 1,
+      });
     } else {
-      result = await db.query(
-        'UPDATE history_shows SET clicks = clicks + 1 WHERE user_id = ? && show_id = ?',
-        [who.id, req.body.show]
-      );
+      await showModel.historyClick(who.id, req.body.show);
     }
   }
-
   if (req.body.type === 'episode') {
-    const [episode_initial_check] = await db.query(
-      'SELECT * FROM history_episodes WHERE user_id = ? && show_id = ? && episode_id = ?',
-      [who.id, req.body.show, req.body.episode]
+    const epiInitialCheck = await showModel.initialCheck(
+      who.id,
+      req.body.episode,
+      'episode_id'
     );
-    if (!episode_initial_check[0]) {
-      result = await db.query(
-        'INSERT INTO history_episodes (user_id, show_id, episode_id, clicks) VALUES (?, ?, ?, ?)',
-        [who.id, req.body.show, req.body.episode, 1]
-      );
-      const epiclick = await db.query(
-        'UPDATE episodes SET episode_click = 1 WHERE episode_id = ?',
-        [req.body.episode]
+    if (!epiInitialCheck[0]) {
+      await cru.insert('history_episodes', {
+        user_id: who.id,
+        show_id: req.body.show,
+        episode_id: req.body.episode,
+        clicks: 1,
+      });
+      await cru.update(
+        'episodes',
+        { episode_click: 1 },
+        { episode_id: req.body.episode }
       );
     } else {
-      result = await db.query(
-        'UPDATE history_episodes SET clicks = clicks + 1 WHERE user_id = ? && show_id = ? && episode_id = ?',
-        [who.id, req.body.show, req.body.episode]
-      );
-      const epiclick = await db.query(
-        'UPDATE episodes SET episode_click = episode_click + 1 WHERE episode_id = ?',
-        [req.body.episode]
-      );
+      await showModel.historyEpiClick(who.id, req.body.show, req.body.episode);
+      await showModel.epiClick(req.body.episode);
     }
   }
   res.status(200).json({ status: { type: req.body.type } });
@@ -341,9 +301,10 @@ const episoderemove = async (req, res) => {
     return res.json(who);
   }
   const targetepi = req.body.episode_id;
-  const [showclose] = await db.query(
-    'UPDATE episodes SET episode_status = 2 WHERE episode_id = ? ',
-    [targetepi]
+  await cru.update(
+    'episodes',
+    { episode_status: 2 },
+    { episode_id: targetepi }
   );
   res.json({ status: `episode ${req.body.episode_id} already removed.` });
 };
@@ -355,11 +316,13 @@ const episode = async (req, res) => {
   }
   const info = req.body;
   const epi_id = uuid.v4();
-  const [episode_check] = await db.query(
-    'SELECT * FROM episodes WHERE show_id = ? && episode_id = ? && episode_episode = ?',
-    [info.show_id, info.episode_id, info.episode]
+  const episodeCheck = await showModel.epiCheck(
+    info.show_id,
+    info.episode_id,
+    info.episode
   );
-  if (episode_check[0]) {
+
+  if (episodeCheck[0]) {
     return res.status(200).json({ error: 'episode number already exist' });
   }
   try {
@@ -367,42 +330,33 @@ const episode = async (req, res) => {
       `${process.env.S3_ORIGIN}`,
       `${process.env.CDN}/resize`
     );
-    console.log('cdnimage', cdnimage);
     const cdnfile = info.file.replace(
       `${process.env.S3_ORIGIN}`,
       `${process.env.CDN}`
     );
-    const [result] = await db.query(
-      'INSERT INTO episodes (show_id, episode_id, episode_title, episode_des, episode_file, episode_duration, episode_length, episode_explicit, episode_image, episode_season, episode_episode, episode_status) ' +
-        'VALUES (?, ? ,?, ?, ?, ?, ?, ?, ?, 1, ?, 1 )',
-      [
-        info.show_id,
-        epi_id,
-        info.title,
-        info.des,
-        cdnfile,
-        info.duration,
-        info.length,
-        info.explicit,
-        cdnimage,
-        info.episode,
-      ]
-    );
+
+    await cru.insert('episodes', {
+      show_id: info.show_id,
+      episode_id: epi_id,
+      episode_title: info.title,
+      episode_des: info.des,
+      episode_file: cdnfile,
+      episode_duration: info.duration,
+      episode_length: info.length,
+      episode_explicit: info.explicit,
+      episode_image: cdnimage,
+      episode_season: 1,
+      episode_episode: info.episode,
+      episode_status: 1,
+    });
   } catch (err) {
     const message = err.sqlMessage + '(uuid)';
     return res.status(200).json({ error: message });
   }
-
-  const [allepi] = await db.query('SELECT * FROM episodes WHERE show_id = ?', [
-    info.show_id,
-  ]);
-  const [delcache] = await db.query(
-    'SELECT rss_id FROM rss WHERE rss_url like ?',
-    [`%${info.show_id}%`]
-  );
-  Redis.del(`${delcache[0].rss_id}`);
-
-  res.send(allepi);
+  const allEpi = await cru.select('episodes', ['*'], { show_id: info.show_id });
+  const delCache = await showModel.delId(info.show_id);
+  Redis.del(`${delCache[0].rss_id}`);
+  res.send(allEpi);
 };
 
 const ishostshow = async (req, res) => {
@@ -410,19 +364,14 @@ const ishostshow = async (req, res) => {
   if (who.error) {
     return res.json(who);
   }
-
-  const [show_id] = await db.query(
-    'SELECT show_id FROM creators_shows WHERE user_id = ?',
-    [who.id]
-  );
-  const [host_episode] = await db.query(
-    'SELECT * FROM episodes WHERE show_id = ? AND episode_status = 1 OR episode_status = 0 ORDER BY episode_publish_date DESC',
-    [show_id[0].show_id]
-  );
-  if (!host_episode[0]) {
+  const showId = await cru.select('creators_shows', ['show_id'], {
+    user_id: who.id,
+  });
+  const hostEpisode = await showModel.hostEpi(showId[0].show_id);
+  if (!hostEpisode[0]) {
     return res.send([]);
   }
-  return res.send(host_episode);
+  return res.send(hostEpisode);
 };
 
 const historylist = async (req, res) => {
@@ -430,11 +379,7 @@ const historylist = async (req, res) => {
   if (who.error) {
     return res.json(who);
   }
-  const [history] = await db.query(
-    'SELECT a.* , b.* FROM history_shows AS a RIGHT JOIN rss AS b ON a.show_id = b.rss_id WHERE user_id = ? ORDER BY a.time_click DESC LIMIT 12',
-    [who.id]
-  );
-
+  const history = await showModel.historyShow(who.id);
   res.send(history);
 };
 
@@ -443,10 +388,7 @@ const sublist = async (req, res) => {
   if (who.error) {
     return res.json(who);
   }
-  const [sub] = await db.query(
-    'SELECT rss_id FROM subscribes WHERE user_id = ?',
-    [who.id]
-  );
+  const sub = await cru.select('subscribes', ['rss_id'], { user_id: who.id });
   let list = [];
   for (let i = 0; i < sub.length; i++) {
     list.push(sub[i].rss_id);
@@ -459,12 +401,8 @@ const subshows = async (req, res) => {
   if (who.error) {
     return res.json(who);
   }
-  const [subshows] = await db.query(
-    'SELECT a.* FROM rss AS a RIGHT JOIN subscribes AS b ON a.rss_id = b.rss_id WHERE b.user_id = ?',
-    [who.id]
-  );
-
-  res.send(subshows);
+  const subShows = await showModel.subShow(who.id);
+  res.send(subShows);
 };
 
 module.exports = {

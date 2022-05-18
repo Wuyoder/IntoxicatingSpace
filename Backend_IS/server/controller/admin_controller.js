@@ -16,9 +16,9 @@ const newrss = async (req, res) => {
     if (req.body.rsslist.length < 1) {
       throw "No RSS Feed's URL ";
     }
-    let insert = '';
     const { rsslist } = req.body;
     let rssObject;
+    let rssInfo = [];
     for (let i = 0; i < rsslist.length; i++) {
       const rss = rsslist[i];
       try {
@@ -58,15 +58,23 @@ const newrss = async (req, res) => {
           category_sub = 'none';
         }
         const hot = 1;
-        insert += `("${title}","${url}","${creator}","${image}",${explicit},"${category_main}","${category_sub}","${hot}", 1),`;
+        rssInfo.push(
+          title,
+          url,
+          creator,
+          image,
+          explicit,
+          category_main,
+          category_sub,
+          hot,
+          1
+        );
       }
     }
     if (count === 0) {
       throw 'No New Feed.';
     }
-    const insertAll = insert.slice(0, insert.length - 1);
-    const result = await mysql.newrss(insertAll);
-
+    const result = await mysql.newrss(rssInfo);
     if (result.error) {
       throw result.error;
     }

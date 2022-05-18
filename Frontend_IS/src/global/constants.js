@@ -15,7 +15,6 @@ export const USER_HISTORY = `${HOST_NAME}/user/userhistory`;
 export const EPISODE = `${HOST_NAME}/user/episode`;
 export const S3 = `${HOST_NAME}/user/s3`;
 export const ISHOST_SHOW = `${HOST_NAME}/user/ishostshow`;
-export const CHAT_msg = `${HOST_NAME}/user/chatmsg`;
 export const CHAT_HISTORY = `${HOST_NAME}/user/chathistory`;
 export const UPDATE_USER = `${HOST_NAME}/user/userprofile`;
 export const UPDATE_CREATOR = `${HOST_NAME}/user/creatorprofile`;

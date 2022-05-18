@@ -5,8 +5,12 @@ const saltRounds = 10;
 const jwt = require('jsonwebtoken');
 const { jwtwrap } = require('../util/jwt');
 const Joiput = require('../util/joiput');
-const Redis = require('../util/cache');
-const userprofile = async (req, res) => {
+const Cache = require('../util/cache');
+const cru = require('../model/cru_model');
+const userModel = require('../model/user_model');
+const showModel = require('../model/show_model');
+
+const userProfile = async (req, res) => {
   const who = await jwtwrap(req);
   if (who.error) {
     return res.status(200).json({ error: who.error });
@@ -14,19 +18,18 @@ const userprofile = async (req, res) => {
   res.send(who);
 };
 
-const creatorprofile = async (req, res) => {
+const creatorProfile = async (req, res) => {
   const who = await jwtwrap(req);
   if (who.error) {
     return res.status(200).json({ error: who.error });
   }
-  const [creator_profile] = await db.query(
-    'SELECT * FROM creators_shows WHERE user_id = ?',
-    [who.id]
-  );
-  res.send(creator_profile);
+  const result = await cru.select('creators_shows', ['*'], {
+    user_id: who.id,
+  });
+  return res.send(result);
 };
 
-const updateuser = async (req, res) => {
+const updateUser = async (req, res) => {
   const who = await jwtwrap(req);
   if (who.error) {
     return res.status(200).json({ error: who.error });
@@ -36,15 +39,16 @@ const updateuser = async (req, res) => {
       `${process.env.S3_ORIGIN}`,
       `${process.env.CDN}/resize`
     );
-
-    await db.query('UPDATE users SET user_image = ? WHERE user_id = ? ', [
-      cdnimage,
-      who.id,
-    ]);
+    await cru.update(
+      'users',
+      { user_image: cdnimage },
+      {
+        user_id: who.id,
+      }
+    );
     return res.json({ status: 'update profile image url OK' });
   }
 
-  let change = '';
   let validation;
   if (req.body.name === '' && req.body.email === '' && req.body.pwd === '') {
     return res.json({ error: 'Nohting Changed.' });
@@ -56,7 +60,11 @@ const updateuser = async (req, res) => {
     if (validation.error) {
       return res.json({ error: 'Username length must be between 3~30.' });
     }
-    change += `user_name = '${req.body.name}' ,`;
+    await cru.update(
+      'users',
+      { user_name: req.body.name },
+      { user_id: who.id }
+    );
   }
   if (req.body.email !== '') {
     validation = Joiput.validate({
@@ -65,7 +73,11 @@ const updateuser = async (req, res) => {
     if (validation.error) {
       return res.json({ error: 'E-mail format does not match.' });
     }
-    change += `user_email = '${req.body.email}' ,`;
+    await cru.update(
+      'users',
+      { user_email: req.body.email },
+      { user_id: who.id }
+    );
   }
   if (req.body.pwd !== '') {
     validation = Joiput.validate({
@@ -75,70 +87,62 @@ const updateuser = async (req, res) => {
       return res.json({ error: 'Password length must be between 8~30.' });
     }
     const hashed_pwd = await bcrypt.hash(req.body.pwd, saltRounds);
-    change += `user_password = '${hashed_pwd}' ,`;
-  }
-  allchange = change.slice(0, change.length - 1);
-  const userquery = 'UPDATE users SET ' + allchange + 'WHERE user_id = ?;';
-  const [userupdate] = await db.query(userquery, [who.id]);
-
-  if (userupdate.affectedRows != 0) {
-    const [newuser] = await db.query('SELECT * FROM users WHERE user_id = ?', [
-      who.id,
-    ]);
-    let payload = {
-      id: newuser[0].user_id,
-      name: newuser[0].user_name,
-      email: newuser[0].user_email,
-      image: newuser[0].user_image,
-      role: newuser[0].user_role,
-      adult: newuser[0].user_adult,
-    };
-
-    const token = jwt.sign(payload, process.env.JWT_SECRET, {
-      expiresIn: process.env.JWT_EXPIRED,
-    });
-    const [newprofile] = await db.query(
-      'SELECT user_name, user_email, user_image FROM users WHERE user_id = ?',
-      [who.id]
+    await cru.update(
+      'users',
+      { user_password: hashed_pwd },
+      { user_id: who.id }
     );
-    res.json({
-      token: token,
-      user_name: newprofile[0].user_name,
-      user_email: newprofile[0].user_email,
-      user_image: newprofile[0].user_image,
-    });
   }
+  const newUser = await cru.select('users', ['*'], { user_id: who.id });
+  let payload = {
+    id: newUser[0].user_id,
+    name: newUser[0].user_name,
+    email: newUser[0].user_email,
+    image: newUser[0].user_image,
+    role: newUser[0].user_role,
+    adult: newUser[0].user_adult,
+  };
+  const token = jwt.sign(payload, process.env.JWT_SECRET, {
+    expiresIn: process.env.JWT_EXPIRED,
+  });
+  const newprofile = await cru.select(
+    'users',
+    ['user_name', 'user_email', 'user_image'],
+    { user_id: who.id }
+  );
+  return res.json({
+    token: token,
+    user_name: newprofile[0].user_name,
+    user_email: newprofile[0].user_email,
+    user_image: newprofile[0].user_image,
+  });
 };
 
-const updatecreator = async (req, res) => {
+const updateCreator = async (req, res) => {
   const who = await jwtwrap(req);
   if (who.error) {
     return res.status(200).json({ error: who.error });
   }
-
-  const [show_target] = await db.query(
-    'SELECT show_id FROM creators_shows WHERE user_id = ?',
-    [who.id]
-  );
+  const show_target = await cru.select('creators_shows', ['show_id'], {
+    user_id: who.id,
+  });
   if (req.body.newshowimage) {
-    await db.query(
-      'UPDATE creators_shows SET show_image = ? WHERE user_id = ? ',
-      [req.body.newshowimage, who.id]
+    await cru.update(
+      'creators_shows',
+      { show_image: req.body.newshowimage },
+      { user_id: who.id }
     );
     const cdnimage = req.body.newshowimage.replace(
       `${process.env.S3_ORIGIN}`,
       `${process.env.CDN}/resize`
     );
-    const [show_RSS] = await db.query(
-      'UPDATE rss SET rss_image = ? WHERE rss_url LIKE ?',
-      [cdnimage, `%${show_target[0].show_id}%`]
+    await userModel.updateRssInfo(
+      'rss_image',
+      cdnimage,
+      `%${show_target[0].show_id}%`
     );
-    const [delcache] = await db.query(
-      'SELECT rss_id FROM rss WHERE rss_url like ?',
-      [`%${show_target[0].show_id}%`]
-    );
-    Redis.del(`${delcache[0].rss_id}`);
-
+    const delCache = await showModel.delId(`%${show_target[0].show_id}%`);
+    Cache.del(`${delCache[0].rss_id}`);
     return res.json({ status: 'update show image url OK' });
   }
   let change = '';
@@ -162,8 +166,16 @@ const updatecreator = async (req, res) => {
     return res.json({ error: 'Nohting Changed.' });
   }
   if (req.body.cname !== '') {
-    change += `creator_name = '${req.body.cname}' ,`;
-    rsschange += `rss_creator = '${req.body.cname}' ,`;
+    await cru.update(
+      'creators_shows',
+      { creator_name: req.body.cname },
+      { user_id: who.id }
+    );
+    await userModel.updateRssInfo(
+      'rss_creator',
+      req.body.cname,
+      show_target[0].show_id
+    );
   }
   if (req.body.cmail !== '') {
     validation = Joiput.validate({
@@ -172,52 +184,67 @@ const updatecreator = async (req, res) => {
     if (validation.error) {
       return res.json({ error: validation.error.details[0].message });
     }
-    change += `creator_email = '${req.body.cmail}' ,`;
+    await cru.update(
+      'creators_shows',
+      { creator_email: req.body.cmail },
+      { user_id: who.id }
+    );
   }
   if (req.body.sname !== '') {
-    change += `show_name = '${req.body.sname}' ,`;
-    rsschange += `rss_title = '${req.body.sname}' ,`;
+    await cru.update(
+      'creators_shows',
+      { show_name: req.body.sname },
+      { user_id: who.id }
+    );
+    await userModel.updateRssInfo(
+      'rss_title',
+      req.body.sname,
+      show_target[0].show_id
+    );
   }
   if (req.body.sdes !== '') {
-    change += `show_des = '${req.body.sdes}' ,`;
+    await cru.update(
+      'creators_shows',
+      { show_des: req.body.sdes },
+      { user_id: who.id }
+    );
   }
-
   if (
     req.body.scategory !== '' &&
     req.body.scategory !== 'choose new category'
   ) {
     const cmain = req.body.scategory.split('_')[0];
     const csub = req.body.scategory.split('_')[1];
-    change += `show_category_main = '${cmain}', show_category_sub = '${csub}' ,`;
-    rsschange += `rss_category_main = '${cmain}', rss_category_sub = '${csub}' ,`;
-  }
-  allchange = change.slice(0, change.length - 1);
-  const creatorquery =
-    'UPDATE creators_shows SET ' + allchange + 'WHERE user_id = ?;';
-  const [creatorupdate] = await db.query(creatorquery, [who.id]);
-  if (rsschange !== '') {
-    allrsschange = rsschange.slice(0, rsschange.length - 1);
-    const rssquery = 'UPDATE rss SET ' + allrsschange + 'WHERE rss_url LIKE ?;';
-    const [rssupdate] = await db.query(rssquery, [
-      `%${show_target[0].show_id}%`,
-    ]);
-  }
-  if (creatorupdate.affectedRows !== 0) {
-    const [newcreatorinfo] = await db.query(
-      'SELECT * FROM creators_shows WHERE user_id = ?',
-      [who.id]
+    await cru.update(
+      'creators_shows',
+      { show_category_main: cmain },
+      { user_id: who.id }
     );
-
-    const [delcache] = await db.query(
-      'SELECT rss_id FROM rss WHERE rss_url like ?',
-      [`%${show_target[0].show_id}%`]
+    await cru.update(
+      'creators_shows',
+      { show_category_sub: csub },
+      { user_id: who.id }
     );
-    Redis.del(`${delcache[0].rss_id}`);
-    res.send(newcreatorinfo[0]);
+    await userModel.updateRssInfo(
+      'rss_category_main',
+      cmain,
+      show_target[0].show_id
+    );
+    await userModel.updateRssInfo(
+      'rss_category_sub',
+      csub,
+      show_target[0].show_id
+    );
   }
+  const newCreatorInfo = await cru.select('creators_shows', ['*'], {
+    user_id: who.id,
+  });
+  const delCache = await showModel.delId(show_target[0].show_id);
+  Cache.del(`${delCache[0].rss_id}`);
+  return res.send(newCreatorInfo[0]);
 };
 
-const updateepisode = async (req, res) => {
+const updateEpisode = async (req, res) => {
   const who = await jwtwrap(req);
   if (who.error) {
     return res.status(200).json({ error: who.error });
@@ -251,68 +278,91 @@ const updateepisode = async (req, res) => {
 
     let change = '';
     if (infos.title !== '') {
-      change += `episode_title = '${infos.title}' ,`;
+      await userModel.updateNewEpi(
+        'episode_title',
+        infos.title,
+        infos.show_id,
+        infos.episode_id
+      );
     }
     if (infos.des !== '') {
-      change += `episode_des = '${infos.des}' ,`;
+      await userModel.updateNewEpi(
+        'episode_des',
+        infos.des,
+        infos.show_id,
+        infos.episode_id
+      );
     }
     if (infos.file !== '') {
       const cdnfile = infos.file.replace(
         `${process.env.S3_ORIGIN}`,
         `${process.env.CDN}`
       );
-      change += `episode_file = '${cdnfile}' ,`;
+      await userModel.updateNewEpi(
+        'episode_file',
+        cdnfile,
+        infos.show_id,
+        infos.episode_id
+      );
     }
     if (infos.duration !== '') {
-      change += `episode_duration = '${infos.duration}' ,`;
+      await userModel.updateNewEpi(
+        'episode_duration',
+        infos.duration,
+        infos.show_id,
+        infos.episode_id
+      );
     }
     if (infos.length !== '') {
-      change += `episode_length = '${infos.length}' ,`;
+      await userModel.updateNewEpi(
+        'episode_length',
+        infos.length,
+        infos.show_id,
+        infos.episode_id
+      );
     }
     if (infos.explicit !== '') {
-      change += `episode_explicit = '${infos.explicit}' ,`;
+      await userModel.updateNewEpi(
+        'episode_explicit',
+        infos.explicit,
+        infos.show_id,
+        infos.episode_id
+      );
     }
     if (infos.image !== '') {
       const cdnimage = infos.image.replace(
         `${process.env.S3_ORIGIN}`,
         `${process.env.CDN}/resize`
       );
-      change += `episode_image = '${cdnimage}' ,`;
+      await userModel.updateNewEpi(
+        'episode_image',
+        cdnimage,
+        infos.show_id,
+        infos.episode_id
+      );
     }
 
     if (infos.episode !== '') {
-      change += `episode_episode = '${infos.episode}' ,`;
-    }
-    allchange = change.slice(0, change.length - 1);
-    const epiquery =
-      'UPDATE episodes SET ' +
-      allchange +
-      'WHERE show_id = ? AND episode_id = ?';
-    const [epiupdate] = await db.query(epiquery, [
-      infos.show_id,
-      infos.episode_id,
-    ]);
-    if (epiupdate.affectedRows !== 0) {
-      const [newepiinfo] = await db.query(
-        'SELECT * FROM episodes WHERE show_id = ? AND episode_id = ?;',
-        [infos.show_id, infos.episode_id]
+      await userModel.updateNewEpi(
+        'episode_episode',
+        infos.episode,
+        infos.show_id,
+        infos.episode_id
       );
-      const [delcache] = await db.query(
-        'SELECT rss_id FROM rss WHERE rss_url like ?',
-        [`%${infos.show_id}%`]
-      );
-      Redis.del(`${delcache[0].rss_id}`);
-      res.send(newepiinfo[0]);
     }
+    const newEpiInfo = await userModel.newEpi(infos.show_id, infos.episode_id);
+    const delCache = await showModel.delId(infos.show_id);
+    Cache.del(`${delCache[0].rss_id}`);
+    res.send(newEpiInfo[0]);
   } catch (err) {
-    res.json({ error: err });
+    return res.json({ error: err });
   }
 };
 
 module.exports = {
-  userprofile,
-  creatorprofile,
-  updateuser,
-  updatecreator,
-  updateepisode,
+  userProfile,
+  creatorProfile,
+  updateUser,
+  updateCreator,
+  updateEpisode,
 };
