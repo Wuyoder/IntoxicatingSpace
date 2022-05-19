@@ -12,7 +12,7 @@ const Chatroom = () => {
   const { audio, episodeid, podcastplayer } = useContext(AppContext);
   const [value, setValue] = useState('');
   const [mem, setMem] = useState(false);
-  //頁面載入時的動作
+
   useEffect(() => {
     if (localStorage.getItem('token')) {
       setMem(true);
@@ -36,7 +36,6 @@ const Chatroom = () => {
 
   useEffect(() => {
     if (ws) {
-      // console.log('success connect!');
       initWebSocket();
     }
   }, [ws]);

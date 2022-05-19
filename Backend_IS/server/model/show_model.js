@@ -1,5 +1,4 @@
 const db = require('../util/db');
-const cru = require('../model/cru_model');
 
 const newEpi = async () => {
   try {
@@ -8,7 +7,8 @@ const newEpi = async () => {
     );
     return result;
   } catch (err) {
-    return { error: 'db error' };
+    console.error(err);
+    return { error: 'db error ( show_model.newEpi )' };
   }
 };
 const rssLike = async (showId) => {
@@ -18,7 +18,8 @@ const rssLike = async (showId) => {
     ]);
     return result;
   } catch (err) {
-    return { error: 'db error' };
+    console.error(err);
+    return { error: 'db error ( show_model.rssLike )' };
   }
 };
 const rssStatus = async (showId, status) => {
@@ -29,7 +30,8 @@ const rssStatus = async (showId, status) => {
     );
     return result;
   } catch (err) {
-    return { error: 'db error' };
+    console.error(err);
+    return { error: 'db error ( show_model.rssStatus )' };
   }
 };
 
@@ -41,7 +43,8 @@ const listNewHost = async (rssId1, rssId2, explicit) => {
     );
     return result;
   } catch (err) {
-    return { error: 'db error' };
+    console.error(err);
+    return { error: 'db error ( show_model.listNewHost )' };
   }
 };
 const listTop = async (rssId1, rssId2, explicit) => {
@@ -52,7 +55,8 @@ const listTop = async (rssId1, rssId2, explicit) => {
     );
     return result;
   } catch (err) {
-    return { error: 'db error' };
+    console.error(err);
+    return { error: 'db error ( show_model.listTop )' };
   }
 };
 
@@ -64,7 +68,8 @@ const listMiddle = async (rssId1, rssId2, explicit) => {
     );
     return result;
   } catch (err) {
-    return { error: 'db error' };
+    console.error(err);
+    return { error: 'db error ( show_model.listMiddle )' };
   }
 };
 const rssId = async (id) => {
@@ -75,7 +80,8 @@ const rssId = async (id) => {
     );
     return result;
   } catch (err) {
-    return { error: 'db error' };
+    console.error(err);
+    return { error: 'db error ( show_model.rssId )' };
   }
 };
 const subCheck = async (id, epiId) => {
@@ -86,7 +92,8 @@ const subCheck = async (id, epiId) => {
     );
     return result;
   } catch (err) {
-    return { error: 'db error' };
+    console.error(err);
+    return { error: 'db error ( show_model.subCheck )' };
   }
 };
 const subDel = async (id, showId) => {
@@ -97,7 +104,8 @@ const subDel = async (id, showId) => {
     );
     return result;
   } catch (err) {
-    return { error: 'db error' };
+    console.error(err);
+    return { error: 'db error ( show_model.subDel )' };
   }
 };
 
@@ -109,18 +117,20 @@ const delId = async (id) => {
     );
     return result;
   } catch (err) {
-    return { error: 'db error' };
+    console.error(err);
+    return { error: 'db error ( show_model.delId )' };
   }
 };
 const initialCheck = async (id, target, type) => {
   try {
     const [result] = await db.query(
-      `SELECT * FROM history_shows WHERE user_id = ? && ${type} = ?`,
+      `SELECT * FROM history_shows WHERE user_id = ? && show_id = ?`,
       [id, target]
     );
     return result;
   } catch (err) {
-    return { error: 'db error' };
+    console.error(err);
+    return { error: 'db error ( show_model.initialCheck )' };
   }
 };
 
@@ -132,7 +142,8 @@ const historyClick = async (id, showId) => {
     );
     return result;
   } catch (err) {
-    return { error: 'db error' };
+    console.error(err);
+    return { error: 'db error ( show_model.historyClick )' };
   }
 };
 const historyEpiClick = async (id, show, epi) => {
@@ -143,7 +154,8 @@ const historyEpiClick = async (id, show, epi) => {
     );
     return result;
   } catch (err) {
-    return { error: 'db error' };
+    console.error(err);
+    return { error: 'db error ( show_model.historyEpiClick )' };
   }
 };
 const epiClick = async (epiId) => {
@@ -154,7 +166,8 @@ const epiClick = async (epiId) => {
     );
     return result;
   } catch (err) {
-    return { error: 'db error' };
+    console.error(err);
+    return { error: 'db error ( show_model.epiClick )' };
   }
 };
 
@@ -166,7 +179,8 @@ const epiCheck = async (showId, epiId, epiNum) => {
     );
     return result;
   } catch (err) {
-    return { error: 'db error' };
+    console.error(err);
+    return { error: 'db error ( show_model.epiCheck )' };
   }
 };
 const hostEpi = async (showId) => {
@@ -177,7 +191,8 @@ const hostEpi = async (showId) => {
     );
     return result;
   } catch (err) {
-    return { error: 'db error' };
+    console.error(err);
+    return { error: 'db error ( show_model.hostEpi )' };
   }
 };
 const historyShow = async (id) => {
@@ -188,7 +203,8 @@ const historyShow = async (id) => {
     );
     return result;
   } catch (err) {
-    return { error: 'db error' };
+    console.error(err);
+    return { error: 'db error ( show_model.historyShow )' };
   }
 };
 
@@ -200,7 +216,8 @@ const subShow = async (id) => {
     );
     return result;
   } catch (err) {
-    return { error: 'db error' };
+    console.error(err);
+    return { error: 'db error ( show_model.subShow )' };
   }
 };
 

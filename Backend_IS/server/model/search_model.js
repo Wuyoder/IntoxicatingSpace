@@ -13,7 +13,8 @@ const search = async (range, explicit, keyword) => {
 
     return result;
   } catch (err) {
-    return { error: 'db error' };
+    console.error(err);
+    return { error: 'db error ( search_model.search )' };
   }
 };
 

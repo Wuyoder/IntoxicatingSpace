@@ -21,7 +21,6 @@ const Creator = () => {
   useEffect(() => {
     const getcreatorinfo = async () => {
       const res1 = ajax('get', CREATOR_PROFILE);
-
       if (!res1.data[0].user_id) {
         window.location.replace('/');
       }

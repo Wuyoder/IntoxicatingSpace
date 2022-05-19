@@ -1502,6 +1502,7 @@ fieldset.MuiOutlinedInput-notchedOutline.css-1d3z3hw-MuiOutlinedInput-notchedOut
 }
 
 #nowplay_btn {
+  font-size: 0.5em;
   z-index: 2;
   max-width: 25vw;
   min-width: 25vw;
@@ -1512,7 +1513,7 @@ fieldset.MuiOutlinedInput-notchedOutline.css-1d3z3hw-MuiOutlinedInput-notchedOut
   -webkit-box-orient: vertical;
   position: fixed;
   bottom: 2vh;
-  left: 14vw;
+  left: 10vw;
   display: none;
 }
 #now_link {

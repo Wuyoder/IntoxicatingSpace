@@ -8,7 +8,8 @@ const newEpi = async (showId, epiId) => {
     );
     return;
   } catch (err) {
-    return { error: 'db error' };
+    console.error(err);
+    return { error: 'db error ( user_model.newEpi )' };
   }
 };
 
@@ -20,7 +21,8 @@ const updateRssInfo = async (column, newInfo, showId) => {
     ]);
     return;
   } catch (err) {
-    return { error: 'db error' };
+    console.error(err);
+    return { error: 'db error ( user_model.updateRssInfo )' };
   }
 };
 
@@ -32,7 +34,8 @@ const updateNewEpi = async (column, newInfo, showId, epiId) => {
     );
     return;
   } catch (err) {
-    return { error: 'db error' };
+    console.error(err);
+    return { error: 'db error ( user_model.updateNewEpi )' };
   }
 };
 const userModel = { newEpi, updateRssInfo, updateNewEpi };

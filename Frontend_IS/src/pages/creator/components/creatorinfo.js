@@ -4,13 +4,10 @@ import { QRCodeCanvas } from 'qrcode.react';
 import { Button } from '@mui/material';
 import { Link } from 'react-router-dom';
 import html2canvas from 'html2canvas';
-import Swal from 'sweetalert2';
-import withReactContent from 'sweetalert2-react-content';
 import Step from '../../step/steps';
 import ajax from '../../../util/ajax';
-
+import salert from '../../../util/salert';
 const Creatorinfo = () => {
-  const MySwal = withReactContent(Swal);
   const [cprofile, setCprofile] = useState([]);
   const [showstatus, setShowstatus] = useState(false);
   const [rssid, setRssid] = useState('');
@@ -36,21 +33,19 @@ const Creatorinfo = () => {
     });
 
     setShowstatus(!showstatus);
-    MySwal.fire({
-      icon: 'info',
-      title: (
-        <h4 id='alert'>
-          Your Show Status Switch to :
-          {(() => {
-            if (showstatus) {
-              return ' OFF';
-            } else {
-              return ' ON';
-            }
-          })()}
-        </h4>
-      ),
-    });
+    salert(
+      'info',
+      <h4 id='alert'>
+        Your Show Status Switch to :
+        {(() => {
+          if (showstatus) {
+            return ' OFF';
+          } else {
+            return ' ON';
+          }
+        })()}
+      </h4>
+    );
   };
 
   return (
@@ -96,10 +91,7 @@ const Creatorinfo = () => {
                   'https://api.intoxicating.space/api/1.0/user/rss/' +
                     cprofile.show_id
                 );
-                MySwal.fire({
-                  icon: 'success',
-                  title: <h4 id='alert'>RSS Feed's URL copied!</h4>,
-                });
+                salert('success', <h4 id='alert'>RSS Feed's URL copied!</h4>);
               }}
             >
               <input
@@ -126,12 +118,7 @@ const Creatorinfo = () => {
             </div>
             <div
               onClick={() => {
-                MySwal.fire({
-                  timer: 1500,
-                  didOpen: () => {
-                    Swal.showLoading();
-                  },
-                });
+                salert('loading');
               }}
             >
               <Link to={`/showchoice/${rssid}`} id='linktomypage'>
@@ -157,16 +144,14 @@ const Creatorinfo = () => {
                     ])
                   )
                 );
-                MySwal.fire({
-                  icon: 'success',
-                  title: (
-                    <>
-                      <h4 className='alert'>
-                        Podcast "{cprofile.show_name}" QRcode copied!
-                      </h4>
-                    </>
-                  ),
-                });
+                salert(
+                  'success',
+                  <>
+                    <h4 className='alert'>
+                      Podcast "{cprofile.show_name}" QRcode copied!
+                    </h4>
+                  </>
+                );
               }}
               id='copyQRcode'
             >

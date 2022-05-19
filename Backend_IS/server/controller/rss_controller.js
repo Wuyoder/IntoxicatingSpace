@@ -1,7 +1,7 @@
 const cru = require('../model/cru_model');
 const { rssEpi } = require('../model/rss_model');
 
-const rssfeed = async (req, res) => {
+const rssFeed = async (req, res) => {
   const id = req.params.rss;
   const show_info = await cru.select('creators_shows', ['*'], { show_id: id });
   if (!show_info[0]) {
@@ -11,26 +11,28 @@ const rssfeed = async (req, res) => {
   if (infos.show_status === 0) {
     return res.status(200).json({ error: 'This show is offline' });
   }
-  const episode_info = await rssEpi(id);
+  const episodeInfo = await rssEpi(id);
 
-  if (!episode_info[0]) {
+  if (!episodeInfo[0]) {
     return res.status(200).json({ error: 'This show (episode) is offline' });
   }
-  const rss_id = await cru.select('rss', ['*'], {
+  const rssId = await cru.select('rss', ['*'], {
     rss_title: show_info[0].show_name,
   });
 
   let items = '';
   let explicit;
-  for (let i = 0; i < episode_info.length; i++) {
-    if (episode_info[i].episode_explicit === 0) {
+  // check each episode's explicit to rewrite show detail
+  for (let i = 0; i < episodeInfo.length; i++) {
+    if (episodeInfo[i].episode_explicit === 0) {
       explicit = 'no';
     } else {
       explicit = 'yes';
     }
-    let basic = episode_info[i].episode_publish_date
+    let basic = episodeInfo[i].episode_publish_date
       .toString()
       .replace('+0800 (台北標準時間)', '');
+    //format db timestamp
     const timeformat =
       basic.slice(0, 3) +
       ',' +
@@ -38,25 +40,25 @@ const rssfeed = async (req, res) => {
       basic.slice(3, 7) +
       basic.slice(10, 28);
     items += `<item>
-      <title><![CDATA[${episode_info[i].episode_title}]]></title>
-      <description><![CDATA[${episode_info[i].episode_des}]]></description>
-      <link>https://intoxicating.space/episode/${rss_id[0].rss_id}-${i}</link>
-      <guid isPermaLink="false">${episode_info[i].episode_id}</guid>
+      <title><![CDATA[${episodeInfo[i].episode_title}]]></title>
+      <description><![CDATA[${episodeInfo[i].episode_des}]]></description>
+      <link>https://intoxicating.space/episode/${rssId[0].rss_id}-${i}</link>
+      <guid isPermaLink="false">${episodeInfo[i].episode_id}</guid>
       <dc:creator><![CDATA[${infos.creator_name}]]></dc:creator>
       <pubDate>${timeformat}</pubDate>
-      <enclosure url="${episode_info[i].episode_file}" length="${episode_info[i].episode_length}" type="audio/mpeg"/>
-      <itunes:duration>${episode_info[i].episode_duration}</itunes:duration>
-      <itunes:image href="${episode_info[i].episode_image}"/>
-      <googleplay:description><![CDATA[${episode_info[i].episode_des}]]></googleplay:description>
-      <itunes:summary><![CDATA[${episode_info[i].episode_des}]]></itunes:summary>
-      <content:encoded><![CDATA[${episode_info[i].episode_des}]]></content:encoded>
-      <itunes:explicit>${episode_info[i].episode_explicit}</itunes:explicit>
+      <enclosure url="${episodeInfo[i].episode_file}" length="${episodeInfo[i].episode_length}" type="audio/mpeg"/>
+      <itunes:duration>${episodeInfo[i].episode_duration}</itunes:duration>
+      <itunes:image href="${episodeInfo[i].episode_image}"/>
+      <googleplay:description><![CDATA[${episodeInfo[i].episode_des}]]></googleplay:description>
+      <itunes:summary><![CDATA[${episodeInfo[i].episode_des}]]></itunes:summary>
+      <content:encoded><![CDATA[${episodeInfo[i].episode_des}]]></content:encoded>
+      <itunes:explicit>${episodeInfo[i].episode_explicit}</itunes:explicit>
       <itunes:season>1</itunes:season>
-      <itunes:episode>${episode_info[i].episode_episode}</itunes:episode>
+      <itunes:episode>${episodeInfo[i].episode_episode}</itunes:episode>
       <itunes:episodeType>full</itunes:episodeType>
   </item>`;
   }
-  let last = episode_info[0].episode_publish_date
+  let last = episodeInfo[0].episode_publish_date
     .toString()
     .replace('+0800 (台北標準時間)', '');
   const lasttimeformat =
@@ -71,7 +73,7 @@ const rssfeed = async (req, res) => {
   rss += `
     <title><![CDATA[${infos.show_name}]]></title>
   <description><![CDATA[${infos.show_des}]]></description>
-      <link>https://intoxicating.space/showchoice/${rss_id[0].rss_id}</link>
+      <link>https://intoxicating.space/showchoice/${rssId[0].rss_id}</link>
       <image>
           <url>${infos.show_image}</url>
           <title>${infos.show_name}</title>
@@ -103,8 +105,7 @@ const rssfeed = async (req, res) => {
       </itunes:owner>`;
   rss += items;
   rss += `</channel></rss>`;
-
-  return res.header('Content-Type', 'application/xml').send(rss);
+  return res.status(200).header('Content-Type', 'application/xml').send(rss);
 };
 
-module.exports = { rssfeed };
+module.exports = { rssFeed };

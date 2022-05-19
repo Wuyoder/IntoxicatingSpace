@@ -4,17 +4,9 @@ const express = require('express');
 const app = express();
 const port = process.env.PORT;
 const bodyParser = require('body-parser');
-app.use(express.static('public'));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(cors());
-
-//TODO:error handler, try&catch
-app.use('/api/1.0/admin', [require('./server/routes/admin_route')]);
-app.use('/api/1.0/user', [require('./server/routes/user_route')]);
-// TODO:SOCKET.IO
-
-//將啟動的 Server 送給 socket.io 處理
+const { jwtsk } = require('./server/util/jwt');
+const cru = require('./server/model/cru_model');
+const chat = require('./server/model/chatroom_model');
 const http = require('http');
 const server = http.createServer(app);
 const { Server } = require('socket.io');
@@ -24,10 +16,14 @@ const io = new Server(server, {
   },
 });
 
-const { jwtsk } = require('./server/util/jwt');
-const cru = require('./server/model/cru_model');
-const chat = require('./server/model/chatroom_model');
+app.use(express.static('public'));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cors());
 
+app.use('/api/1.0/admin', [require('./server/routes/admin_route')]);
+app.use('/api/1.0/user', [require('./server/routes/user_route')]);
+// socket.io
 io.on('connection', (socket) => {
   socket.on('getMessage', async (message) => {
     const who = await jwtsk(message.token);
@@ -57,14 +53,11 @@ io.on('connection', (socket) => {
     }
   });
 });
-
-// Page not found
+// api url error
 app.use(function (req, res, next) {
-  res.redirect('/');
-  //res.send('wrong way...');
+  res.status(404).send('wrong way.');
 });
-
-// Error handling
+// error handling
 app.use(function (err, req, res, next) {
   console.log(err);
   res.status(500).send('Internal Server Error');

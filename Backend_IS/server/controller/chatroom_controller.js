@@ -1,10 +1,10 @@
 require('dotenv').config();
-const chat = require('../model/chatroom_model');
+const { chatRecord } = require('../model/chatroom_model');
 
-const chathistory = async (req, res) => {
+const chatHistory = async (req, res) => {
   const history = req.body;
-  const recorded = await chat.chatHistory(history.show_id, history.episode_id);
-  return res.send(recorded);
+  const recorded = await chatRecord(history.show_id, history.episode_id);
+  return res.status(200).send(recorded);
 };
 
-module.exports = { chathistory };
+module.exports = { chatHistory };

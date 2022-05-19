@@ -1,10 +1,8 @@
-import { SIGNUP, LOGIN } from '../../../global/constants';
+import { SIGNUP } from '../../../global/constants';
 import { Button, TextField } from '@mui/material';
-import Swal from 'sweetalert2';
-import withReactContent from 'sweetalert2-react-content';
 import ajax from '../../../util/ajax';
+import salert from '../../../util/salert';
 const Signup = () => {
-  const MySwal = withReactContent(Swal);
   const gosignup = async () => {
     const name = document.getElementById('S_name').value;
     const email = document.getElementById('S_email').value;
@@ -17,25 +15,10 @@ const Signup = () => {
       birth: birth,
     });
     if (s_result.data.error) {
-      MySwal.fire({
-        title: (
-          <>
-            <h4 className='alert'>{s_result.data.error}</h4>
-          </>
-        ),
-      });
+      salert('hint', {}, s_result.data.error);
     }
     if (s_result.data.status) {
-      MySwal.fire({
-        title: (
-          <>
-            <h4 className='alert'>Please Sign in.</h4>
-          </>
-        ),
-        didOpen: () => {
-          MySwal.showLoading();
-        },
-      });
+      salert('signin');
       window.location.replace('/login');
     }
   };

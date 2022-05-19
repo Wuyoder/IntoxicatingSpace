@@ -1,28 +1,28 @@
 const db = require('../util/db');
 const cru = require('./cru_model');
-const newrss = async (rssInfo) => {
+const newRssURL = async (rssInfo) => {
   try {
     await db.query(
       `INSERT INTO rss ( rss_title, rss_url, rss_creator, rss_image, rss_explicit, rss_category_main, rss_category_sub, rss_hot, rss_status) VALUES (?,?,?,?,?,?,?,?,?);`,
       [rssInfo]
     );
+    return;
   } catch (err) {
-    err = new Error();
-    return { error: 'Server Error (DB)' };
+    console.error(err);
+    return { error: 'db error ( admin_model.newRss )' };
   }
-  return { status: 'OK' };
 };
 
-const urlcheck = async (url) => {
+const urlCheck = async (url) => {
   try {
     const check = await cru.select('rss', ['rss_id'], { rss_url: url });
     if (check.length !== 0) {
       throw err;
     }
-    return { status: 'OK' };
+    return;
   } catch (err) {
-    err = new Error();
-    return { error: "RSS Feed's URL Already Exist." };
+    console.error(err);
+    return { error: 'db error ( admin_model.urlCheck )' };
   }
 };
-module.exports = { newrss, urlcheck };
+module.exports = { newRssURL, urlCheck };

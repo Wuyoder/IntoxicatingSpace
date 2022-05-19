@@ -44,7 +44,6 @@ const StepShowchoice = () => {
   };
   const guider = () => {
     setIntro(true);
-    console.log('state.stepsEnabled', state.stepsEnabled);
   };
   return (
     <>
@@ -107,7 +106,6 @@ const StepChatroom = () => {
   };
   const guider = () => {
     setIntro(true);
-    console.log('state.stepsEnabled', state.stepsEnabled);
   };
   return (
     <>
@@ -171,7 +169,6 @@ const StepUserprofile = () => {
   };
   const guider = () => {
     setIntro(true);
-    console.log('state.stepsEnabled', state.stepsEnabled);
   };
   return (
     <>
@@ -241,7 +238,6 @@ const StepEditUserprofile = () => {
   };
   const guider = () => {
     setIntro(true);
-    console.log('state.stepsEnabled', state.stepsEnabled);
   };
   return (
     <>
@@ -315,7 +311,6 @@ const StepCreator = () => {
   };
   const guider = () => {
     setIntro(true);
-    console.log('state.stepsEnabled', state.stepsEnabled);
   };
   return (
     <>
@@ -377,7 +372,6 @@ const StepEditCreator = () => {
   };
   const guider = () => {
     setIntro(true);
-    console.log('state.stepsEnabled', state.stepsEnabled);
   };
   return (
     <>
@@ -431,7 +425,6 @@ const StepEpi = () => {
   };
   const guider = () => {
     setIntro(true);
-    console.log('state.stepsEnabled', state.stepsEnabled);
   };
   return (
     <>
@@ -481,7 +474,6 @@ const StepNoEpi = () => {
   };
   const guider = () => {
     setIntro(true);
-    console.log('state.stepsEnabled', state.stepsEnabled);
   };
   return (
     <>
@@ -543,7 +535,6 @@ const StepNewEpi = () => {
   };
   const guider = () => {
     setIntro(true);
-    console.log('state.stepsEnabled', state.stepsEnabled);
   };
   return (
     <>

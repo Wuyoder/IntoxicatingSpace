@@ -1,16 +1,17 @@
 const RssParser = require('rss-parser');
 const rssparser = new RssParser();
-const mysql = require('../model/admin_model');
+const { newRssURL, urlCheck } = require('../model/admin_model');
 const { jwtwrap } = require('../util/jwt');
 
-const newrss = async (req, res) => {
+const newRss = async (req, res) => {
   const who = await jwtwrap(req);
   let count = 0;
+  // admin operation check
   if (who.error) {
-    return res.json(who);
+    return res.status(401).json(who);
   }
   if (who.role !== 1) {
-    return res.json({ error: 'Forbidden Operation.' });
+    return res.status(401).json({ error: 'Forbidden Operation.' });
   }
   try {
     if (req.body.rsslist.length < 1) {
@@ -28,7 +29,8 @@ const newrss = async (req, res) => {
       }
       const title = rssObject.title;
       const url = rssObject.feedUrl;
-      const check = await mysql.urlcheck(url);
+      // No repeat podcast rss check
+      const check = await urlCheck(url);
       if (!check.error) {
         count += 1;
         const image = rssObject.itunes.image;
@@ -74,17 +76,18 @@ const newrss = async (req, res) => {
     if (count === 0) {
       throw 'No New Feed.';
     }
-    const result = await mysql.newrss(rssInfo);
+    const result = await newRssURL(rssInfo);
     if (result.error) {
       throw result.error;
     }
   } catch (err) {
     return res.json({ error: err });
   }
-  res.json({
+  return res.status(200).json({
     status: `${count} new RSS insert to DB OK (${
       req.body.rsslist.length - count
     } RSS already exist)`,
   });
 };
-module.exports = { newrss };
+
+module.exports = { newRss };

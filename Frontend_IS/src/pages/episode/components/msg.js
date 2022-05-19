@@ -29,10 +29,6 @@ const Msg = ({ item }) => {
         <div className='msg_day'>
           {(() => {
             let modiday = item.time_click.toString().slice(0, 10);
-            let moditime = item.time_click
-              .toString()
-              .split('T')[1]
-              .split('.')[0];
             return `( ${modiday} )`;
           })()}
         </div>

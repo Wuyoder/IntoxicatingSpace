@@ -1,6 +1,6 @@
 const { jwtwrap } = require('../util/jwt');
 const { search } = require('../model/search_model');
-const showkeyword = async (req, res) => {
+const showKeyword = async (req, res) => {
   const who = await jwtwrap(req);
   let explicit = '';
   if (who.adult === 0) {
@@ -8,10 +8,10 @@ const showkeyword = async (req, res) => {
   }
   const data = req.body;
   if (!data.keyword || data.keyword === ' ') {
-    return res.json({ error: 'no keyword' });
+    return res.status(200).json({ error: 'no keyword' });
   }
   if (data.keyword.indexOf('  ') > -1) {
-    return res.json({ error: 'no keyword' });
+    return res.status(200).json({ error: 'no keyword' });
   }
   const words = data.keyword.split(' ');
   let mutiSearch = [];
@@ -34,11 +34,11 @@ const showkeyword = async (req, res) => {
       .status(200)
       .json({ error: 'no match data, please try other keywords.' });
   }
-  return res.json({
+  return res.status(200).json({
     title: titleSearch.flat(),
     creator: creatorSearch.flat(),
     cate: cateSearch.flat(),
   });
 };
 
-module.exports = { showkeyword };
+module.exports = { showKeyword };

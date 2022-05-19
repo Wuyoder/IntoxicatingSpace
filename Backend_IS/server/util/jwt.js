@@ -7,25 +7,20 @@ const jwtwrap = async (req) => {
       req.get('Authorization').replace('Bearer ', ''),
       process.env.JWT_SECRET
     );
+    return who;
   } catch (err) {
-    err = new Error();
-    err.message = 'wrong token';
-    return { error: err.message };
+    return { error: 'wrong token' };
   }
-  return who;
 };
 
 const jwtsk = async (token) => {
   let who;
   try {
     who = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
+    return who;
   } catch (err) {
-    err = new Error();
-    err.message = 'wrong token';
-    return { error: err.message };
+    return { error: 'wrong token' };
   }
-
-  return who;
 };
 
 module.exports = { jwtwrap, jwtsk };

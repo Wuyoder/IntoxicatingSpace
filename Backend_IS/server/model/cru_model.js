@@ -32,11 +32,8 @@ const insert = async (table, obj) => {
     const [result] = await db.query(query, variables);
     return checkQueryResult(result);
   } catch (err) {
-    return {
-      code: 500,
-      status: 'db failed.',
-      error: 'db error',
-    };
+    console.error(err);
+    return { error: 'db error ( cru_model.insert )' };
   }
 };
 //update table columns table: 'name', obj key-value pair, only one where condition
@@ -73,11 +70,8 @@ const update = async (table, obj, where) => {
     const [result] = await db.query(query, variables);
     return result;
   } catch (err) {
-    return {
-      code: 500,
-      status: 'db failed.',
-      error: 'db error',
-    };
+    console.error(err);
+    return { error: 'db error ( cru_model.update )' };
   }
 };
 //update table columns table: 'name', column: array[], only one where condition
@@ -98,21 +92,24 @@ const select = async (table, column, where) => {
     const [result] = await db.query(query, whereVariables.join(','));
     return result;
   } catch (err) {
-    return { code: 500, status: 'db failed.', error: 'db error' };
+    console.error(err);
+    return { error: 'db error ( cru_model.select )' };
   }
 };
 const startTrans = async () => {
   try {
     await db.query('START TRANSACTION');
   } catch (err) {
-    return { error: 'db error' };
+    console.error(err);
+    return { error: 'db error ( cru_model.startTrans )' };
   }
 };
 const commitTrans = async () => {
   try {
     await db.query('COMMIT');
   } catch (err) {
-    return { error: 'db error' };
+    console.error(err);
+    return { error: 'db error ( cru_model.commitTrans )' };
   }
 };
 const cru = { insert, update, select, startTrans, commitTrans };

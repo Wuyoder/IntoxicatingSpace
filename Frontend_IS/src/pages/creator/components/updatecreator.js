@@ -2,12 +2,10 @@ import { useEffect, useState } from 'react';
 import { S3, CREATOR_PROFILE } from '../../../global/constants';
 import { UPDATE_CREATOR } from '../../../global/constants';
 import { Button, TextField } from '@mui/material';
-import Swal from 'sweetalert2';
-import withReactContent from 'sweetalert2-react-content';
 import Step from '../../step/steps';
 import ajax from '../../../util/ajax';
+import salert from '../../../util/salert';
 const Updatecreator = ({ creatorprofile }) => {
-  const MySwal = withReactContent(Swal);
   const [cprofile, setCprofile] = useState([]);
   const [image, setImage] = useState([]);
   const [cname, setCname] = useState([]);
@@ -21,7 +19,6 @@ const Updatecreator = ({ creatorprofile }) => {
     const getcreatorinfo = async () => {
       const res = await ajax('get', CREATOR_PROFILE);
       setCprofile(res.data[0]);
-      console.log(cprofile);
       setCname(res.data[0].creator_name);
       setCemail(res.data[0].creator_email);
       setSname(res.data[0].show_name);
@@ -46,19 +43,13 @@ const Updatecreator = ({ creatorprofile }) => {
       sdes: new_show_des,
     });
     if (res.data.error) {
-      MySwal.fire({
-        icon: 'error',
-        title: <h4 id='alert'>{res.data.error}</h4>,
-      });
+      salert('error', <h4 id='alert'>{res.data.error}</h4>);
+
       return;
     } else {
-      MySwal.fire({
-        icon: 'success',
-        title: <h4 id='alert'>Creator Info Changed.</h4>,
-      });
+      salert('success', <h4 id='alert'>Creator Info Changed.</h4>);
     }
-    //TODO:要把res.data列出來
-    console.log('newprofile', res.data);
+    //console.log('newprofile', res.data);
 
     setCname(res.data.creator_name);
     setCemail(res.data.creator_email);
@@ -79,31 +70,17 @@ const Updatecreator = ({ creatorprofile }) => {
     const imageInput = document.getElementById('new_show_image');
     const file = imageInput.files[0];
     if (!file) {
-      MySwal.fire({
-        icon: 'error',
-        title: <h4 id='alert'>Nothing Changed.</h4>,
-      });
+      salert('error', <h4 id='alert'>Nothing Changed.</h4>);
       return;
     }
     if (document.getElementById('new_show_image').files[0].size > 9000000) {
-      MySwal.fire({
-        icon: 'error',
-        title: <h4 id='alert'>Please choose valid podcast artwork file.</h4>,
-      });
+      salert(
+        'error',
+        <h4 id='alert'>Please choose valid podcast artwork file.</h4>
+      );
       return;
     }
-    MySwal.fire({
-      icon: 'info',
-      title: (
-        <>
-          <h4 id='alert'>Please Wait For Uploading.</h4>
-          <div id='waitpercent'></div>
-        </>
-      ),
-      showConfirmButton: false,
-      allowOutsideClick: false,
-      allowEscapeKey: false,
-    });
+    salert('upload');
     const res = await ajax('post', S3, { type: 'profile_image' });
 
     if (res.data.presignedURL) {
@@ -124,10 +101,7 @@ const Updatecreator = ({ creatorprofile }) => {
           );
           document.getElementById('show_image').src =
             localStorage.getItem('creator_image');
-          MySwal.fire({
-            icon: 'success',
-            title: <h4 id='alert'>{update.data.status}</h4>,
-          });
+          salert('success', <h4 id='alert'>{update.data.status}</h4>);
         }
       }
     }
@@ -135,18 +109,16 @@ const Updatecreator = ({ creatorprofile }) => {
   const nowimage = () => {
     if (document.getElementById('new_show_image').files[0]) {
       if (document.getElementById('new_show_image').files[0].size > 9000000) {
-        MySwal.fire({
-          icon: 'error',
-          title: (
-            <>
-              <h4 id='alert'>Image File too large</h4>
-              <h6>
-                Podcast artwork must be between 1400 x 1400 and 3000 x 3000
-                pixels, JPG or PNG.
-              </h6>
-            </>
-          ),
-        });
+        salert(
+          'error',
+          <>
+            <h4 id='alert'>Image File too large</h4>
+            <h6>
+              Podcast artwork must be between 1400 x 1400 and 3000 x 3000
+              pixels, JPG or PNG.
+            </h6>
+          </>
+        );
       }
       setImage(document.getElementById('new_show_image').files[0].name);
     } else {

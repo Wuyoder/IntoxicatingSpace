@@ -1,14 +1,11 @@
 import { useEffect, useState } from 'react';
 import { UPDATE_USER, USER_PROFILE, S3 } from '../../../global/constants';
 import { Button, TextField } from '@mui/material';
-import Swal from 'sweetalert2';
-import withReactContent from 'sweetalert2-react-content';
 import Step from '../../step/steps';
 import ajax from '../../../util/ajax';
+import salert from '../../../util/salert';
 
 const Updateuser = () => {
-  const MySwal = withReactContent(Swal);
-  const [setUserprofile] = useState({});
   const [username, setUsername] = useState([]);
   const [useremail, setUseremail] = useState([]);
   const [setImgurl] = useState('');
@@ -16,7 +13,7 @@ const Updateuser = () => {
   useEffect(() => {
     const getuserprofile = async () => {
       const res = await ajax('get', USER_PROFILE);
-      setUserprofile(res.data);
+
       setUsername(res.data.name);
       setUseremail(res.data.email);
     };
@@ -36,15 +33,9 @@ const Updateuser = () => {
       localStorage.setItem('token', res.data.token);
       setUsername(res.data.user_name);
       setUseremail(res.data.user_email);
-      MySwal.fire({
-        icon: 'success',
-        title: <h4 id='alert'>User Info Changed.</h4>,
-      });
+      salert('success', <h4 id='alert'>User Info Changed.</h4>);
     } else {
-      MySwal.fire({
-        icon: 'error',
-        title: <h4 id='alert'>{res.data.error}</h4>,
-      });
+      salert('errorMsg', {}, res.data.error);
     }
     document.getElementById('new_name').value = '';
     document.getElementById('new_email').value = '';
@@ -56,25 +47,10 @@ const Updateuser = () => {
     const imageInput = document.querySelector('#imageInput');
     const file = imageInput.files[0];
     if (!file) {
-      MySwal.fire({
-        icon: 'error',
-        title: <h4 id='alert'>Please Choose New Image First.</h4>,
-      });
+      salert('error', <div id='alert'>Please Choose New Image First.</div>);
       return;
     }
-    MySwal.fire({
-      icon: 'info',
-      title: (
-        <>
-          <h4 id='alert'>Please Wait For Uploading.</h4>
-          <div id='waitpercent'></div>
-        </>
-      ),
-      showConfirmButton: false,
-      allowOutsideClick: false,
-      allowEscapeKey: false,
-    });
-
+    salert('upload');
     if (imageInput.files[0]) {
       const res = await ajax('post', S3, { type: 'profile_image' });
       if (res.data.presignedURL) {
@@ -90,17 +66,11 @@ const Updateuser = () => {
       }
       window.location.reload();
     } else {
-      MySwal.fire({
-        icon: 'error',
-        title: <h4 id='alert'>Please Choose New Image First.</h4>,
-      });
+      salert('error', <h4 id='alert'>Please Choose New Image First.</h4>);
     }
     document.getElementById('update_userprofile_image').src =
       localStorage.getItem('user_image');
-    MySwal.fire({
-      icon: 'success',
-      title: <h4 id='alert'>User Image Changed.</h4>,
-    });
+    salert('success', <h4 id='alert'>User Image Changed.</h4>);
   };
   const nowimage = () => {
     if (document.getElementById('imageInput').files[0]) {

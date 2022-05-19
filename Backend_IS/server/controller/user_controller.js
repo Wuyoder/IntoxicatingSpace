@@ -1,5 +1,4 @@
 require('dotenv').config();
-const db = require('../util/db');
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
 const jwt = require('jsonwebtoken');
@@ -13,6 +12,7 @@ const showModel = require('../model/show_model');
 const userProfile = async (req, res) => {
   const who = await jwtwrap(req);
   if (who.error) {
+    console.error(who.error);
     return res.status(200).json({ error: who.error });
   }
   res.send(who);
@@ -21,6 +21,7 @@ const userProfile = async (req, res) => {
 const creatorProfile = async (req, res) => {
   const who = await jwtwrap(req);
   if (who.error) {
+    console.error(who.error);
     return res.status(200).json({ error: who.error });
   }
   const result = await cru.select('creators_shows', ['*'], {
@@ -32,6 +33,7 @@ const creatorProfile = async (req, res) => {
 const updateUser = async (req, res) => {
   const who = await jwtwrap(req);
   if (who.error) {
+    console.error(who.error);
     return res.status(200).json({ error: who.error });
   }
   if (req.body.newprofileimage) {
@@ -46,19 +48,21 @@ const updateUser = async (req, res) => {
         user_id: who.id,
       }
     );
-    return res.json({ status: 'update profile image url OK' });
+    return res.status(200).json({ status: 'update profile image url OK' });
   }
 
   let validation;
   if (req.body.name === '' && req.body.email === '' && req.body.pwd === '') {
-    return res.json({ error: 'Nohting Changed.' });
+    return res.status(200).json({ error: 'Nohting Changed.' });
   }
   if (req.body.name !== '') {
     validation = Joiput.validate({
       Name: req.body.name,
     });
     if (validation.error) {
-      return res.json({ error: 'Username length must be between 3~30.' });
+      return res
+        .status(200)
+        .json({ error: 'Username length must be between 3~30.' });
     }
     await cru.update(
       'users',
@@ -71,7 +75,7 @@ const updateUser = async (req, res) => {
       Email: req.body.email,
     });
     if (validation.error) {
-      return res.json({ error: 'E-mail format does not match.' });
+      return res.status(200).json({ error: 'E-mail format does not match.' });
     }
     await cru.update(
       'users',
@@ -84,12 +88,15 @@ const updateUser = async (req, res) => {
       Password: req.body.pwd,
     });
     if (validation.error) {
-      return res.json({ error: 'Password length must be between 8~30.' });
+      console.error(validation.error);
+      return res
+        .status(200)
+        .json({ error: 'Password length must be between 8~30.' });
     }
-    const hashed_pwd = await bcrypt.hash(req.body.pwd, saltRounds);
+    const hashedPwd = await bcrypt.hash(req.body.pwd, saltRounds);
     await cru.update(
       'users',
-      { user_password: hashed_pwd },
+      { user_password: hashedPwd },
       { user_id: who.id }
     );
   }
@@ -110,7 +117,7 @@ const updateUser = async (req, res) => {
     ['user_name', 'user_email', 'user_image'],
     { user_id: who.id }
   );
-  return res.json({
+  return res.status(200).json({
     token: token,
     user_name: newprofile[0].user_name,
     user_email: newprofile[0].user_email,
@@ -121,9 +128,10 @@ const updateUser = async (req, res) => {
 const updateCreator = async (req, res) => {
   const who = await jwtwrap(req);
   if (who.error) {
+    console.error(who.error);
     return res.status(200).json({ error: who.error });
   }
-  const show_target = await cru.select('creators_shows', ['show_id'], {
+  const showTarget = await cru.select('creators_shows', ['show_id'], {
     user_id: who.id,
   });
   if (req.body.newshowimage) {
@@ -139,14 +147,12 @@ const updateCreator = async (req, res) => {
     await userModel.updateRssInfo(
       'rss_image',
       cdnimage,
-      `%${show_target[0].show_id}%`
+      `%${showTarget[0].show_id}%`
     );
-    const delCache = await showModel.delId(`%${show_target[0].show_id}%`);
+    const delCache = await showModel.delId(`%${showTarget[0].show_id}%`);
     Cache.del(`${delCache[0].rss_id}`);
-    return res.json({ status: 'update show image url OK' });
+    return res.status(200).json({ status: 'update show image url OK' });
   }
-  let change = '';
-  let rsschange = '';
   if (
     req.body.cname === '' &&
     req.body.cmail === '' &&
@@ -154,7 +160,7 @@ const updateCreator = async (req, res) => {
     req.body.sdes === '' &&
     req.body.scategory === 'choose new category'
   ) {
-    return res.json({ error: 'Nohting Changed.' });
+    return res.status(200).json({ error: 'Nohting Changed.' });
   }
   if (
     req.body.cname == '' &&
@@ -163,7 +169,7 @@ const updateCreator = async (req, res) => {
     req.body.sdes == '' &&
     req.body.scategory == ''
   ) {
-    return res.json({ error: 'Nohting Changed.' });
+    return res.status(200).json({ error: 'Nohting Changed.' });
   }
   if (req.body.cname !== '') {
     await cru.update(
@@ -182,7 +188,9 @@ const updateCreator = async (req, res) => {
       Email: req.body.cmail,
     });
     if (validation.error) {
-      return res.json({ error: validation.error.details[0].message });
+      return res
+        .status(200)
+        .json({ error: validation.error.details[0].message });
     }
     await cru.update(
       'creators_shows',
@@ -213,26 +221,26 @@ const updateCreator = async (req, res) => {
     req.body.scategory !== '' &&
     req.body.scategory !== 'choose new category'
   ) {
-    const cmain = req.body.scategory.split('_')[0];
-    const csub = req.body.scategory.split('_')[1];
+    const cMain = req.body.scategory.split('_')[0];
+    const cSub = req.body.scategory.split('_')[1];
     await cru.update(
       'creators_shows',
-      { show_category_main: cmain },
+      { show_category_main: cMain },
       { user_id: who.id }
     );
     await cru.update(
       'creators_shows',
-      { show_category_sub: csub },
+      { show_category_sub: cSub },
       { user_id: who.id }
     );
     await userModel.updateRssInfo(
       'rss_category_main',
-      cmain,
+      cMain,
       show_target[0].show_id
     );
     await userModel.updateRssInfo(
       'rss_category_sub',
-      csub,
+      cSub,
       show_target[0].show_id
     );
   }
@@ -247,6 +255,7 @@ const updateCreator = async (req, res) => {
 const updateEpisode = async (req, res) => {
   const who = await jwtwrap(req);
   if (who.error) {
+    console.error(who.error);
     return res.status(200).json({ error: who.error });
   }
   try {
@@ -261,7 +270,7 @@ const updateEpisode = async (req, res) => {
       infos.image === '' &&
       infos.episode === ''
     ) {
-      return res.json({ error: 'Nohting Changed.' });
+      return res.status(200).json({ error: 'Nohting Changed.' });
     }
     if (
       infos.title === '' &&
@@ -273,10 +282,8 @@ const updateEpisode = async (req, res) => {
       infos.image === '' &&
       infos.episode === ''
     ) {
-      return res.json({ error: 'Nohting Changed.' });
+      return res.status(200).json({ error: 'Nohting Changed.' });
     }
-
-    let change = '';
     if (infos.title !== '') {
       await userModel.updateNewEpi(
         'episode_title',
@@ -353,9 +360,10 @@ const updateEpisode = async (req, res) => {
     const newEpiInfo = await userModel.newEpi(infos.show_id, infos.episode_id);
     const delCache = await showModel.delId(infos.show_id);
     Cache.del(`${delCache[0].rss_id}`);
-    res.send(newEpiInfo[0]);
+    return res.send(newEpiInfo[0]);
   } catch (err) {
-    return res.json({ error: err });
+    console.error(err);
+    return res.status(200).json({ error: err });
   }
 };
 

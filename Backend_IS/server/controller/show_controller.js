@@ -7,7 +7,7 @@ const Redis = require('../util/cache');
 const showModel = require('../model/show_model');
 const cru = require('../model/cru_model');
 
-const showlist = async (req, res) => {
+const showList = async (req, res) => {
   const who = await jwtwrap(req);
   let explicit = '';
   if (who.error) {
@@ -47,32 +47,33 @@ const showlist = async (req, res) => {
     showlist_2: showlistMiddle,
     showlist_3: showlistNewhost,
   };
-  return res.json(data);
+  return res.status(200).json(data);
 };
 
-const myshowpage = async (req, res) => {
+const myShowPage = async (req, res) => {
   const who = await jwtwrap(req);
   if (who.error) {
-    return res.json(who);
+    return res.status(200).json(who);
   }
   const rss_id = await showModel.rssId(who.id);
-  res.json({ rss_id: rss_id[0].rss_id });
+  return res.status(200).json({ rss_id: rss_id[0].rss_id });
 };
 
-const showchoice = async (req, res) => {
+const showChoice = async (req, res) => {
+  //check with / without cache performance
   var timer = -performance.now();
   const id = req.params.id;
   const cache = await Redis.get(`${id}`);
   if (cache !== null) {
     timer += performance.now();
     console.log('Cache Time: ' + (timer / 1000).toFixed(5) + ' sec.');
-    return res.send(JSON.parse(cache));
+    return res.status(200).send(JSON.parse(cache));
   }
   const showChoice = await cru.select('rss', ['rss_url', 'rss_hot'], {
     rss_id: id,
   });
   if (showChoice.length < 1) {
-    return res.json({ status: 'RSS not in database' });
+    return res.status(200).json({ status: 'RSS not in database' });
   }
   const hotPlus = showChoice[0].rss_hot + 1;
   await cru.update('rss', { rss_hot: hotPlus }, { rss_id: id });
@@ -82,23 +83,23 @@ const showchoice = async (req, res) => {
   } catch (err) {
     err = new Error();
     err.message = 'wrong rss url';
-    return res.json({ error: err.message });
+    return res.status(200).json({ error: err.message });
   }
   Redis.set(`${id}`, JSON.stringify(rssObject));
   Redis.expire(`${id}`, 7200);
   timer += performance.now();
   console.log('No Cache Time: ' + (timer / 1000).toFixed(5) + ' sec.');
-  res.send(rssObject);
+  return res.send(rssObject);
 };
 
-const episodechoice = async (req, res) => {
-  const show_episode = req.params.episode;
-  const split = show_episode.split('-');
+const episodeChoice = async (req, res) => {
+  const showEpisode = req.params.episode;
+  const split = showEpisode.split('-');
   const show = split[0];
   const episode = split[1];
   const url = await cru.select('rss', ['rss_url'], { rss_id: show });
   if (!url[0]) {
-    return res.json({ error: 'wrong show info.' });
+    return res.status(200).json({ error: 'wrong show info.' });
   }
   rssObject = await rssparser.parseURL(url[0].rss_url);
   data = {
@@ -107,20 +108,20 @@ const episodechoice = async (req, res) => {
     author: rssObject.itunes.author,
     item: rssObject.items[episode],
   };
-  res.send(data);
+  return res.send(data);
 };
 
-const showsubscribe = async (req, res) => {
+const showSubscribe = async (req, res) => {
   const who = await jwtwrap(req);
   if (who.error) {
-    return res.json(who);
+    return res.status(200).json(who);
   }
   if (!req.body.id) {
     return res.status(200).json({ error: 'show id missing' });
   }
   const subCheck = await showModel.subCheck(who.id, req.body.id);
   if (subCheck[0]?.user_id) {
-    return res.json({ status: 'already subscribed.' });
+    return res.status(200).json({ status: 'already subscribed.' });
   }
   await cru.insert('subscribes', { user_id: who.id, rss_id: req.body.id });
   const searchName = await cru.select('creators_shows', ['show_name'], {
@@ -136,16 +137,16 @@ const showsubscribe = async (req, res) => {
       { show_subscriber: subPlus },
       { show_name: searchName[0].rss_title }
     );
-    return res.json({ status: 'subscribe IS host show ok' });
+    return res.status(200).json({ status: 'subscribe IS host show ok' });
   } else {
-    return res.json({ status: 'subscribe outsite host show ok' });
+    return res.status(200).json({ status: 'subscribe outsite host show ok' });
   }
 };
 
-const showunsub = async (req, res) => {
+const showUnsub = async (req, res) => {
   const who = await jwtwrap(req);
   if (who.error) {
-    return res.json(who);
+    return res.status(200).json(who);
   }
   if (!req.body.id) {
     return res.status(200).json({ error: 'show id missing' });
@@ -168,21 +169,20 @@ const showunsub = async (req, res) => {
       { show_subscriber: subMinus },
       { show_name: searchName[0].rss_title }
     );
-    return res.json({ status: 'unsubscribe IS host show ok' });
+    return res.status(200).json({ status: 'unsubscribe IS host show ok' });
   } else {
-    return res.json({ status: 'unsubscribe outsite host show ok' });
+    return res.status(200).json({ status: 'unsubscribe outsite host show ok' });
   }
 };
 
 const switcher = async (req, res) => {
   const who = await jwtwrap(req);
   if (who.error) {
-    return res.json(who);
+    return res.status(200).json(who);
   }
   if (!req.body.type) {
     return res.status(200).json({ error: 'type missing' });
   }
-
   if (req.body.type === 'show') {
     if (!req.body.show_id) {
       return res.status(200).json({ error: 'show id or status missing' });
@@ -212,11 +212,10 @@ const switcher = async (req, res) => {
     }
     const delCache = await showModel.delId(req.body.show_id);
     Redis.del(`${delCache[0].rss_id}`);
-    return res.json({
+    return res.status(200).json({
       status: { type: req.body.type, status: showStatusAfter },
     });
-  }
-  if (req.body.type === 'episode') {
+  } else {
     if (!req.body.episode_id || !req.body.show_id) {
       return res.status(200).json({ error: 'episode id or status missing' });
     }
@@ -242,14 +241,16 @@ const switcher = async (req, res) => {
     }
     const delCache = await showModel.delId(req.body.show_id);
     Redis.del(`${delCache[0].rss_id}`);
-    res.json({ status: { type: req.body.type, status: epistatus_after } });
+    res
+      .status(200)
+      .json({ status: { type: req.body.type, status: epistatus_after } });
   }
 };
 
-const userhistory = async (req, res) => {
+const userHistory = async (req, res) => {
   const who = await jwtwrap(req);
   if (who.error) {
-    return res.json(who);
+    return res.status(200).json(who);
   }
   if (!req.body.type) {
     return res.status(200).json({ error: 'type missing' });
@@ -295,27 +296,29 @@ const userhistory = async (req, res) => {
   }
   res.status(200).json({ status: { type: req.body.type } });
 };
-const episoderemove = async (req, res) => {
+const episodeRemove = async (req, res) => {
   const who = await jwtwrap(req);
   if (who.error) {
-    return res.json(who);
+    return res.status(200).json(who);
   }
-  const targetepi = req.body.episode_id;
+  const targetEpi = req.body.episode_id;
   await cru.update(
     'episodes',
     { episode_status: 2 },
-    { episode_id: targetepi }
+    { episode_id: targetEpi }
   );
-  res.json({ status: `episode ${req.body.episode_id} already removed.` });
+  res
+    .status(200)
+    .json({ status: `episode ${req.body.episode_id} already removed.` });
 };
 
 const episode = async (req, res) => {
   const who = await jwtwrap(req);
   if (who.error) {
-    return res.json(who);
+    return res.status(200).json(who);
   }
   const info = req.body;
-  const epi_id = uuid.v4();
+  const epiId = uuid.v4();
   const episodeCheck = await showModel.epiCheck(
     info.show_id,
     info.episode_id,
@@ -337,7 +340,7 @@ const episode = async (req, res) => {
 
     await cru.insert('episodes', {
       show_id: info.show_id,
-      episode_id: epi_id,
+      episode_id: epiId,
       episode_title: info.title,
       episode_des: info.des,
       episode_file: cdnfile,
@@ -351,6 +354,7 @@ const episode = async (req, res) => {
     });
   } catch (err) {
     const message = err.sqlMessage + '(uuid)';
+    console.error(message);
     return res.status(200).json({ error: message });
   }
   const allEpi = await cru.select('episodes', ['*'], { show_id: info.show_id });
@@ -359,10 +363,10 @@ const episode = async (req, res) => {
   res.send(allEpi);
 };
 
-const ishostshow = async (req, res) => {
+const isHostShow = async (req, res) => {
   const who = await jwtwrap(req);
   if (who.error) {
-    return res.json(who);
+    return res.status(200).json(who);
   }
   const showId = await cru.select('creators_shows', ['show_id'], {
     user_id: who.id,
@@ -374,50 +378,51 @@ const ishostshow = async (req, res) => {
   return res.send(hostEpisode);
 };
 
-const historylist = async (req, res) => {
+const historyList = async (req, res) => {
   const who = await jwtwrap(req);
   if (who.error) {
-    return res.json(who);
+    return res.status(200).json(who);
   }
   const history = await showModel.historyShow(who.id);
   res.send(history);
 };
 
-const sublist = async (req, res) => {
+const subList = async (req, res) => {
   const who = await jwtwrap(req);
   if (who.error) {
-    return res.json(who);
+    return res.status(200).json(who);
   }
   const sub = await cru.select('subscribes', ['rss_id'], { user_id: who.id });
   let list = [];
   for (let i = 0; i < sub.length; i++) {
     list.push(sub[i].rss_id);
   }
-  res.send(list);
+  console.log(list);
+  return res.status(200).send(list);
 };
 
-const subshows = async (req, res) => {
+const subShows = async (req, res) => {
   const who = await jwtwrap(req);
   if (who.error) {
-    return res.json(who);
+    return res.status(200).json(who);
   }
   const subShows = await showModel.subShow(who.id);
   res.send(subShows);
 };
 
 module.exports = {
-  showlist,
-  showchoice,
-  episodechoice,
-  showsubscribe,
-  showunsub,
+  showList,
+  showChoice,
+  episodeChoice,
+  showSubscribe,
+  showUnsub,
   switcher,
-  userhistory,
+  userHistory,
   episode,
-  ishostshow,
-  historylist,
-  sublist,
-  subshows,
-  myshowpage,
-  episoderemove,
+  isHostShow,
+  historyList,
+  subList,
+  subShows,
+  myShowPage,
+  episodeRemove,
 };

@@ -12,7 +12,7 @@ const { v4 } = require('uuid');
 const s3Upload = async (req, res) => {
   const who = await jwtwrap(req);
   if (who.error) {
-    return res.json(who);
+    return res.status(401).json(who);
   }
   let Key;
   let type;
@@ -49,7 +49,7 @@ const s3Upload = async (req, res) => {
     Key,
   };
 
-  return res.send(result);
+  return res.status(200).send(result);
 };
 
 module.exports = { s3Upload };

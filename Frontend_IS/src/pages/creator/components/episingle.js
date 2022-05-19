@@ -7,11 +7,11 @@ import {
 } from '../../../global/constants';
 import { Button, Card, TextField } from '@mui/material';
 import Swal from 'sweetalert2';
-import withReactContent from 'sweetalert2-react-content';
 import Step from '../../step/steps';
 import ajax from '../../../util/ajax';
+import salert from '../../../util/salert';
+
 const Episingle = ({ item, i }) => {
-  const MySwal = withReactContent(Swal);
   const [edit, setEdit] = useState(true);
   const [episitu, setEpisitu] = useState(true);
   const [explicit, setExplicit] = useState(true);
@@ -54,34 +54,20 @@ const Episingle = ({ item, i }) => {
       explicit.value === item.episode_explicit.toString() &&
       episode.value === item.episode_episode.toString()
     ) {
-      MySwal.fire({
-        icon: 'error',
-        title: (
-          <>
-            <h4 id='alert'>Nothing Changed.</h4>
-          </>
-        ),
-      });
+      salert(
+        'error',
+        <>
+          <h4 id='alert'>Nothing Changed.</h4>
+        </>
+      );
     } else {
       let fileurl = '';
       let imageurl = '';
       let length = '';
 
       if (file.files[0]) {
-        MySwal.fire({
-          icon: 'info',
-          title: (
-            <>
-              <h4 id='alert'>Please Wait For Uploading.</h4>
-              <div id='waitpercent'></div>
-            </>
-          ),
-          showConfirmButton: false,
-          allowOutsideClick: false,
-          allowEscapeKey: false,
-        });
+        salert('upload');
         length = file.files[0].size;
-
         const res1 = await ajax('post', S3, {
           type: 'episode_file',
           episode_num: item.episode_id,
@@ -96,18 +82,7 @@ const Episingle = ({ item, i }) => {
       }
 
       if (image.files[0]) {
-        MySwal.fire({
-          icon: 'info',
-          title: (
-            <>
-              <h4 id='alert'>Please Wait For Uploading.</h4>
-              <div id='waitpercent'></div>
-            </>
-          ),
-          showConfirmButton: false,
-          allowOutsideClick: false,
-          allowEscapeKey: false,
-        });
+        salert('upload');
         const res2 = await ajax('post', S3, {
           type: 'episode_image',
           episode_num: item.episode_id,
@@ -147,15 +122,9 @@ const Episingle = ({ item, i }) => {
       document.getElementById('newepi_explicit').value = '';
       document.getElementById('newepi_episode').value = '';
       if (updateres.data.error) {
-        MySwal.fire({
-          icon: 'error',
-          title: <h4 id='alert'>{updateres.data.error}</h4>,
-        });
+        salert('error', <h4 id='alert'>{updateres.data.error}</h4>);
       } else {
-        MySwal.fire({
-          icon: 'success',
-          title: <h4 id='alert'>Episode Info Changed.</h4>,
-        });
+        salert('success', <h4 id='alert'>Episode Info Changed.</h4>);
       }
     }
   };

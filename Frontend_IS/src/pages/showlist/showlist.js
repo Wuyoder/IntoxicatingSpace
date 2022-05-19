@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { SHOWLIST } from '../../global/constants';
 import Show from './components/show';
-import Category from './components/category';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
@@ -22,7 +21,7 @@ const Showlist = () => {
     <>
       <div id='showlist_container'>
         <div className='showlist_row'>
-          <Category category={showlist.topic1} />
+          <div class='show_list_title'>{showlist.topic1}</div>
           <Row xs={6}>
             {showlist.showlist_1?.map((item) => {
               return (
@@ -36,7 +35,7 @@ const Showlist = () => {
           </Row>
         </div>
         <div className='showlist_row'>
-          <Category category={showlist.topic2} />
+          <div class='show_list_title'>{showlist.topic2}</div>
           <Row xs={6}>
             {showlist.showlist_2?.map((item) => {
               return (
@@ -50,7 +49,7 @@ const Showlist = () => {
           </Row>
         </div>
         <div className='showlist_row'>
-          <Category category={showlist.topic3} />
+          <div class='show_list_title'>{showlist.topic3}</div>
           <Row xs={6}>
             {showlist.showlist_3?.map((item) => {
               return (

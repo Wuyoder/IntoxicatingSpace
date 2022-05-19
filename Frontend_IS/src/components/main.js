@@ -1,13 +1,11 @@
 import { NavLink, Link } from 'react-router-dom';
 import { COUNTER_LOGINS, SEARCH } from '../global/constants';
 import React, { useEffect, useContext, useState } from 'react';
-import axios from 'axios';
 import AudioPlayer from 'react-h5-audio-player';
 import 'react-h5-audio-player/lib/styles.css';
 import { AppContext } from '../App';
 import { Button, TextField } from '@mui/material';
-import Swal from 'sweetalert2';
-import withReactContent from 'sweetalert2-react-content';
+import salert from '../util/salert';
 import ajax from '../util/ajax';
 
 const Withyou = () => {
@@ -95,19 +93,9 @@ let activeStyle = {
 };
 
 const Sidebar = ({ member }) => {
-  const MySwal = withReactContent(Swal);
   const gologout = () => {
     localStorage.clear();
-    MySwal.fire({
-      title: (
-        <>
-          <h4 className='alert'>SeeYa</h4>
-        </>
-      ),
-      didOpen: () => {
-        MySwal.showLoading();
-      },
-    });
+    salert('seeya');
     window.location.replace('/');
   };
   const goindex = () => {

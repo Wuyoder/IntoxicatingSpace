@@ -1,13 +1,10 @@
 import { useState } from 'react';
 import { EPISODE, S3 } from '../../../global/constants';
 import { Button, Card } from '@mui/material';
-import Swal from 'sweetalert2';
-import withReactContent from 'sweetalert2-react-content';
 import Step from '../../step/steps';
 import ajax from '../../../util/ajax';
-
+import salert from '../../../util/salert';
 const Newepisode = ({ creatorprofile }) => {
-  const MySwal = withReactContent(Swal);
   const [duration, setDuration] = useState(0);
   const [image, setImage] = useState([]);
   const [file, setFile] = useState([]);
@@ -31,10 +28,11 @@ const Newepisode = ({ creatorprofile }) => {
   const gonewepi = async (e) => {
     e.preventDefault();
     if (document.getElementById('episode_image').files[0].size > 9000000) {
-      MySwal.fire({
-        icon: 'error',
-        title: <h4 id='alert'>Please choose valid podcast artwork file.</h4>,
-      });
+      salert(
+        'error',
+        <h4 id='alert'>Please choose valid podcast artwork file.</h4>
+      );
+
       return;
     }
 
@@ -50,35 +48,18 @@ const Newepisode = ({ creatorprofile }) => {
       epiexplicit.value === '' ||
       epinum.value === ''
     ) {
-      MySwal.fire({
-        icon: 'error',
-        title: <h4 id='alert'>Episode Info should be completed.</h4>,
-      });
+      salert('error', <h4 id='alert'>Episode Info should be completed.</h4>);
     } else {
       if (!epiimage.files[0]) {
-        MySwal.fire({
-          icon: 'error',
-          title: <h4 id='alert'>Please Choose Episode's Image.</h4>,
-        });
+        salert('error', <h4 id='alert'>Please Choose Episode's Image.</h4>);
       } else {
         if (!epifile.files[0]) {
-          MySwal.fire({
-            icon: 'error',
-            title: <h4 id='alert'>Please Choose Episode's Audio file.</h4>,
-          });
+          salert(
+            'error',
+            <h4 id='alert'>Please Choose Episode's Audio file.</h4>
+          );
         } else {
-          MySwal.fire({
-            icon: 'info',
-            title: (
-              <>
-                <h4 id='alert'>Please Wait For Uploading.</h4>
-                <div id='waitpercent'></div>
-              </>
-            ),
-            showConfirmButton: false,
-            allowOutsideClick: false,
-            allowEscapeKey: false,
-          });
+          salert('upload');
           const res1 = await ajax('post', S3, {
             type: 'episode_image',
             episode_num: epinum.value,
@@ -117,15 +98,9 @@ const Newepisode = ({ creatorprofile }) => {
             console.log('response', response);
             console.log(response.data.error);
             if (!response.data.error) {
-              MySwal.fire({
-                icon: 'success',
-                title: <h4 id='alert'>New Episode Published.</h4>,
-              });
+              salert('success', <h4 id='alert'>New Episode Published.</h4>);
             } else {
-              MySwal.fire({
-                icon: 'error',
-                title: <h4 id='alert'>{response.data.error}</h4>,
-              });
+              salert('error', <h4 id='alert'>{response.data.error}</h4>);
             }
           });
 
@@ -139,18 +114,16 @@ const Newepisode = ({ creatorprofile }) => {
   const nowimage = () => {
     if (document.getElementById('episode_image').files[0]) {
       if (document.getElementById('episode_image').files[0].size > 9000000) {
-        MySwal.fire({
-          icon: 'error',
-          title: (
-            <>
-              <h4 id='alert'>Image File too large</h4>
-              <h6>
-                Podcast artwork must be between 1400 x 1400 and 3000 x 3000
-                pixels, JPG or PNG.
-              </h6>
-            </>
-          ),
-        });
+        salert(
+          'error',
+          <>
+            <h4 id='alert'>Image File too large</h4>
+            <h6>
+              Podcast artwork must be between 1400 x 1400 and 3000 x 3000
+              pixels, JPG or PNG.
+            </h6>
+          </>
+        );
       }
       setImage(document.getElementById('episode_image').files[0].name);
     } else {
