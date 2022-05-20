@@ -8,5 +8,5 @@ const pool = mysql2.createPool({
   waitForConnections: true,
   connectionLimit: 10,
 });
-const db = pool.promise();
-module.exports = db;
+const db_test = pool.promise();
+module.exports = { db_test };

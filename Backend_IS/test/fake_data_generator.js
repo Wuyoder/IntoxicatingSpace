@@ -1,14 +1,17 @@
-const db = require('./db_test');
+const { db_test } = require('./db_test');
+const { fake_chatHistory } = require('./fake_data');
 
 async function truncateDate() {
+  console.log('table truncate start!!!!');
   const truncateTable = async (table) => {
-    await db.query('START TRANSACTION');
-    await db.query('SET FOREIGN_KEY_CHECKS = ?', 0);
-    await db.query(`TRUNCATE TABLE ${table}`);
-    await db.query('SET FOREIGN_KEY_CHECKS = ?', 1);
-    await db.query('COMMIT');
+    await db_test.query('START TRANSACTION');
+    await db_test.query('SET FOREIGN_KEY_CHECKS = ?', 0);
+    await db_test.query(`TRUNCATE TABLE ${table}`);
+    await db_test.query('SET FOREIGN_KEY_CHECKS = ?', 1);
+    await db_test.query('COMMIT');
     return;
   };
+
   const tables = [
     'chats',
     'counters',
@@ -21,13 +24,24 @@ async function truncateDate() {
     'subcribes',
     'users',
   ];
-  for (let table in tables) {
-    await truncateTable(table);
-  }
+
+  tables.map((x) => truncateTable(x));
   return;
 }
 
-//test target
-async function insertDate() {}
+async function insertFakeChatHistory() {
+  console.log('start insertFakeData');
+  await db_test.query(
+    'INSERT INTO chats ( show_id, episode_id, membership, user_id, chat_msg, chat_msg_type, chat_episode_time ) VALUES ?',
+    [fake_chatHistory.map((x) => Object.values(x))]
+  );
+}
 
-module.exports = { truncateDate, insertDate };
+//test target
+async function insertFakeDate() {
+  await db_test.query('START TRANSACTION');
+  await insertFakeChatHistory();
+  await db_test.query('COMMIT');
+}
+
+module.exports = { truncateDate, insertFakeDate };

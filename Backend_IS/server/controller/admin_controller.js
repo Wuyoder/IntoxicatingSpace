@@ -19,8 +19,8 @@ const newRss = async (req, res) => {
     }
     const { rsslist } = req.body;
     let rssObject;
-    let rssInfo = [];
     for (let i = 0; i < rsslist.length; i++) {
+      let rssInfo = [];
       const rss = rsslist[i];
       try {
         rssObject = await rssparser.parseURL(rss);
@@ -34,19 +34,15 @@ const newRss = async (req, res) => {
       if (!check.error) {
         count += 1;
         const image = rssObject.itunes.image;
-        let creator;
-        let explicit;
-        let category_main;
-        let category_sub;
+        let creator = title;
+        let explicit = 1;
+        let category_main = 'none';
+        let category_sub = 'none';
         if (rssObject.items[0].creator) {
           creator = rssObject.items[0].creator;
-        } else {
-          creator = title;
         }
         if (rssObject.itunes.explicit === 'no') {
           explicit = 0;
-        } else {
-          explicit = 1;
         }
         if (rssObject.itunes.categoriesWithSubs) {
           category_main = rssObject.itunes.categoriesWithSubs[0].name;
@@ -55,9 +51,6 @@ const newRss = async (req, res) => {
           } else {
             category_sub = category_main;
           }
-        } else {
-          category_main = 'none';
-          category_sub = 'none';
         }
         const hot = 1;
         rssInfo.push(
@@ -71,23 +64,21 @@ const newRss = async (req, res) => {
           hot,
           1
         );
+        const result = await newRssURL(rssInfo);
+        //TODO: rollback
       }
     }
     if (count === 0) {
       throw 'No New Feed.';
     }
-    const result = await newRssURL(rssInfo);
-    if (result.error) {
-      throw result.error;
-    }
+    return res.status(200).json({
+      status: `${count} new RSS insert to DB OK (${
+        req.body.rsslist.length - count
+      } RSS already exist)`,
+    });
   } catch (err) {
     return res.json({ error: err });
   }
-  return res.status(200).json({
-    status: `${count} new RSS insert to DB OK (${
-      req.body.rsslist.length - count
-    } RSS already exist)`,
-  });
 };
 
 module.exports = { newRss };

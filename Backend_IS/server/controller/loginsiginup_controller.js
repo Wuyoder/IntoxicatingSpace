@@ -46,6 +46,7 @@ const signUp = async (req, res) => {
       error: 'Are you a Future man? Please fill in correct information.',
     });
   }
+  //TODO:
   if (today - birthdate > 4733568200433) {
     return res.status(200).json({
       error: 'Honesty is the best policy. Please fill in correct information.',
@@ -65,6 +66,7 @@ const signUp = async (req, res) => {
     new Date().setFullYear(new Date().getFullYear() - 18)
   );
   //explicit podcast filter
+  //TODO:
   let adult;
   if (birth < adultBoundary) {
     adult = 1;
@@ -130,6 +132,7 @@ const signUp = async (req, res) => {
         'Your account has been successfully created. Please turn to signin.',
     });
   } catch (err) {
+    //TODO:
     return res.status(200).json({ error: err });
   }
 };
@@ -140,8 +143,8 @@ const signIn = async (req, res) => {
   if (!userInfo[0]) {
     return res.status(200).json({ error: 'signup first' });
   }
-  const checkpwd = await bcrypt.compare(pwd, userInfo[0].user_password);
-  if (!checkpwd) {
+  const checkPwd = await bcrypt.compare(pwd, userInfo[0].user_password);
+  if (!checkPwd) {
     return res.status(200).json({ error: 'wrong password' });
   }
   const infos = userInfo[0];

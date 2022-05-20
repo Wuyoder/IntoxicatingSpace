@@ -5,6 +5,7 @@ const chatRecord = async (show_id, episode_id) => {
       'SELECT a.*, b.user_name FROM chats as a  right JOIN users as b ON b.user_id = a.user_id WHERE a.show_id = ? AND a.episode_id = ?  ORDER BY a.chat_episode_time ;',
       [show_id, episode_id]
     );
+    console.log('result', result);
     if (result.length < 1) {
       return [
         {

@@ -4,7 +4,10 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "NODE_ENV=test",
+    "test_windows": "set NODE_ENV=test&&mocha --exit",
+    "fakedata": "NODE_ENV=test node test/fake_data_generator.js",
+    "dev": "nodemon app.js"
   },
   "repository": {
     "type": "git",
@@ -21,13 +24,16 @@
     "axios": "^0.26.1",
     "bcrypt": "^5.0.1",
     "body-parser": "^1.20.0",
+    "chai-http": "^4.3.0",
     "cors": "^2.8.5",
+    "deep-equal-in-any-order": "^1.1.18",
     "dotenv": "^16.0.0",
     "express": "^4.17.3",
     "http": "^0.0.1-security",
     "joi": "^17.6.0",
     "json-server": "^0.17.0",
     "jsonwebtoken": "^8.5.1",
+    "mocha": "^10.0.0",
     "mysql2": "^2.3.3",
     "nodemon": "^2.0.16",
     "redis": "^4.1.0",

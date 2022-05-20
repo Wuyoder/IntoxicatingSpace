@@ -2,7 +2,9 @@ require('dotenv').config();
 const cors = require('cors');
 const express = require('express');
 const app = express();
-const port = process.env.PORT;
+const port = (process.env.ENV = 'test')
+  ? process.env.PORT_TEST
+  : process.env.PORT;
 const bodyParser = require('body-parser');
 const { jwtsk } = require('./server/util/jwt');
 const cru = require('./server/model/cru_model');
