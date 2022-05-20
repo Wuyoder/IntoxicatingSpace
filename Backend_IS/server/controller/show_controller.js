@@ -397,7 +397,6 @@ const subList = async (req, res) => {
   for (let i = 0; i < sub.length; i++) {
     list.push(sub[i].rss_id);
   }
-  console.log(list);
   return res.status(200).send(list);
 };
 

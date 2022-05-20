@@ -42,9 +42,9 @@ const ShowInfo = () => {
         if (!res.data.error) {
           if (res.data.indexOf(Number(show)) < 0) {
             setOriginsub(false);
+          } else {
+            setOriginsub(true);
           }
-        } else {
-          setOriginsub(true);
         }
       });
     };

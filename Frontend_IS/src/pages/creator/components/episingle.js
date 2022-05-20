@@ -95,7 +95,7 @@ const Episingle = ({ item, i }) => {
           image.files[0]
         );
       }
-      const updateepi = {
+      const updateEpi = {
         show_id: item.show_id,
         episode_id: item.episode_id,
         title: title.value,
@@ -107,7 +107,7 @@ const Episingle = ({ item, i }) => {
         explicit: explicit.value,
         episode: episode.value,
       };
-      const updateres = await ajax('putdb', UPDATE_EPI, updateepi);
+      const updateres = await ajax('putdb', UPDATE_EPI, updateEpi);
       setDuration(0);
       item.episode_title = updateres.data.episode_episode;
       item.episode_episode = updateres.data.episode_title;
@@ -121,7 +121,8 @@ const Episingle = ({ item, i }) => {
       document.getElementById('newepi_des').value = '';
       document.getElementById('newepi_explicit').value = '';
       document.getElementById('newepi_episode').value = '';
-      if (updateres.data.error) {
+      console.log('updateres', updateres);
+      if (updateres.request.statusText !== 'OK') {
         salert('error', <h4 id='alert'>{updateres.data.error}</h4>);
       } else {
         salert('success', <h4 id='alert'>Episode Info Changed.</h4>);

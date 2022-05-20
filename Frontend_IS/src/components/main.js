@@ -50,25 +50,28 @@ const Topbar = () => {
   };
 
   return (
-    <div id='topbar'>
-      <div className='withyou'>
-        <p className='withyou'>
+    <div
+      Style='display: flex;flex-direction: row;padding: 0 5vh 0 10vh;background-color: #6f96a6;width: 100%;
+  height: 6vh;flex-direction: row;justify-content: space-between;align-items: center;padding: 0'
+    >
+      <div>
+        <p Style='font-weight: 400;font-size: 1.1em;margin: 0 0 0 2vw'>
           Intoxicating Space <Withyou />
         </p>
       </div>
       <div></div>
 
-      <div className='search_container'>
-        <div className='search_item'>
+      <div Style=' display: flex;margin-right: 3vw'>
+        <div Style='margin: 0.5vw'>
           <TextField
-            className='topbarinput'
             label='Keyword'
             variant='outlined'
             id='search_input'
+            Style='background-color: #6f96a6 ;'
             onKeyDown={enter}
           ></TextField>
         </div>
-        <div className='search_item'>
+        <div Style='margin: 0.5vw'>
           <Link to='/search' Style='text-decoration:none'>
             <button id='gotosearch' Style='display:none'>
               go
@@ -78,7 +81,7 @@ const Topbar = () => {
             variant='contained'
             id='search_btn'
             onClick={gosearch}
-            className='search_btn'
+            Style='background-color: #6f96a6;color: aliceblue;height: 4vh; width: 7vw;'
           >
             Search
           </Button>
@@ -102,16 +105,21 @@ const Sidebar = ({ member }) => {
     document.getElementById('HOME_BTN').click();
   };
   return (
-    <div id='sidebar'>
+    <div
+      Style='background: linear-gradient(#274050, #222a32); width: 9vw;
+  height: auto; display: flex; justify-content: flex-start; align-items: center;
+  flex-direction: column;'
+    >
       <div>
         <img
-          id='sidebar_logo'
           alt='logo'
           src={require('../global/LogoBlue.png')}
           onClick={goindex}
+          id='sidebar_logo'
+          Style='max-width: 4vw;  margin-top: 2vh;  margin-bottom: 2vh;'
         ></img>
       </div>
-      <div className='sidebar-container'>
+      <div Style='margin: 20px'>
         <NavLink
           to='/'
           style={({ isActive }) => (isActive ? activeStyle : undefined)}
@@ -120,14 +128,13 @@ const Sidebar = ({ member }) => {
         >
           <Button
             variant='contained'
-            id='sidebar_home_btn'
-            className='sidebar_btn'
+            Style='background-color: #274050 !important; width: 7vw; color: aliceblue;'
           >
             HOME
           </Button>
         </NavLink>
       </div>
-      <div className='sidebar-container'>
+      <div Style='margin: 20px'>
         {!member ? (
           <>
             <div>
@@ -138,8 +145,7 @@ const Sidebar = ({ member }) => {
               >
                 <Button
                   variant='contained'
-                  id='sidebar_creator_btn'
-                  className='sidebar_btn'
+                  Style='background-color: #274050 !important; width: 7vw; color: aliceblue;'
                 >
                   CREATOR
                 </Button>
@@ -154,8 +160,7 @@ const Sidebar = ({ member }) => {
           >
             <Button
               variant='contained'
-              id='sidebar_login_btn'
-              className='sidebar_btn'
+              Style='background-color: #274050 !important; width: 7vw; color: aliceblue;'
             >
               LOGIN
             </Button>
@@ -170,7 +175,7 @@ const Sidebar = ({ member }) => {
                 <Button
                   onClick={gologout}
                   variant='contained'
-                  id='sidebar_logout_btn'
+                  Style='background-color: #274050 !important; width: 7vw; color: aliceblue;'
                 >
                   LOG OUT
                 </Button>
@@ -180,7 +185,7 @@ const Sidebar = ({ member }) => {
         ) : null}
       </div>
 
-      <div className='sidebar-container'></div>
+      <div Style='margin: 20px'></div>
     </div>
   );
 };
@@ -200,7 +205,7 @@ const Player = () => {
           }}
           showSkipControls={false}
           showFilledVolume={true}
-          Style='background-color:black'
+          Style='width: 100%;height: 10vh;background-color: #0b1a26; color: black;'
         />
         {(() => {
           setAudio(document.querySelector('audio'));
@@ -212,8 +217,13 @@ const Player = () => {
       <Link
         to={`/episode/${localStorage.getItem('nowplay_url')}`}
         id='now_link'
+        Style='text-decoration: none'
       >
-        <div id='nowplay_btn'>
+        <div
+          id='nowplay_btn'
+          Style='font-size: 0.5em;  z-index: 2;  max-width: 25vw;  min-width: 25vw;  overflow: hidden;  text-overflow: ellipsis;
+  display: -webkit-box;  -webkit-line-clamp: 1;  -webkit-box-orient: vertical;  position: fixed;  bottom: 1.5vh;  left: 10vw;  display: none;'
+        >
           {(() => {
             if (localStorage.getItem('nowplay_title') !== null) {
               return localStorage.getItem('nowplay_title');

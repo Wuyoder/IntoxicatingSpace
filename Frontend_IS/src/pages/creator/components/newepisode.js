@@ -95,8 +95,6 @@ const Newepisode = ({ creatorprofile }) => {
             image: imageurl,
             episode: epinum.value,
           }).then((response) => {
-            console.log('response', response);
-            console.log(response.data.error);
             if (!response.data.error) {
               salert('success', <h4 id='alert'>New Episode Published.</h4>);
             } else {

@@ -20,17 +20,16 @@ const Creator = () => {
 
   useEffect(() => {
     const getcreatorinfo = async () => {
-      const res1 = ajax('get', CREATOR_PROFILE);
+      const res1 = await ajax('get', CREATOR_PROFILE);
       if (!res1.data[0].user_id) {
         window.location.replace('/');
       }
-      setCreatorprofile(res1.data[0]);
       const res2 = await ajax('get', ISHOST_SHOW);
-
+      setCreatorprofile(res1.data[0]);
       setCreatorepisode(res2.data);
     };
     getcreatorinfo();
-  }, [updateuser, updateuser, newepisode, biguser, bigcreator, bigepi]);
+  }, []);
 
   return (
     <Card variant='outlined' id='creator_container'>

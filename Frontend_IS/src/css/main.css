@@ -15,17 +15,6 @@ code {
   color: #0b1a26;
 }
 
-#topbar {
-  width: 100%;
-  height: 12vh;
-  background-color: #0b1a26;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 5vh 0 10vh;
-}
-
 #middle {
   display: flex;
   flex-direction: row;
@@ -61,14 +50,6 @@ code {
   color: aliceblue;
 }
 
-#playbar {
-  width: 100%;
-  height: 10vh;
-  background-color: #0b1a26;
-  color: black;
-}
-/* ----- */
-
 #main_logo {
   height: 8vh;
   width: 8vh;
@@ -83,22 +64,6 @@ code {
 body {
   background-color: #222a32;
   color: aliceblue;
-}
-
-.sidebar_btn {
-  color: aliceblue;
-  font-size: 25px;
-  text-decoration: none;
-  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-  font-family: 'Ubuntu', sans-serif;
-  margin: 50px;
-  padding: 10px;
-}
-.sidebar_btn:hover {
-  color: aqua;
-}
-.sidebar-container {
-  margin: 20px;
 }
 
 .creator_container {
@@ -429,24 +394,6 @@ a {
   font-size: 1.5em;
 }
 /* TOPBAR ---------------------------------------------------*/
-#topbar {
-  background-color: #6f96a6;
-  width: 100%;
-  height: 6vh;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0;
-}
-.withyou {
-  font-weight: 400;
-  font-size: 1.1em;
-  margin: 0 0 0 2vw;
-  font-family: 'Ubuntu', sans-serif;
-}
-.topbarinput {
-  background-color: #6f96a6;
-}
 #search_input {
   height: 4vh;
   width: 14vw;
@@ -466,39 +413,11 @@ fieldset.MuiOutlinedInput-notchedOutline.css-1d3z3hw-MuiOutlinedInput-notchedOut
   color: aliceblue !important;
   display: none !important;
 }
-#search_btn {
-  background-color: #6f96a6;
-  color: aliceblue;
-  height: 4vh;
-  width: 7vw;
-}
 #search_btn:hover {
   background-color: #6f96a6;
   color: #091d2d;
 }
-.search_container {
-  display: flex;
-  margin-right: 3vw;
-}
-.search_item {
-  margin: 0.5vw;
-}
-
 /* SIDEBAR ---------------------------------------------------*/
-#sidebar {
-  background: linear-gradient(#274050, #222a32);
-  width: 9vw;
-  height: auto;
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  flex-direction: column;
-}
-#sidebar_logo {
-  max-width: 4vw;
-  margin-top: 2vh;
-  margin-bottom: 2vh;
-}
 #sidebar_logo:hover {
   cursor: grab;
   animation: shake 800ms ease-in-out;
@@ -527,32 +446,6 @@ fieldset.MuiOutlinedInput-notchedOutline.css-1d3z3hw-MuiOutlinedInput-notchedOut
 .css-sghohy-MuiButtonBase-root-MuiButton-root {
   background-color: #274050;
   color: aliceblue;
-}
-#sidebar_home_btn {
-  background-color: #274050 !important;
-  width: 7vw;
-  color: aliceblue;
-}
-#sidebar_creator_btn {
-  background-color: #274050 !important;
-  width: 7vw;
-  color: aliceblue;
-}
-#sidebar_logout_btn {
-  background-color: #274050 !important;
-  width: 7vw;
-  color: aliceblue;
-}
-#sidebar_login_btn {
-  background-color: #274050 !important;
-  width: 7vw;
-  color: aliceblue;
-  margin-top: 0;
-}
-#sidebar_home_btn:hover,
-#sidebar_creator_btn:hover,
-#sidebar_login_btn:hover {
-  color: #677980;
 }
 
 /* PLAYBAR ---------------------------------------------------*/
@@ -1501,27 +1394,6 @@ fieldset.MuiOutlinedInput-notchedOutline.css-1d3z3hw-MuiOutlinedInput-notchedOut
   display: none !important;
 }
 
-#nowplay_btn {
-  font-size: 0.5em;
-  z-index: 2;
-  max-width: 25vw;
-  min-width: 25vw;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-line-clamp: 1;
-  -webkit-box-orient: vertical;
-  position: fixed;
-  bottom: 2vh;
-  left: 10vw;
-  display: none;
-}
-#now_link {
-  text-decoration: none;
-}
-#now_link:hover {
-  color: #222a32;
-}
 #no_nowplay {
   color: #646668;
 }
