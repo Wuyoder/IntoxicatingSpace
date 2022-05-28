@@ -12,17 +12,16 @@ IS is a lovely place for creators and podcast addict to enjoy or even publish th
 
 - [Welcome](#Welcome)
 - [Features](#Features)
-- [Website Structure and Technologies](#Website_Structure_and_Technologies)
+- [Website Structure and Technologies](#website-structure-and-technologies)
 - [Database](#Database)
-- [Running Test](#Running)
-- [Tech Stack](#Stack)
+- [Running Test](#running-tests)
 - [Author](#Author)
 
 ## Welcome
 
 - Welcome to Intoxicating Space!
-  ![](http://d12ooj5qum74a8.cloudfront.net/Read.me/intoxicatingspace_index.png)
 
+![](docs/intoxicatingspace_index.png)
 <p align="right"><a href='#contents'>| back to content |</a></p>
 
 ## Features
@@ -31,7 +30,8 @@ IS is a lovely place for creators and podcast addict to enjoy or even publish th
 
 - Choose your favorite podcast show first.
 - Login default account or signup a new account to become a creator!
-  ![](https://github.com/Wuyoder/resource/blob/main/IS/IS_demo1.gif)
+
+![](docs/IS_demo1.gif)
 
 
 #### Interactive Time Stamp Chatroom
@@ -40,27 +40,32 @@ IS is a lovely place for creators and podcast addict to enjoy or even publish th
 - Leave message and interact with someone in chatroom to share your feelings.
 - Click time stamp along with message to fast forward to specific part.
 
-![](https://github.com/Wuyoder/resource/blob/main/IS/IS_demo2.gif)
+![](docs/IS_demo2.gif)
+
 
 #### Essential Operations
 
 - Browsing records and editable personal information shows on "user profile" part of "creator" page.
-  ![](https://github.com/Wuyoder/resource/blob/main/IS/IS_demo3.gif)
+
+![](docs/IS_demo3.gif)
 
 #### Creator Operations
 
 - Creator can edit uploaded podcast episodes or create a new one.
-  ![](https://github.com/Wuyoder/resource/blob/main/IS/IS_demo5.gif)
+
+![](docs/IS_demo5.gif)
 
 - Easy to manage podcast status or modify information.
 - Promote your podcast by sharing QRcode linked to your Space page, or publish your show to other podcast platform with RSS Feed's URL provided by IS.
-  ![](https://github.com/Wuyoder/resource/blob/main/IS/IS_demo4.gif)
+
+![](docs/IS_demo4.gif)
 
 <p align="right"><a href='#contents'>| back to content |</a></p>
 
 ## Website Structure and Technologies
 
-![Website_Structure_and_Technologies](http://d12ooj5qum74a8.cloudfront.net/Read.me/intoxicatinspace_webside_structure.png)
+
+![Website_Structure_and_Technologies](docs/intoxicatinspace_webside_structure.png)
 
 #### Back-End:
 
