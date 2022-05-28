@@ -1,19 +1,18 @@
 # Intoxicating Space (IS)
 
-IS is a lovely place for creators and podcast addict to enjoy podcast or even publish their origin Podcast shows here!
-(We served Podacast Hosting feature)
+IS is a lovely place for creators and podcast addict to enjoy or even publish their origin Podcast shows here!
 
-- You may "Intoxicate" with sharing thoughts to people of the same taste in interactive chatroom.
+- You may "Intoxicate" with sharing thoughts to people of the same taste in  chatroom.
 
 - You can edit your own "Space" information to present your personal style to followers at any time.
 
 - IS also provides special RSS Feed helping you to "Podcast" all over the world!
 
-## table of contents
+## Contents
 
 - [Welcome](#Welcome)
 - [Features](#Features)
-- [Website Structure and Technologies](#Structure)
+- [Website Structure and Technologies](#Website_Structure_and_Technologies)
 - [Database](#Database)
 - [Running Test](#Running)
 - [Tech Stack](#Stack)
@@ -24,6 +23,8 @@ IS is a lovely place for creators and podcast addict to enjoy podcast or even pu
 - Welcome to Intoxicating Space!
   ![](http://d12ooj5qum74a8.cloudfront.net/Read.me/intoxicatingspace_index.png)
 
+<p align="right"><a href='#contents'>| back to content |</a></p>
+
 ## Features
 
 #### Podcast Player
@@ -32,9 +33,10 @@ IS is a lovely place for creators and podcast addict to enjoy podcast or even pu
 - Login default account or signup a new account to become a creator!
   ![](https://github.com/Wuyoder/resource/blob/main/IS/IS_demo1.gif)
 
+
 #### Interactive Time Stamp Chatroom
 
-- Intro's helper at the bottom left corner will let you know more allowed operations.
+- Intro helper at the bottom left corner will let you know more allowed operations.
 - Leave message and interact with someone in chatroom to share your feelings.
 - Click time stamp along with message to fast forward to specific part.
 
@@ -51,12 +53,14 @@ IS is a lovely place for creators and podcast addict to enjoy podcast or even pu
   ![](https://github.com/Wuyoder/resource/blob/main/IS/IS_demo5.gif)
 
 - Easy to manage podcast status or modify information.
-- Promote your podcast by sharing QRcode linked to your show page, or publish your show to other podcast platform with RSS Feed's URL provided by IS.
+- Promote your podcast by sharing QRcode linked to your Space page, or publish your show to other podcast platform with RSS Feed's URL provided by IS.
   ![](https://github.com/Wuyoder/resource/blob/main/IS/IS_demo4.gif)
+
+<p align="right"><a href='#contents'>| back to content |</a></p>
 
 ## Website Structure and Technologies
 
-![](http://d12ooj5qum74a8.cloudfront.net/Read.me/intoxicatinspace_webside_structure.png)
+![Website_Structure_and_Technologies](http://d12ooj5qum74a8.cloudfront.net/Read.me/intoxicatinspace_webside_structure.png)
 
 #### Back-End:
 
@@ -86,10 +90,14 @@ IS is a lovely place for creators and podcast addict to enjoy podcast or even pu
 - Crontab
 - MVC design pattern
 
+<p align="right"><a href='#contents'>| back to content |</a></p>
+
 ## Database
 
 MySQL Database Schema
 ![]()
+
+<p align="right"><a href='#contents'>| back to content |</a></p>
 
 ## Running Tests
 
@@ -104,6 +112,7 @@ on Windows
 ```bash
  npm run test_windows
 ```
+<p align="right"><a href='#contents'>| back to content |</a></p>
 
 ## Author
 
