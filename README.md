@@ -1,8 +1,10 @@
 # Intoxicating Space (IS)
 
+### Click here! [intoxicating.space](https://intoxicating.space)
+
 IS is a lovely place for creators and podcast addict to enjoy or even publish their origin Podcast shows here!
 
-- You may "Intoxicate" with sharing thoughts to people of the same taste in  chatroom.
+- You may "Intoxicate" with sharing thoughts to people of the same taste in chatroom.
 
 - You can edit your own "Space" information to present your personal style to followers at any time.
 
@@ -22,6 +24,7 @@ IS is a lovely place for creators and podcast addict to enjoy or even publish th
 - Welcome to Intoxicating Space!
 
 ![](docs/intoxicatingspace_index.png)
+
 <p align="right"><a href='#contents'>| back to content |</a></p>
 
 ## Features
@@ -33,7 +36,6 @@ IS is a lovely place for creators and podcast addict to enjoy or even publish th
 
 ![](docs/IS_demo1.gif)
 
-
 #### Interactive Time Stamp Chatroom
 
 - Intro helper at the bottom left corner will let you know more allowed operations.
@@ -41,7 +43,6 @@ IS is a lovely place for creators and podcast addict to enjoy or even publish th
 - Click time stamp along with message to fast forward to specific part.
 
 ![](docs/IS_demo2.gif)
-
 
 #### Essential Operations
 
@@ -63,7 +64,6 @@ IS is a lovely place for creators and podcast addict to enjoy or even publish th
 <p align="right"><a href='#contents'>| back to content |</a></p>
 
 ## Website Structure and Technologies
-
 
 ![Website_Structure_and_Technologies](docs/intoxicatinspace_webside_structure.png)
 
@@ -117,6 +117,7 @@ on Windows
 ```bash
  npm run test_windows
 ```
+
 <p align="right"><a href='#contents'>| back to content |</a></p>
 
 ## Author
