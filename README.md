@@ -100,7 +100,7 @@ IS is a lovely place for creators and podcast addict to enjoy or even publish th
 ## Database
 
 MySQL Database Schema
-![]()
+![](docs/intoxicatingspace_db_schema.png)
 
 <p align="right"><a href='#contents'>| back to content |</a></p>
 
