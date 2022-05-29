@@ -329,7 +329,7 @@ const episode = async (req, res) => {
     return res.status(200).json({ error: 'episode number already exist' });
   }
   try {
-    const cdnimage = info.image.replace(
+    const cdnImage = info.image.replace(
       `${process.env.S3_ORIGIN}`,
       `${process.env.CDN}/resize`
     );
@@ -347,7 +347,7 @@ const episode = async (req, res) => {
       episode_duration: info.duration,
       episode_length: info.length,
       episode_explicit: info.explicit,
-      episode_image: cdnimage,
+      episode_image: cdnImage,
       episode_season: 1,
       episode_episode: info.episode,
       episode_status: 1,

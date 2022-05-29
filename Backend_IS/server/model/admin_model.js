@@ -13,7 +13,7 @@ const newRssURL = async (rssInfo) => {
   }
 };
 
-const urlCheck = async (url) => {
+const isURLExist = async (url) => {
   try {
     const check = await cru.select('rss', ['rss_id'], { rss_url: url });
     if (check.length !== 0) {
@@ -25,4 +25,4 @@ const urlCheck = async (url) => {
     return { error: 'db error ( admin_model.urlCheck )' };
   }
 };
-module.exports = { newRssURL, urlCheck };
+module.exports = { newRssURL, isURLExist };

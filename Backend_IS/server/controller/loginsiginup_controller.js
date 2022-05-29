@@ -46,7 +46,7 @@ const signUp = async (req, res) => {
       error: 'Are you a Future man? Please fill in correct information.',
     });
   }
-  //TODO:
+  //if  > 150 year old, consider invalid input
   if (today - birthdate > 4733568200433) {
     return res.status(200).json({
       error: 'Honesty is the best policy. Please fill in correct information.',
@@ -61,18 +61,11 @@ const signUp = async (req, res) => {
       .json({ error: 'the email address is already in use.' });
   }
   const hashedPwd = await bcrypt.hash(pwd, saltRounds);
-
   const adultBoundary = new Date(
     new Date().setFullYear(new Date().getFullYear() - 18)
   );
   //explicit podcast filter
-  //TODO:
-  let adult;
-  if (birth < adultBoundary) {
-    adult = 1;
-  } else {
-    adult = 0;
-  }
+  const adult = (birth < adult) ? 1 : 0;
   try {
     const startTrans = await cru.startTrans();
     const newUser = await cru.insert('users', {
@@ -132,7 +125,7 @@ const signUp = async (req, res) => {
         'Your account has been successfully created. Please turn to signin.',
     });
   } catch (err) {
-    //TODO:
+    const rollbackTrans = await cru.rollbackTrans();
     return res.status(200).json({ error: err });
   }
 };

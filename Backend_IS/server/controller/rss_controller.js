@@ -24,15 +24,11 @@ const rssFeed = async (req, res) => {
   let explicit;
   // check each episode's explicit to rewrite show detail
   for (let i = 0; i < episodeInfo.length; i++) {
-    if (episodeInfo[i].episode_explicit === 0) {
-      explicit = 'no';
-    } else {
-      explicit = 'yes';
-    }
+   const explicit = (episodeInfo[i].episode_explicit === 0) ? 'no' : 'yes';
     let basic = episodeInfo[i].episode_publish_date
       .toString()
       .replace('+0800 (台北標準時間)', '');
-    //format db timestamp
+    //format db timestamp to rss timestamp
     const timeformat =
       basic.slice(0, 3) +
       ',' +
@@ -52,7 +48,7 @@ const rssFeed = async (req, res) => {
       <googleplay:description><![CDATA[${episodeInfo[i].episode_des}]]></googleplay:description>
       <itunes:summary><![CDATA[${episodeInfo[i].episode_des}]]></itunes:summary>
       <content:encoded><![CDATA[${episodeInfo[i].episode_des}]]></content:encoded>
-      <itunes:explicit>${episodeInfo[i].episode_explicit}</itunes:explicit>
+      <itunes:explicit>${explicit}</itunes:explicit>
       <itunes:season>1</itunes:season>
       <itunes:episode>${episodeInfo[i].episode_episode}</itunes:episode>
       <itunes:episodeType>full</itunes:episodeType>

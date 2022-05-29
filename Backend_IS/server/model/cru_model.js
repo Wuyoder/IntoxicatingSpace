@@ -112,5 +112,14 @@ const commitTrans = async () => {
     return { error: 'db error ( cru_model.commitTrans )' };
   }
 };
-const cru = { insert, update, select, startTrans, commitTrans };
+
+const rollbackTrans=async()=>{
+  try {
+    await db.query('ROLLBACK');
+  } catch (err) {
+    console.error(err);
+    return { error: 'db error ( cru_model.rollbackTrans )' };
+  }
+}
+const cru = { insert, update, select, startTrans, commitTrans, rollbackTrans };
 module.exports = cru;

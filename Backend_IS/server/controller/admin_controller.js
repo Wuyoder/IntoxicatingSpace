@@ -1,6 +1,6 @@
 const RssParser = require('rss-parser');
 const rssparser = new RssParser();
-const { newRssURL, urlCheck } = require('../model/admin_model');
+const { newRssURL, isURLExist } = require('../model/admin_model');
 const { jwtwrap } = require('../util/jwt');
 
 const newRss = async (req, res) => {
@@ -30,7 +30,7 @@ const newRss = async (req, res) => {
       const title = rssObject.title;
       const url = rssObject.feedUrl;
       // No repeat podcast rss check
-      const check = await urlCheck(url);
+      const check = await isURLExist(url);
       if (!check.error) {
         count += 1;
         const image = rssObject.itunes.image;
@@ -65,7 +65,6 @@ const newRss = async (req, res) => {
           1
         );
         const result = await newRssURL(rssInfo);
-        //TODO: rollback
       }
     }
     if (count === 0) {
