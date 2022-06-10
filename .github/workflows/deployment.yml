@@ -16,7 +16,7 @@ jobs:
         run: npm install
       - name: build react
         working-directory: ./Frontend_IS/
-        run: npm run build
+        run: CI='' npm run build
       - uses: shinyinc/action-aws-cli@v1.2
       - name: upload S3
         working-directory: ./Frontend_IS/
