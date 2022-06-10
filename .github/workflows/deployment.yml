@@ -22,7 +22,6 @@ jobs:
         working-directory: ./Frontend_IS/
         run: |
           pwd
-          ls 
           aws s3 sync build s3://${{ secrets.AWS_S3_BUCKET_NAME_STATIC_WEBSITE }}/
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_GITHUB_ACTIONS }}
