@@ -6,7 +6,7 @@ on:
     branches:
       - main
     paths:
-      - 'Frontend_IS/*'
+      - '*'
 
 jobs:
   build:
