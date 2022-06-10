@@ -17,13 +17,12 @@ jobs:
       - name: build react
         working-directory: ./Frontend_IS/
         run: CI='' npm run build
-      - uses: hkusu/s3-upload-action@v2
+      - uses: shallwefootball/s3-upload-action@master
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_GITHUB_ACTIONS }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY_GITHUB_ACTIONS }}
-          aws-region: "ap-northeast-1"
-          aws-bucket: ${{ secrets.AWS_S3_BUCKET_NAME_STATIC_WEBSITE }}
-          file-path: "./Frontend_IS/build/"
+          aws_key_id: ${{ secrets.AWS_ACCESS_KEY_GITHUB_ACTIONS }}
+          aws_secret_access_key: ${{ secrets.AWS_SECRET_KEY_GITHUB_ACTIONS }}
+          aws_bucket: ${{ secrets.AWS_S3_BUCKET_NAME_STATIC_WEBSITE }}
+          source_dir: "./Frontend_IS/build/"
       - name: Invalidate CloudFront
         uses: chetan/invalidate-cloudfront-action@v2
         env:
