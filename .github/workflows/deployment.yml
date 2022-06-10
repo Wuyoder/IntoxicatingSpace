@@ -17,16 +17,18 @@ jobs:
       - name: build react
         working-directory: ./Frontend_IS/
         run: CI='' npm run build
-      - uses: shinyinc/action-aws-cli@v1.2
-      - name: upload S3
-        working-directory: ./Frontend_IS/
-        run: |
-          pwd
-          aws s3 sync build s3://${{ secrets.AWS_S3_BUCKET_NAME_STATIC_WEBSITE }}/
+      - uses: hkusu/s3-upload-action@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_GITHUB_ACTIONS }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY_GITHUB_ACTIONS }}
+          aws-region: "ap-northeast-1"
+          aws-bucket: ${{ secrets.AWS_S3_BUCKET_NAME_STATIC_WEBSITE }}
+          file-path: "./Frontend_IS/build/"
+      - name: Invalidate CloudFront
+        uses: chetan/invalidate-cloudfront-action@v2
         env:
+          DISTRIBUTION: ${{ secrets.AWS_CLOUDFRONT_DISTRIBUTION_ID }}
+          PATHS: "/*"
+          AWS_REGION: "ap-northeast-1"
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_GITHUB_ACTIONS }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY_GITHUB_ACTIONS }}
-      - run: aws cloudfront create-invalidation --distribution-id ${{ secrets.AWS_CLOUDFRONT_DISTRIBUTION_ID }} --paths "/*"
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
