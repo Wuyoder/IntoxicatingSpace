@@ -5,15 +5,13 @@ on:
   push:
     branches:
       - main
-    paths:
-      - '.github/'
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
+    if: ${{ contains(github.event.head_commit.message, '#deploy') }}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - run: npm install
       - run: npm run build
 
